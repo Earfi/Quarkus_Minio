@@ -17,7 +17,7 @@ function ListBuckets() {
     },[])
 
     return ( 
-        <div className='bg-gray-300 w-[300px] sm:w-[450px] md:w-[550px] lg:w-[800px] xl:w-full px-10 py-5 mx-auto mt-0 h-fit border border-black shadow-xl'>
+        <div className='bg-gray-300 w-full sm:w-[450px] md:w-[550px] lg:w-[800px] xl:w-full px-10 py-5 mx-auto mt-0 h-fit border border-black shadow-xl'>
             <AddBucket/>
             <h1 className='text-xl font-bold border-b-2 border-black pb-2 mt-3'>ALL : <span className="text-purple-600">Bucket &#9778;</span></h1>
             <div className='flex flex-col my-2 border-2 border-gray-600 bg-white'>

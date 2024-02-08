@@ -57,11 +57,11 @@ function UploadFile() {
       
 
     return (
-        <div className='bg-orange-400 w-[300px] sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-10 py-5 mt-20 border-2 shadow-xl'>
+        <div className='bg-blue-950 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-10 py-5 mt-20 border-2 shadow-xl'>
           <h1 className='font-bold text-xl text-white '>UploadFile</h1>
           <div className='sm:flex justify-center flex-row h-fit'> 
             <div className='m-2'>
-              <p className='text-md font-serif ms-2'>Select Bucket</p> 
+              <p className='text-md font-serif ms-2 text-white'>Select Bucket</p> 
               <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white'>
                 {allBuckets.length == 0 &&
                   (
@@ -70,7 +70,7 @@ function UploadFile() {
                     </>
                   )
                 }
-                <option className="bg-black text-white hover:cursor-none">Please Select</option>
+                <option className="bg-black text-white hover:cursor-none ">Please Select</option>
                 {allBuckets.map((post) => ( 
                   <>
                     <option className='m-5 text-black bg-white hover:bg-red-400 hover:text-white hover:cursor-pointer"' key={post} value={post}>{post}</option>
@@ -79,11 +79,11 @@ function UploadFile() {
               </select>
             </div>
             <div className='mb-5'>
-              <label className='text-md font-serif ms-2'>Select file : </label>
+              <label className='text-md font-serif ms-2 text-white'>Select file : </label>
               <input multiple onChange={handleFileChange} className='bg-white border w-full' type="file"  />
             </div>
           </div>
-          <button onClick={uploadFile} className='w-full bg-gray-500 text-white p-2 cursor-pointer hover:bg-red-500'>Upload File</button>
+          <button onClick={uploadFile} className='w-full bg-red-600 text-white p-2 cursor-pointer hover:bg-red-800'>Upload File</button>
           <div className="flex flex-col mt-2 bg-white px-2 py-1">
             <p><b>file select : </b>{file ? file.name : 'No file selected'}</p>  
             <p><b>bucket select : </b>{bucket ? bucket : 'No bucket selected'}</p>
