@@ -12,6 +12,8 @@ function Sidebar() {
                         className={`absolute text-gray-500 cursor-pointer hover:text-orange-500  ${fullWidth ? 'rotate-180 right-2 top-1 text-3xl ' : 'right-7 top-1 text-2xl'}`} >&#10132;</p>
                     <h1 className={`text-xl font-bold border-b-2 border-gray-600 ${fullWidth ? '' : 'hidden'}`}>User</h1> 
                     <ul className="my-2 font-semibold ">
+                        <Link to="/file"><li className="p-2 cursor-pointer hover:bg-red-500">&#10063; <span className={`${fullWidth ? '' : 'hidden'}`}>File</span></li></Link> 
+                        <Link to="/jasper"><li className="p-2 cursor-pointer hover:bg-red-500">&#8464; <span className={`${fullWidth ? '' : 'hidden'}`}>Jasper</span></li></Link> 
                         <Link to="/obj-browse"><li className="p-2 cursor-pointer hover:bg-red-500">&#9918; <span className={`${fullWidth ? '' : 'hidden'}`}>Object Browser</span></li></Link>
                         <li className="p-2 cursor-pointer hover:bg-red-500">&#9763; <span className={`${fullWidth ? '' : 'hidden'}`}>Access Keys</span></li>
                         <li className="p-2 cursor-pointer hover:bg-red-500">&#9760; <span className={`${fullWidth ? '' : 'hidden'}`}>Documentation</span></li> 

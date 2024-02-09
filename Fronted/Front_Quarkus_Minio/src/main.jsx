@@ -14,6 +14,7 @@ import FilePage from './views/FilePage.jsx';
 import About from './views/About.jsx';
 import Service from './views/Service.jsx';
 import Profile from './views/Profile.jsx';
+import Jasper from './views/Jasper.jsx';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/file/:bucket",
     element: <FileBucket/>,
+  },
+  {
+    path: "/jasper",
+    element: <Jasper/>,
   },
   {
     path: "/file",

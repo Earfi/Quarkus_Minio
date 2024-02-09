@@ -9,12 +9,16 @@ function ListBuckets() {
 
     useEffect(() => { 
         const getBacket = async () => {
-        const res = await fetch("http://localhost:8080/minio/all/bucket")
-        const data = await res.json()
-        setBuckets(data)
-        }  
-        getBacket() 
-    },[])
+            const res = await fetch("http://localhost:8080/minio/all/bucket",{
+                method: "GET"
+            });
+            const data = await res.json();
+            setBuckets(data);
+        };  
+        getBacket();
+    },[]);
+
+    
 
     return ( 
         <div className='bg-gray-300 w-full sm:w-[450px] md:w-[550px] lg:w-[800px] xl:w-full px-10 py-5 mx-auto mt-0 h-fit border border-black shadow-xl'>
