@@ -16,7 +16,7 @@ function FilePage() {
                     <div className="mx-auto">
                         <UploadFile/> 
                         <ListFile bucket={"1testbacket"} />
-                        <ListFile bucket={"asd"} />
+                        <ListFile bucket={"2testbucket"} />
                     </div>
                 </div>
             </div>

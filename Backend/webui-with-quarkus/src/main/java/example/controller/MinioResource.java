@@ -39,7 +39,7 @@ public class MinioResource {
     @Path("/download/file/{bucket}/{fileName}")
     public Response downloadFile(@PathParam("bucket") String bucket, @PathParam("fileName") String fileName) throws Exception {
         InputStream stream = fileService.downloadFile(bucket,fileName);
-        return Response.ok(stream).entity(fileService.downloadFile(bucket,fileName)).build();
+        return Response.ok(stream).build();
     }
 
 
@@ -83,9 +83,10 @@ public class MinioResource {
     }
 
     @DELETE
-    @Path("/bucket/delete")
-    public Response deleteBucket(@QueryParam("bucketName") String bucketName) throws Exception {
-        return Response.ok().entity(bucketService.removeBucket(bucketName)).build();
+    @Path("/{bucket}/delete")
+    public Response deleteBucket(@PathParam("bucket") String bucketName) throws Exception {
+        bucketService.removeBucket(bucketName);
+        return Response.status(200).build();
     }
 
 }

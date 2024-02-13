@@ -58,19 +58,20 @@ public class MinioBucketService {
         }
     }
 
-    public Response removeBucket(String bucketName) {
-        try {
-            minioClient.removeBucket(
-                    RemoveBucketArgs.builder()
-                            .bucket(bucketName)
-                            .build()
-            );
-            return Response.ok("Bucket removed successfully").build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error removing bucket: " + e.getMessage()).build();
-        }
+    public void removeBucket(String bucketName) throws Exception{
+        minioClient.removeBucket(bucketName);
+//        try {
+//            minioClient.removeBucket(
+//                    RemoveBucketArgs.builder()
+//                            .bucket(bucketName)
+//                            .build()
+//            );
+//            return Response.ok("Bucket removed successfully").build();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+//                    .entity("Error removing bucket: " + e.getMessage()).build();
+//        }
     }
 
 }
