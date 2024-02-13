@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import GetAddress from "../components/jasper/GetAddress";
-import InsertAddress from "../components/jasper/InsertAddress";
+import GetAddress from "../components/jasper/DB/GetAddress";
+import InsertAddress from "../components/jasper/DB/InsertAddress";
 
 function Jasper() {
     return (
@@ -13,8 +14,23 @@ function Jasper() {
                 </div>
                 <div className="ml-[80px] flex flex-col w-[100%]"> 
                     <div className="w-fit mx-auto">
-                        <InsertAddress/>
-                        <GetAddress/>
+                        <div className="mt-5">
+                            <label className="text-xl font-mono">Gen PDF with Database : </label>
+                            <Link to="/jasper/db">
+                                <button className="border-b-2 border-b-red-500 hover:text-red-500 cursor-pointer">
+                                    CLICK!!
+                                </button>
+                            </Link>
+                        </div>
+
+                        <div className="mt-5">
+                            <label className="text-xl font-mono">Gen PDF with JSON : </label>
+                            <Link to="/jasper/json">
+                                <button className="border-b-2 border-b-red-500 hover:text-red-500 cursor-pointer">
+                                    CLICK!!
+                                </button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

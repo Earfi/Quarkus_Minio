@@ -15,6 +15,8 @@ import About from './views/About.jsx';
 import Service from './views/Service.jsx';
 import Profile from './views/Profile.jsx';
 import Jasper from './views/Jasper.jsx';
+import JasperDB from './views/Jasper/JasperDB.jsx';
+import JasperJSON from './views/Jasper/JasperJSON.jsx';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
   {
     path: "/jasper",
     element: <Jasper/>,
+  },
+  {
+    path: "/jasper/db",
+    element: <JasperDB/>,
+  },
+  {
+    path: "/jasper/json",
+    element: <JasperJSON/>,
   },
   {
     path: "/file",

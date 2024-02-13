@@ -31,7 +31,7 @@ function GetAddress() {
 
     const downloadPdf = async () => {
         try {
-            const res = await fetch("http://localhost:8080/address/export", {
+            const res = await fetch("http://localhost:8080/jasper/address/export", {
                 method: "GET"
             });
     
@@ -57,7 +57,7 @@ function GetAddress() {
             <h1 className="pt-5 pl-5 text-3xl font-medium ">Address Client</h1>
             <hr className="bg-black h-1"/>  
             {infoAddress.length > 0 && (
-                <button className="m-5"><a href="http://localhost:8080/address/export" className="bg-purple-600 text-white  p-2 rounded-lg hover:bg-purple-800 cursor-pointer">Download</a></button>
+                <button className="m-5" onClick={downloadPdf}><a href="" className="bg-purple-600 text-white  p-2 rounded-lg hover:bg-purple-800 cursor-pointer">Download</a></button>
             )}
             {infoAddress.length > 0 && (
                 <div className="p-5 flex gap-5 flex-wrap justify-center">
