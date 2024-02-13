@@ -16,12 +16,12 @@ public class generateReport {
     ReportService reportService;
 
     @POST
-    @Path("/generate/{filename}")
+    @Path("/generate/{filename}/{bucket}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("application/pdf")
-    public Response generateReport(@Valid ReportDto reportDto ,@PathParam("filename") String filename) throws Exception {
+    public Response generateReport(@Valid ReportDto reportDto ,@PathParam("filename") String filename,@PathParam("bucket")String bucket) throws Exception {
         String fileName = filename+".pdf";
-        byte[] pdfBytes = reportService.generatePdfReport(reportDto,fileName);
+        byte[] pdfBytes = reportService.generatePdfReport(reportDto,fileName,bucket);
         return Response.ok(pdfBytes, "application/pdf")
                 .header("Content-Disposition", "inline; filename=\""+ fileName +"\"")
                 .build();

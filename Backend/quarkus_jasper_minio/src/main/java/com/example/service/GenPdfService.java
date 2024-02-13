@@ -29,7 +29,7 @@ public class GenPdfService {
     MinioFileService minioFileService;
 
     @Transactional
-    public void exportJasperReport(OutputStream output) throws JRException {
+    public void exportJasperReportAddress(OutputStream output) throws JRException {
         List<Address> addresses = repository.listAll();
 
         try (var inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("User_Address.jrxml")) {

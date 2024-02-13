@@ -64,14 +64,12 @@ public class MinioFileService{
         }
     }
 
-    public Object downloadFile(String bucket, String objName, String fileName) throws Exception{
-        DownloadObjectArgs download = DownloadObjectArgs.builder()
-                .bucket(bucket)
-                .object(objName)
-                .filename(fileName)
-                .build();
-        minioClient.downloadObject(download);
-        return null;
+    public InputStream downloadFile(String bucket, String fileName) throws Exception{
+        InputStream inputStream = minioClient.getObject(bucket,fileName);
+        return inputStream;
     }
+
+
+
 
 }

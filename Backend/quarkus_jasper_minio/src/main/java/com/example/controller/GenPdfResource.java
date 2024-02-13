@@ -30,7 +30,7 @@ public class GenPdfResource {
 
         StreamingOutput streamingOutput = output -> {
             try {
-                addressService.exportJasperReport(output);
+                addressService.exportJasperReportAddress(output);
             } catch (JRException e) {
                 throw new RuntimeException(e);
             }

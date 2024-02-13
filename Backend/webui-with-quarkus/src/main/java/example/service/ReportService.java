@@ -40,7 +40,7 @@ public class ReportService{
         }
     }
 
-    public byte[] generatePdfReport(ReportDto dto ,String filename) throws Exception {
+    public byte[] generatePdfReport(ReportDto dto ,String filename,String bucket) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("companyUrl", dto.getCompanyUrl());
         params.put("companyName", dto.getCompanyName());
@@ -53,7 +53,7 @@ public class ReportService{
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(pdfData);
 
             // Upload PDF to MinIO
-            minioFileService.uploadFile("1testbacket", byteArrayInputStream, filename);
+            minioFileService.uploadFile(bucket, byteArrayInputStream, filename);
 
             return pdfData;
         } catch (JRException e) {

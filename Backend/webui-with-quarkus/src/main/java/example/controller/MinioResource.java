@@ -4,6 +4,7 @@ import example.service.MinioBucketService;
 import example.service.MinioFileService;
 import example.service.serviceAll.BucketService;
 import example.service.serviceAll.FileService;
+import io.minio.DownloadObjectArgs;
 import io.minio.MinioClient;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -11,7 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
 @Path("/minio")
@@ -35,10 +36,12 @@ public class MinioResource {
     }
 
     @GET
-    @Path("/file/{bucket}/{objName}/{fileName}")
-    public Response downloadFile(@PathParam("bucket") String bucket, @PathParam("objName") String objName, @PathParam("fileName") String fileName) throws Exception {
-        return Response.status(200).entity(fileService.downloadFile(bucket,objName,fileName)).build();
+    @Path("/download/file/{bucket}/{fileName}")
+    public Response downloadFile(@PathParam("bucket") String bucket, @PathParam("fileName") String fileName) throws Exception {
+        InputStream stream = fileService.downloadFile(bucket,fileName);
+        return Response.ok(stream).entity(fileService.downloadFile(bucket,fileName)).build();
     }
+
 
     @POST
     @Path("/file/upload/{bucket}")
