@@ -49,7 +49,7 @@ function GetAddress() {
             console.error("Failed to download file:", error);
             alert("Failed to download file!");
         }
-    }
+    } 
     
 
     return(

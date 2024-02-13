@@ -11,7 +11,9 @@ function Profile() {
                 </div>
                 <div className="ml-[80px] flex flex-col w-[100%]"> 
                     <div className="mx-auto">
-                        Profile
+                        <h1 className="text-2xl my-5 font-medium text-center border-b-2">Profile</h1>
+                        <img className="w-[200px] mx-auto border-4 border-black rounded-full" src="../..//profile-icon.png" alt="" />
+                        <input type="file" className="my-5 bg-gray-100 border"/>
                     </div>
                 </div>
             </div>

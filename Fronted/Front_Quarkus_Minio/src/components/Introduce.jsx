@@ -10,7 +10,7 @@ function Introduce() {
                     <p className="text-white">Pichaya Chantrasriwong</p>
                     <Link to="/bucket"><button className="text-white text-xl font-medium border py-2 px-3 bg-red-500 rounded-xl shadow-sm cursor-pointer hover:bg-red-800 mt-5">Start Minio</button></Link>
                 </div>
-                <div>
+                <div className="sm:mr-20">
                     <img src="../..//M1-20-21.jpg" width={700} alt="" className="rounded-2xl shadow-2xl border w-80"/>
                 </div>
             </div>

@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { saveAs } from 'file-saver';
 
 function InsertJson() {
+    const [allBuckets,setAllBuckets] = useState([]);  
+    const [bucket,setBucket] = useState(''); 
 
     const [fileName,setFileName] = useState("");
 
     const [companyName, setCompanyName] = useState("");
     const [companyUrl, setCompanyUrl] = useState("");
     const [allUsers, setAllUsers] = useState([]);
+
+    useEffect(() => { 
+        const getAllBacket = async () => {
+            const res = await fetch("http://localhost:8080/minio/all/bucket")
+            const data = await res.json()
+            setAllBuckets(data)
+        }  
+        getAllBacket() 
+    },[]) 
 
     const [newUser, setNewUser] = useState({
         name: "",
@@ -26,7 +37,7 @@ function InsertJson() {
             phone: "",
             birthday: ""
         });
-
+        alert("Insert Successfully!!")
         console.log(allUsers);
         console.log(newUser);
     };
@@ -39,7 +50,7 @@ function InsertJson() {
                 rows: allUsers
             };
     
-            const response = await fetch(`http://localhost:8080/api/v1/report/generate/${fileName}`, {
+            const response = await fetch(`http://localhost:8080/api/v1/report/generate/${fileName}/${bucket}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -62,6 +73,24 @@ function InsertJson() {
     return (
         <div className="my-2 w-full bg-gray-100">
             <div className="w-[400px] md:w-[600px] lg:w-[800px] xl:w-[1000px] bg-gray-200 h-fit p-2 mx-auto border-black border-2">
+                <div className="my-2">
+                    <h1><b>Select Bucket to Collect Files!!</b></h1>
+                    <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white my-2'>
+                        {allBuckets.length == 0 &&
+                        (
+                            <>
+                            <option className='m-5 bg-red-500 text-white font-mono border-l-red-500 border p-2'>No Bucket !!!</option>
+                            </>
+                        )
+                        }
+                        <option className="bg-black text-white hover:cursor-none ">Please Select</option>
+                        {allBuckets.map((post) => ( 
+                        <>
+                            <option className='m-5 text-black bg-white hover:bg-red-400 hover:text-white hover:cursor-pointer"' key={post} value={post}>{post}</option>
+                        </>
+                        ))} 
+                    </select>
+                </div>
                 <div className="flex flex-col items-start w-full my-2">
                         <label><b>File Name</b></label>
                         <input onChange={(e) => setFileName(e.target.value)} type="text" placeholder="input file name" className="border px-2 rounded-lg w-full h-10 mt-2"/>

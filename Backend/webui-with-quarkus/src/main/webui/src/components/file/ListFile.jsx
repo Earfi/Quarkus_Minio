@@ -34,21 +34,28 @@ function Information({bucket}) {
         }
     };   
 
-    const downloadFile = async (fileName)  => {
-        const res = await fetch(`http://localhost:8080/minio/file/${bucket}/${fileName}/${fileName}`,{
+    const downloadFile = async (fileName) => {
+        const res = await fetch(`http://localhost:8080/minio/download/file/${bucket}/${fileName}`, {
             method: "GET",
-        })
-
-        console.log(fileName);
-        console.log(res);
-
+        });
+    
         if (res.ok) {
-            alert("Download File successfully"); 
-            // window.location.reload();
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            alert("Downloaded File Successfully!");
         } else {
-            alert("Error Download file!!!"); 
-        } 
-    }
+            alert("Error Downloading File!!!");
+        }
+    };
+    
+    
+    
 
     return (
         <>
@@ -63,8 +70,8 @@ function Information({bucket}) {
                 }
                 {files.map((file) => (
                     <div className='flex flex-col items-center justify-center border p-5'>
-                        <div className='flex flex-col md:flex-row justify-center items-start'>
-                            <p className='w-[250px] bg-white border-l-red-500 border p-2 cursor-pointer hover:bg-gray-400' key={file.id}>{file}</p>
+                        <div className='w-full flex flex-col md:flex-row md:justify-between items-start'>
+                            <p className='w-full overflow-hidden bg-white border-l-red-500 border p-2 cursor-pointer hover:bg-gray-400' key={file.id}>{file}</p>
                             <div className='flex flex-row gap-3 mt-2 md:mt-0 sm:ml-2'>
                                 <button className='bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'>PREVIEW</button>
                                 <button onClick={() => downloadFile(file)}  className='bg-blue-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-blue-800'>Download</button>

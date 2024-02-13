@@ -70,7 +70,7 @@ function Information({bucket}) {
                 }
                 {files.map((file) => (
                     <div className='flex flex-col items-center justify-center border p-5'>
-                        <div className='flex flex-col md:flex-row justify-center items-start'>
+                        <div className='w-full flex flex-col md:flex-row md:justify-between items-start'>
                             <p className='w-full overflow-hidden bg-white border-l-red-500 border p-2 cursor-pointer hover:bg-gray-400' key={file.id}>{file}</p>
                             <div className='flex flex-row gap-3 mt-2 md:mt-0 sm:ml-2'>
                                 <button className='bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'>PREVIEW</button>

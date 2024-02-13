@@ -17,7 +17,7 @@ function App() {
             <div className="ml-[80px] flex flex-col w-[100%]">
                 <div className='w-full'>
                   <Introduce/>
-                  <div className='bg-black w-full h-10 flex items-center justify-between px-5'>
+                  <div className='bg-black w-full h-fit flex flex-col md:flex-row items-center justify-between px-5'>
                     <h1 className="text-white">EARF &#9996;</h1> 
                     <h1 className="text-white">Pichaya Chantrasriwong</h1>
                     <h1 className="text-white">Connect Quarkus with React JS</h1>
