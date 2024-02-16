@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import Swal from 'sweetalert2'
 
 function UploadFile() {
-    const [allBuckets,setAllBuckets] = useState([]);  
-    // to send backend
+    const [allBuckets,setAllBuckets] = useState([]);   
     const [bucket,setBucket] = useState(''); 
     const [file,setFile] = useState(null); 
     const [fileName,setFileName] = useState(null); 
