@@ -1,6 +1,8 @@
 package example.service;
 
+import example.dto.FileInfo;
 import io.minio.*;
+import io.minio.errors.MinioException;
 import io.minio.messages.Item;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -16,24 +18,39 @@ public class MinioFileService{
     @Inject
     private MinioClient minioClient;
 
-    public List<String> getAllFile(String bucket) throws Exception{
-        if (minioClient == null) {
-            throw new IllegalArgumentException("MinioClient cannot be null");
+    public List<FileInfo> getAllFile(String bucket) throws Exception {
+        List<FileInfo> fileReturn = new ArrayList<>();
+        Iterable<Result<Item>> listObj = minioClient.listObjects(bucket);
+        try {
+            for (Result<Item> file : listObj) {
+                Item item = file.get();
+                fileReturn.add(new FileInfo(item.objectName(),String.valueOf(item.size()),item.lastModified().toString()));
+            }
+        } catch (MinioException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        Iterable<Result<Item>> listObjectsArgs = minioClient.listObjects(ListObjectsArgs.builder()
-                .bucket(bucket).build());
 
-        List<String> resultToList = new ArrayList<>();
-        listObjectsArgs.forEach(value -> {
-            try {
-                resultToList.add(value.get().objectName());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        return resultToList;
+        return fileReturn;
     }
+
+
+    //    public List<BucketInfo> getAllBucket() {
+//        List<BucketInfo> bucketReturn = new ArrayList<>();
+//        try {
+//            List<Bucket> bucketList = minioClient.listBuckets();
+//            for (Bucket bucket : bucketList) {
+//                bucketReturn.add(new BucketInfo(bucket.name(), bucket.creationDate().toString()));
+//            }
+//        } catch (MinioException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return bucketReturn;
+//    }
 
     public Object uploadFile(String bucketName, InputStream filStream, String fileName) throws Exception{
         try{

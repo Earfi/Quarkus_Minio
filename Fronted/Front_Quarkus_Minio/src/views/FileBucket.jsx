@@ -6,7 +6,7 @@ import ListFile from "../components/file/ListFile";
 import UploadFile from "../components/file/UploadFile";
 
 function FileBucket() {
-    const { bucket } = useParams();
+    const { bucket } = useParams(); 
     const navigate = useNavigate();
     
     return (
@@ -17,8 +17,8 @@ function FileBucket() {
                     <Sidebar/>  
                 </div>
                 <div className="ml-[80px] flex flex-col w-[100%]"> 
-                    <div className="mx-auto">
-                        <h1 onClick={() => navigate(-1)} className="absolute text-4xl left-24 md:left-52 top-24 cursor-pointer hover:text-red-500 z-0">&#10094;</h1>
+                    <div className="mx-auto ">
+                        <h1 onClick={() => navigate(-1)} className="absolute text-4xl text-white md:text-black md:-left-20 cursor-pointer hover:text-red-500 z-0">&#10094;</h1>
                         <UploadFile/>
                         <ListFile bucket={bucket} />
                     </div>

@@ -8,6 +8,8 @@ public class AddressDto {
     private String street;
     private String city;
 
+
+
     public int getId() {
         return id;
     }

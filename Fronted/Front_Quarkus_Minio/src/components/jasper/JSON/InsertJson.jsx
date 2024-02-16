@@ -37,20 +37,34 @@ function InsertJson() {
             phone: "",
             birthday: ""
         });
-        alert("Insert Successfully!!")
+
+        if (setNewUser.name != "") {
+            alert("Insert Successfully!!") 
+        }else{
+            alert("Please Input Value!!!")
+        }
         console.log(allUsers);
         console.log(newUser);
     };
 
     const handleGeneratePdf = async () => {
         try {
+
+            if(setCompanyName == "" || setCompanyUrl == ""){
+                return
+            }
+            if(bucket == "" || bucket == "Please Selete"){
+                alert("Please Selete Bucket!!")
+                return
+            }
+
             const dataToSend = {
                 companyName: companyName,
                 companyUrl: companyUrl,
                 rows: allUsers
             };
     
-            const response = await fetch(`http://localhost:8080/api/v1/report/generate/${fileName}/${bucket}`, {
+            const response = await fetch(`http://localhost:8080/api/v1/report/generate/${fileName}/${bucket}/1`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -62,7 +76,7 @@ function InsertJson() {
                 throw new Error("Failed to generate PDF");
             }
     
-            const responseData = await response.blob();
+            const responseData = await response.blob();  
             saveAs(responseData, `${fileName}` + ".pdf");
         } catch (error) {
             console.error("Error generating PDF:", error);
@@ -71,11 +85,11 @@ function InsertJson() {
     
 
     return (
-        <div className="my-2 w-full bg-gray-100">
-            <div className="w-[400px] md:w-[600px] lg:w-[800px] xl:w-[1000px] bg-gray-200 h-fit p-2 mx-auto border-black border-2">
+        <div className="my-2 px-5 w-full bg-gray-100">
+            <form className="w-full md:w-[600px] lg:w-[800px] xl:w-[1000px] bg-gray-200 h-fit p-2 mx-auto border-black border-2">
                 <div className="my-2">
                     <h1><b>Select Bucket to Collect Files!!</b></h1>
-                    <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white my-2'>
+                    <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white my-2' required>
                         {allBuckets.length == 0 &&
                         (
                             <>
@@ -93,16 +107,16 @@ function InsertJson() {
                 </div>
                 <div className="flex flex-col items-start w-full my-2">
                         <label><b>File Name</b></label>
-                        <input onChange={(e) => setFileName(e.target.value)} type="text" placeholder="input file name" className="border px-2 rounded-lg w-full h-10 mt-2"/>
+                        <input onChange={(e) => setFileName(e.target.value)} type="text" placeholder="input file name" className="border px-2 rounded-lg w-full h-10 mt-2" required/>
                 </div>
                 <div className="w-full flex flex-col justify-center items-center gap-2 md:flex-row">
                     <div className="flex flex-col items-start w-full">
                         <label><b>Company Name</b></label>
-                        <input onChange={(e) => setCompanyName(e.target.value)} type="text" placeholder="company name" className="border px-2 rounded-lg w-full h-10 mt-2"/>
+                        <input onChange={(e) => setCompanyName(e.target.value)} type="text" placeholder="company name" className="border px-2 rounded-lg w-full h-10 mt-2" required/>
                     </div>
                     <div className="flex flex-col items-start w-full">
                         <label><b>Company Website</b></label>
-                        <input onChange={(e) => setCompanyUrl(e.target.value)} type="text" placeholder="company website" className="border px-2 rounded-lg w-full h-10 mt-2"/>
+                        <input onChange={(e) => setCompanyUrl(e.target.value)} type="text" placeholder="company website" className="border px-2 rounded-lg w-full h-10 mt-2" required/>
                     </div>
                 </div>
                 <hr className="my-2"/>
@@ -116,7 +130,7 @@ function InsertJson() {
                             onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
                             type="text" 
                             placeholder="your name" 
-                            className="border px-2 rounded-lg w-full h-10 mt-2"
+                            className="border px-2 rounded-lg w-full h-10 mt-2"  required
                         />
                     </div>
                     <div className="flex flex-col items-start w-full">
@@ -126,7 +140,7 @@ function InsertJson() {
                             onChange={(e) => setNewUser({ ...newUser, age: e.target.value })} 
                             type="number" 
                             placeholder="your age" 
-                            className="border px-2 rounded-lg w-full h-10 mt-2"
+                            className="border px-2 rounded-lg w-full h-10 mt-2"  required
                         />
                     </div>
                     <div className="flex flex-col items-start w-full">
@@ -135,7 +149,7 @@ function InsertJson() {
                             value={newUser.gender} 
                             onChange={(e) => setNewUser({ ...newUser, gender: e.target.value })} 
                             name="gender"  
-                            className="border px-2 rounded-lg w-full h-10 mt-2"
+                            className="border px-2 rounded-lg w-full h-10 mt-2"  required
                         >
                             <option value="">Select</option>
                             <option value="male">Male</option>
@@ -149,7 +163,7 @@ function InsertJson() {
                             onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })} 
                             type="number" 
                             placeholder="your phone" 
-                            className="border px-2 rounded-lg w-full h-10 mt-2"
+                            className="border px-2 rounded-lg w-full h-10 mt-2"  required
                         />
                     </div>
                     <div className="flex flex-col items-start w-full">
@@ -159,14 +173,14 @@ function InsertJson() {
                             onChange={(e) => setNewUser({ ...newUser, birthday: e.target.value })} 
                             type="date" 
                             placeholder="your birthday" 
-                            className="border px-2 rounded-lg w-full h-10 mt-2"
+                            className="border px-2 rounded-lg w-full h-10 mt-2" required
                         />
                     </div>
                 </div>
 
-                <button onClick={handleAddUser} className="w-full h-10 bg-red-500 text-white font-bold my-2 hover:bg-red-800">Add User</button>
-                <button onClick={handleGeneratePdf} className="w-full h-10 bg-green-500 text-white font-bold my-2 hover:bg-green-800">Generate PDF</button>
-            </div>
+                <button type="submit" onClick={handleAddUser} className="w-full h-10 bg-red-500 text-white font-bold my-2 hover:bg-red-800">Add User</button>
+                <button type="submit" onClick={handleGeneratePdf} className="w-full h-10 bg-green-500 text-white font-bold my-2 hover:bg-green-800">Generate PDF</button>
+            </form>
         </div>
     )
 }

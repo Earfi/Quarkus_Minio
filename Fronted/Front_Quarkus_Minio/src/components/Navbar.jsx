@@ -20,7 +20,7 @@ function Navbar() {
             </div>
             <h1 onClick={() => setOpenBar(!openBar)} className="block lg:hidden mr-10 text-2xl cursor-pointer hover:text-red-500">&#9776;</h1>
             
-            <div className={`absolute right-${openBar == true ? '0' : '[-100%]'} w-[250px] bg-gray-800 h-[90vh] top-20 py-5 transition-all border-4 border-black`}>
+            <div className={`block  absolute ${openBar ? 'right-0' : 'right-[-100%]'} w-[250px] bg-gray-800 h-[90vh] top-20 py-5 transition-all border-4 border-black`}>
                 <div className="flex flex-col justify-center items-center gap-6">
                     <Link to="/" className="hover:text-orange-400 border-b-2">HOME</Link> 
                     <Link to="/bucket" className="hover:text-orange-400 border-b-2">BUCKET &#9778;</Link> 

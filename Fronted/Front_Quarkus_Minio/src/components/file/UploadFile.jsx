@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2'
 
 function UploadFile() {
     const [allBuckets,setAllBuckets] = useState([]);  
@@ -43,26 +44,43 @@ function UploadFile() {
             method: "POST",
             body: formData,
           });
-      
+
           if (res.ok) {
-            alert("File uploaded successfully");
-            window.location.reload();
-          } else {
-            alert("Error uploading file!!!");
-          }
+            Swal.fire({
+                title: "File uploaded successfully",
+                text: "Please Check your File!!!",
+                icon: "success",
+                showConfirmButton: false, 
+                timer: 1000
+              });
+            setTimeout(() => {
+                window.location.reload()
+            }, 1500); 
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error uploading file!!!", 
+            }); 
+        } 
+       
         } catch (error) {
-          alert("Error uploading file:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Error uploading file!!!", 
+        }); 
         }
       };
       
 
     return (
-        <div className='bg-blue-950 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-10 py-5 mt-20 border-2 shadow-xl'>
+        <div className='bg-blue-950 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-5 py-5  border-2 shadow-xl'>
           <h1 className='font-bold text-xl text-white '>UploadFile</h1>
-          <div className='sm:flex justify-center flex-row h-fit'> 
-            <div className='m-2'>
-              <p className='text-md font-serif ms-2 text-white'>Select Bucket</p> 
-              <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white'>
+          <div className=' sm:flex justify-center flex-row h-fit  '> 
+            <div className='m-2 w-full'>
+              <p className='text-md font-serif text-white'>Select Bucket</p> 
+              <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white '>
                 {allBuckets.length == 0 &&
                   (
                     <>

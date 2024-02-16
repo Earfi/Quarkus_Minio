@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 function GetAddress() {
+    const [allBuckets,setAllBuckets] = useState([]);  
+    const [bucket,setBucket] = useState(''); 
 
     const [infoAddress,setInfoAddress] = useState([]);
 
@@ -12,7 +14,14 @@ function GetAddress() {
             const data = await res.json();
             setInfoAddress(data);
         };  
+
+        const getAllBacket = async () => {
+            const res = await fetch("http://localhost:8080/minio/all/bucket")
+            const data = await res.json()
+            setAllBuckets(data)
+        }  
         getAddress();
+        getAllBacket();
     },[])
 
     const removeAddress = async (id) => {
@@ -31,7 +40,7 @@ function GetAddress() {
 
     const downloadPdf = async () => {
         try {
-            const res = await fetch("http://localhost:8080/jasper/address/export", {
+            const res = await fetch(`http://localhost:8080/jasper/address/export/${bucket}`, {
                 method: "GET"
             });
     
@@ -57,7 +66,24 @@ function GetAddress() {
             <h1 className="pt-5 pl-5 text-3xl font-medium ">Address Client</h1>
             <hr className="bg-black h-1"/>  
             {infoAddress.length > 0 && (
-                <button className="m-5" onClick={downloadPdf}><a href="" className="bg-purple-600 text-white  p-2 rounded-lg hover:bg-purple-800 cursor-pointer">Download</a></button>
+                <div className="flex flex-row">
+                    <button className="m-5" onClick={downloadPdf}><a href="" className="bg-purple-600 text-white  p-2 rounded-lg hover:bg-purple-800 cursor-pointer">GEN PDF</a></button>
+                    <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white my-2' required>
+                        {allBuckets.length == 0 &&
+                        (
+                            <>
+                            <option className='m-5 bg-red-500 text-white font-mono border-l-red-500 border p-2'>No Bucket !!!</option>
+                            </>
+                        )
+                        }
+                        <option className="bg-black text-white hover:cursor-none ">Please Select Bucket</option>
+                        {allBuckets.map((post) => ( 
+                        <>
+                            <option className='m-5 text-black bg-white hover:bg-red-400 hover:text-white hover:cursor-pointer"' key={post} value={post}>{post}</option>
+                        </>
+                        ))} 
+                    </select>
+                </div>
             )}
             {infoAddress.length > 0 && (
                 <div className="p-5 flex gap-5 flex-wrap justify-center">

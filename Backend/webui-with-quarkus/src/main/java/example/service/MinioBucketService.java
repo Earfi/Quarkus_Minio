@@ -1,9 +1,11 @@
 package example.service;
 
+import example.dto.BucketInfo;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.RemoveBucketArgs;
+import io.minio.errors.MinioException;
 import io.minio.messages.Bucket;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -18,19 +20,36 @@ public class MinioBucketService {
     @Inject
     private MinioClient minioClient;
 
-    public List<String> getAllBucket() throws Exception{
-        List<Bucket> bucketList = minioClient.listBuckets();
+    public List<String> getAllBucket() {
         List<String> bucketReturn = new ArrayList<>();
-        bucketList.forEach(value -> {
-            try {
-                bucketReturn.add(value.name());
-                System.out.println(value.name() + ", " + value.creationDate());
-            }catch (Exception e) {
-                e.printStackTrace();
+        try {
+            List<Bucket> bucketList = minioClient.listBuckets();
+            for (Bucket bucket : bucketList) {
+                bucketReturn.add(bucket.name());
             }
-        });
+        } catch (MinioException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return bucketReturn;
     }
+
+
+//    public List<BucketInfo> getAllBucket() {
+//        List<BucketInfo> bucketReturn = new ArrayList<>();
+//        try {
+//            List<Bucket> bucketList = minioClient.listBuckets();
+//            for (Bucket bucket : bucketList) {
+//                bucketReturn.add(new BucketInfo(bucket.name(), bucket.creationDate().toString()));
+//            }
+//        } catch (MinioException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return bucketReturn;
+//    }
 
     public Object uploadBucket(String bucketName){
 //        String bucketName = "test";
@@ -73,5 +92,7 @@ public class MinioBucketService {
 //                    .entity("Error removing bucket: " + e.getMessage()).build();
 //        }
     }
+
+
 
 }

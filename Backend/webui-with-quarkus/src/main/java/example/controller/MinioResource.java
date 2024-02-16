@@ -1,18 +1,26 @@
 package example.controller;
 
+import example.dto.FileInfo;
 import example.service.MinioBucketService;
 import example.service.MinioFileService;
-import example.service.serviceAll.BucketService;
-import example.service.serviceAll.FileService;
-import io.minio.DownloadObjectArgs;
-import io.minio.MinioClient;
+import example.service.serviceInject.BucketService;
+import example.service.serviceInject.FileService;
+import io.minio.*;
+import io.minio.errors.MinioException;
+import io.minio.messages.Item;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import java.io.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Path("/minio")
@@ -30,9 +38,18 @@ public class MinioResource {
     @GET
     @Path("/file/all/{bucket}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllFile(@PathParam("bucket") String bucket) throws Exception {
-        List<String> files = fileService.getAllFile(bucket);
-        return Response.ok(files).build();
+    @Schema(implementation = MinioFileService.class)
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "ok" , content = @Content(mediaType = "application/json")),
+            @APIResponse(responseCode = "404", description = "Nooo Bucket")
+    })
+    public Response getAllFile(@PathParam("bucket") String bucket) {
+        try {
+            List<FileInfo> files = fileService.getAllFile(bucket);
+            return Response.ok(files).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Nooo Bucket").build();
+        }
     }
 
     @GET
@@ -78,8 +95,14 @@ public class MinioResource {
     @Path("/bucket/upload")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response uploadBucket(BucketService requestBody) {
-        String bucketName = requestBody.getBucketName();
-        return Response.ok().entity(bucketService.uploadBucket(bucketName)).build();
+        try {
+            String bucketName = requestBody.getBucketName();
+            bucketService.uploadBucket(bucketName);
+            return Response.status(200).build();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DELETE
@@ -88,6 +111,8 @@ public class MinioResource {
         bucketService.removeBucket(bucketName);
         return Response.status(200).build();
     }
+
+
 
 }
 

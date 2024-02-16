@@ -1,8 +1,29 @@
 import { useState } from "react";
+import Swal from 'sweetalert2'
 
-function AddBucket() {
+
+function AddBucket() { 
+
+
     const [showAdd,setShowAdd] = useState(false);
     const [inputBucket,setInputBucket] = useState(null); 
+
+    const showSwal = () => {
+        Swal.fire({
+            title: "Bucket add successfully",
+            text: "Please Check your bucket!!!",
+            icon: "success" ,
+            showConfirmButton: false, 
+            timer: 1000
+          });
+    } 
+    const showSwalErr = () => {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Error adding Bucket!!!", 
+        }); 
+    } 
 
     const uploadBucket = async () => {
         try{
@@ -22,12 +43,14 @@ function AddBucket() {
                 },
                 body: JSON.stringify(requestData),
             })
-
+            console.log(res);
             if (res.ok) {
-                alert("Bucket add successfully");
-                window.location.reload();
-            } else {
-                alert("Error adding Bucket!!!");
+                showSwal();  
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1500); 
+            } else if (!res.ok){
+                showSwalErr(); 
             }
         } catch(error) {
             alert("Error adding Bucket!! :", error);
