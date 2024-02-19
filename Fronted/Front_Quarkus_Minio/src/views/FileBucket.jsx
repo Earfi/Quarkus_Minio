@@ -13,12 +13,12 @@ function FileBucket() {
         <div className="w-full overflow-hidden mb-20"> 
             <Navbar/>
             <div className="flex flex-row pt-20">
-                <div className="fixed z-10">
+                <div className="fixed ">
                     <Sidebar/>  
                 </div>
                 <div className="ml-[80px] flex flex-col w-[100%]"> 
                     <div className="mx-auto ">
-                        <h1 onClick={() => navigate(-1)} className="absolute text-4xl text-white md:text-black md:-left-20 cursor-pointer hover:text-red-500 z-0">&#10094;</h1>
+                        {/* <h1 onClick={() => navigate(-1)} className="absolute text-4xl text-white md:text-black md:-left-20 cursor-pointer hover:text-red-500 z-0">&#10094;</h1> */}
                         <UploadFile/>
                         <ListFile bucket={bucket} />
                     </div>

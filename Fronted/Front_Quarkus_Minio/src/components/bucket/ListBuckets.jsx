@@ -9,8 +9,6 @@ function ListBuckets() {
     const [bucketEditName, setBucketEditName] = useState("");
     const [newName, setNewName] = useState("");
      
- 
-
     useEffect(() => { 
         const getBucket = async () => {
             try {

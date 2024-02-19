@@ -32,32 +32,38 @@ function Navbar() {
         }, 700);
     }
     return (
-        <div>
-            <div className="w-full h-20 bg-blue-950 text-xl font-medium text-white flex justify-between items-center fixed z-50"> 
-                <Link to="/" className="hidden md:block ml-10 text-sm md:ml-30 border py-2 px-2 rounded-full">Minio With Quarkus</Link>
+        <div className="z-50">
+            <div className="w-full h-20 bg-blue-950 text-xl font-medium text-white flex justify-around items-center fixed "> 
+                <Link to="/" className="hidden sm:block ml-10 text-sm md:ml-30 border py-2 px-2 rounded-full">Minio With Quarkus</Link>
                 <div className="hidden lg:flex p-5 text-sm sm:text-md md:text-xl gap-7 cursor-pointer items-center">
                     <Link to="/" className="hover:text-orange-400">HOME</Link> 
-                    <Link to="/bucket" className="hover:text-orange-400">BUCKET &#9778;</Link> 
-                    <Link to="/jasper" className="hover:text-orange-400">JASPER &#8464;</Link> 
-                    <Link to="/about" className="hover:text-orange-400">ABOUT &#8471;</Link> 
-                    <Link to="/service" className="hover:text-orange-400">SERVICE &#9743;</Link>  
+                    <Link to="/bucket" className="hover:text-orange-400">BUCKET</Link> 
+                    <Link to="/jasper" className="hover:text-orange-400">JASPER</Link> 
+                    <Link to="/about" className="hover:text-orange-400">ABOUT</Link> 
+                    <Link to="/service" className="hover:text-orange-400">SERVICE</Link>  
                 </div>
-                <input 
-                    onClick={() => setSearch(!search)}  
-                    type="text" 
-                    className="p-1 rounded-md text-black mx-5" 
-                    name="search" 
-                    placeholder="Search Bucket" 
-                    value={searchValue} 
-                    onChange={(e) => setSearchValue(e.target.value)} 
-                />
+                <div className="flex gap-10">
+                    <div className=" flex flex-row relative overflow-hidden">
+                        <input 
+                            onClick={() => setSearch(true)}  
+                            type="text" 
+                            className="p-1 rounded-md text-black mx-5 w-36 sm:w-42" 
+                            name="search" 
+                            placeholder="Search Bucket" 
+                            value={searchValue} 
+                            onChange={(e) => setSearchValue(e.target.value)} 
+                        />
+                        <p onClick={() => setSearch(false)} className="absolute right-0 h-full bg-white text-black w-10 text-center text-2xl font-bold cursor-pointer hover:text-blue-500 rounded-md">&#9747;</p>
+                    </div>
+                    <h1 onClick={() => setOpenBar(!openBar)} className="block lg:hidden mr-10 text-2xl cursor-pointer hover:text-red-500">&#9776;</h1>
+                </div>
                 <div className="hidden xl:flex p-5 text-sm sm:text-xl gap-5 cursor-pointer items-center"> 
                     <Link to="/profile"><h1 className="hover:text-orange-400 text-sm sm:text-xl ">Profile</h1></Link>
                     <h1 className="text-5xl">&#9996;</h1>
                 </div>
-                <h1 onClick={() => setOpenBar(!openBar)} className="block lg:hidden mr-10 text-2xl cursor-pointer hover:text-red-500">&#9776;</h1>
                 
-                <div className={`block  absolute ${openBar ? 'right-0' : 'right-[-100%]'} w-[250px] bg-gray-800 h-[90vh] top-20 py-5 transition-all border-4 border-black`}>
+                
+                <div className={`block lg:hidden absolute ${openBar ? 'right-0' : 'right-[-100%]'} w-[250px] bg-gray-800 h-[90vh] top-20 py-5 transition-all border-4 border-black`}>
                     <div className="flex flex-col justify-center items-center gap-6">
                         <Link to="/" className="hover:text-orange-400 border-b-2">HOME</Link> 
                         <Link to="/bucket" className="hover:text-orange-400 border-b-2">BUCKET &#9778;</Link> 
@@ -67,7 +73,7 @@ function Navbar() {
                     </div>
                 </div>
             </div>
-            <div className={`absolute top-20 ${search ? 'h-full' : 'h-0'} w-full bg-gray-200 transition-all duration-500 overflow-hidden z-50 flex justify-center`}>
+            <div className={`fixed top-20 ${search ? 'h-full' : 'h-0'} w-full backdrop-blur-3xl transition-all duration-500 overflow-hidden z-50 flex justify-center `}>
                 <div className="max-w-screen-lg w-full p-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {filteredBuckets.map((bucket) => (

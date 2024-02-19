@@ -36,7 +36,6 @@ public class MinioFileService{
         return fileReturn;
     }
 
-
     //    public List<BucketInfo> getAllBucket() {
 //        List<BucketInfo> bucketReturn = new ArrayList<>();
 //        try {
@@ -81,9 +80,14 @@ public class MinioFileService{
         }
     }
 
-    public InputStream downloadFile(String bucket, String fileName) throws Exception{
-        InputStream inputStream = minioClient.getObject(bucket,fileName);
-        return inputStream;
+    public InputStream downloadFile(String bucket, String fileName) throws Exception {
+        try {
+            InputStream inputStream = minioClient.getObject(bucket, fileName);
+            return inputStream;
+        } catch (MinioException e) {
+            System.err.println("Error while downloading file: " + e.getMessage());
+            throw new Exception("Failed to download file from MinIO", e);
+        }
     }
 
 

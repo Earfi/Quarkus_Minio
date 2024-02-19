@@ -22,6 +22,7 @@ import java.io.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.UUID;
 
 @Path("/minio")
 @Produces(MediaType.APPLICATION_JSON)
@@ -66,8 +67,11 @@ public class MinioResource {
     public Response uploadFile(@PathParam("bucket") String bucketName,
                            @MultipartForm FileService file) throws Exception {
         InputStream filStream = file.file;
+        String fileName = file.fileName;
+        String objectId = UUID.randomUUID().toString();
+
         try  {
-            return Response.status(200).entity(fileService.uploadFile(bucketName, filStream, file.fileName)).build();
+            return Response.status(200).entity(fileService.uploadFile(bucketName, filStream, fileName)).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(500).entity("Failed to upload file").build();
@@ -77,10 +81,16 @@ public class MinioResource {
     @DELETE
     @Path("/file/delete/{bucket}/{fileName}")
     public Response deleteFile(@PathParam("bucket") String bucketName,
-                               @PathParam("fileName") String fileName) throws Exception {
-        fileService.deleteFile(bucketName,fileName);
-        return Response.ok().build();
+                               @PathParam("fileName") String fileName) {
+        try {
+            fileService.deleteFile(bucketName, fileName);
+            return Response.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to delete file").build();
+        }
     }
+
 
 
 //--------------- bucket ---------------------------
@@ -107,10 +117,16 @@ public class MinioResource {
 
     @DELETE
     @Path("/{bucket}/delete")
-    public Response deleteBucket(@PathParam("bucket") String bucketName) throws Exception {
-        bucketService.removeBucket(bucketName);
-        return Response.status(200).build();
+    public Response deleteBucket(@PathParam("bucket") String bucketName) {
+        try {
+            bucketService.removeBucket(bucketName);
+            return Response.status(200).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to delete bucket").build();
+        }
     }
+
 
 
 

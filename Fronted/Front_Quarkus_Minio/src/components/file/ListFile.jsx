@@ -152,7 +152,7 @@ function Information({bucket}) {
                                 <p><b>Size : </b>{convertBytes(file.fileSize)}</p>
                                 <p><b>Last Modified : </b>{convertDate(file.creationDate)}</p>
                             </div>
-                            <div className='flex flex-row flex-wrap gap-3 mt-2 md:mt-0 sm:ml-2 w-full justify-end'>
+                            <div className='flex flex-row flex-wrap gap-3 mt-2 md:mt-0 sm:ml-2 w-full justify-center sm:justify-end'>
                                 <button className='bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'>PREVIEW</button>
                                 <button onClick={() => downloadFile(file.fileName)}  className='bg-blue-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-blue-800'>Download</button>
                                 <button onClick={() => setFileEditedName(file.fileName)} className='bg-gray-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-gray-800'>Edit</button>

@@ -66,6 +66,7 @@ function AddBucket() {
                 <div className="flex flex-col mt-5 bg-white p-2 absolute top-32 shadow-2xl border-black border-2">
                     <h1 className="font-mono">Input Bucket!!!</h1>
                     <input onChange={(e) => setInputBucket(e.target.value)} type="text" className="border px-2 py-1"/> 
+                    <p className="text-red-500">*letter no</p>
                     <button onClick={uploadBucket} className="bg-red-500 mt-2 text-white px-2 py-1 rounded-md font-semibold border shadow-md hover:bg-red-800">Add</button>
                 </div>
             )
