@@ -9,8 +9,7 @@ function Information({bucket}) {
 
     useEffect(() => { 
  
-        const getFileFromBucket = async () => {
-            console.log(bucket);
+        const getFileFromBucket = async () => { 
             const res = await fetch(`http://localhost:8080/minio/file/all/${bucket}`)
             const data = await res.json()
             setFiles(data) 

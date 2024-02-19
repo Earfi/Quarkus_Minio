@@ -52,6 +52,9 @@ function UploadFile() {
                 showConfirmButton: false, 
                 timer: 1000
               });
+
+            // Toast();
+            
             setTimeout(() => {
                 window.location.reload()
             }, 1500); 
@@ -71,6 +74,22 @@ function UploadFile() {
         }); 
         }
       };
+
+      // const Toast = Swal.mixin({
+      //   toast: true,
+      //   position: "bottom-end",
+      //   showConfirmButton: false,
+      //   timer: 3000,
+      //   timerProgressBar: true,
+      //   didOpen: (toast) => {
+      //     toast.onmouseenter = Swal.stopTimer;
+      //     toast.onmouseleave = Swal.resumeTimer;
+      //   }
+      // });
+      // Toast.fire({
+      //   icon: "success",
+      //   title: "Signed in successfully"
+      // });
       
 
     return (

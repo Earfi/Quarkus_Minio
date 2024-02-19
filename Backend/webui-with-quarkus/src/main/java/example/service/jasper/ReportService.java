@@ -3,24 +3,31 @@ package example.service.jasper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import example.dto.AddressDto;
 import example.dto.jasper.temp1.ReportDto;
+import example.dto.jasper.temp2.AddressJasperRowDto;
+import example.dto.jasper.temp3.LetterDto;
 import example.service.MinioFileService;
 import io.vertx.core.json.JsonObject;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Singleton
 public class ReportService{
 
     private JasperReport compiledReport;
     private String jasperFileName;
+
+    private static final Logger logger = Logger.getLogger(ReportService.class.getName());
 
     @Inject
     MinioFileService minioFileService;
@@ -66,7 +73,7 @@ public class ReportService{
             jasperFileName = "User_Address.jrxml";
 
             ObjectMapper objectMapper = new ObjectMapper();
-            AddressDto dto = objectMapper.readValue(jsonObject.toString(),AddressDto.class);
+            AddressJasperRowDto dto = objectMapper.readValue(jsonObject.toString(),AddressJasperRowDto.class);
 
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourcePath + jasperFileName);
             if (inputStream != null) {
@@ -92,7 +99,52 @@ public class ReportService{
 
             return pdfData;
 
+        } else if(template.equals("3")){
+            jasperFileName = "Letter.jrxml";
+
+            try {
+
+                InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourcePath + jasperFileName);
+                if (inputStream == null) {
+                    throw new IllegalStateException("Jasper file not found: " + jasperFileName);
+                }
+
+                compiledReport = JasperCompileManager.compileReport(inputStream);
+
+//                LetterDto letterDto = new LetterDto();
+                ObjectMapper objectMapper = new ObjectMapper();
+                LetterDto letterDto = objectMapper.readValue(jsonObject.toString(),LetterDto.class);
+
+                Map<String, Object> parameters = new HashMap<>();
+                parameters.put("senderAddress", letterDto.getSenderAddress());
+                parameters.put("date", letterDto.getDate());
+                parameters.put("recipientName", letterDto.getRecipientName());
+                parameters.put("recipientAddress", letterDto.getRecipientAddress());
+                parameters.put("salutation", letterDto.getSalutation());
+                parameters.put("content1", letterDto.getContent1());
+                parameters.put("content2", letterDto.getContent2());
+                parameters.put("content3", letterDto.getContent3());
+                parameters.put("closing", letterDto.getClosing());
+                parameters.put("signature", letterDto.getSignature());
+
+                JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Collections.singleton(letterDto));
+                JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport, parameters, dataSource);
+                byte[] pdfData = JasperExportManager.exportReportToPdf(jasperPrint);
+
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(pdfData);
+
+                minioFileService.uploadFile(bucket, byteArrayInputStream, filename);
+
+                return pdfData;
+
+            } catch (Exception e) {
+                // Log error
+                logger.severe("Failed to generate PDF: " + e.getMessage());
+                e.printStackTrace();
+                return null;
+            }
         }
+
 
         return null;
     }

@@ -1,187 +1,39 @@
-import { useEffect, useState } from "react";
-import { saveAs } from 'file-saver';
+import { useState } from "react";
+import InsertCompany from "./InsertCompany";
+import InsertLetter from "./InsertLetter";
+
 
 function InsertJson() {
-    const [allBuckets,setAllBuckets] = useState([]);  
-    const [bucket,setBucket] = useState(''); 
-
-    const [fileName,setFileName] = useState("");
-
-    const [companyName, setCompanyName] = useState("");
-    const [companyUrl, setCompanyUrl] = useState("");
-    const [allUsers, setAllUsers] = useState([]);
-
-    useEffect(() => { 
-        const getAllBacket = async () => {
-            const res = await fetch("http://localhost:8080/minio/all/bucket")
-            const data = await res.json()
-            setAllBuckets(data)
-        }  
-        getAllBacket() 
-    },[]) 
-
-    const [newUser, setNewUser] = useState({
-        name: "",
-        age: "",
-        gender: "",
-        phone: "",
-        birthday: ""
-    });
-
-    const handleAddUser = () => {
-        setAllUsers([...allUsers, newUser]);
-        setNewUser({
-            name: "",
-            age: "",
-            gender: "",
-            phone: "",
-            birthday: ""
-        });
-
-        if (setNewUser.name != "") {
-            alert("Insert Successfully!!") 
-        }else{
-            alert("Please Input Value!!!")
-        }
-        console.log(allUsers);
-        console.log(newUser);
-    };
-
-    const handleGeneratePdf = async () => {
-        try {
-
-            if(setCompanyName == "" || setCompanyUrl == ""){
-                return
-            }
-            if(bucket == "" || bucket == "Please Selete"){
-                alert("Please Selete Bucket!!")
-                return
-            }
-
-            const dataToSend = {
-                companyName: companyName,
-                companyUrl: companyUrl,
-                rows: allUsers
-            };
-    
-            const response = await fetch(`http://localhost:8080/api/v1/report/generate/${fileName}/${bucket}/1`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(dataToSend)
-            });
-    
-            if (!response.ok) {
-                throw new Error("Failed to generate PDF");
-            }
-    
-            const responseData = await response.blob();  
-            saveAs(responseData, `${fileName}` + ".pdf");
-        } catch (error) {
-            console.error("Error generating PDF:", error);
-        }
-    };
-    
+    const [template,setTemplate] = useState(null);
 
     return (
-        <div className="my-2 px-5 w-full bg-gray-100">
-            <form className="w-full md:w-[600px] lg:w-[800px] xl:w-[1000px] bg-gray-200 h-fit p-2 mx-auto border-black border-2">
-                <div className="my-2">
-                    <h1><b>Select Bucket to Collect Files!!</b></h1>
-                    <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white my-2' required>
-                        {allBuckets.length == 0 &&
-                        (
+       <div  className="w-full h-fit ">
+        <hr />
+            <div>
+                <h1 className="ml-5 text-xl font-bold my-2 text-center">Select Template</h1>
+                <select onChange={(e) => setTemplate(e.target.value) } className="w-full h-18 border text-lg p-5 bg-blue-800 font-bold text-white text-center hover:bg-blue-900" >
+                    {/* <option value="0" className="bg-black hover:bg-gray-800">Select Template</option> */}
+                    <option value="0" className="bg-black text-white hover:bg-gray-800 cursor-none" >select</option> 
+                    <option value="1" className="bg-white text-black">Letter</option> 
+                    <option value="2" className="bg-white text-black">Company Client</option> 
+                </select>
+            </div>
+            <div className="w-full min-h-[100vh]"> 
+                    <div>
+                        {(template == null || template == "1") && (
                             <>
-                            <option className='m-5 bg-red-500 text-white font-mono border-l-red-500 border p-2'>No Bucket !!!</option>
+                                <InsertLetter/>
                             </>
-                        )
-                        }
-                        <option className="bg-black text-white hover:cursor-none ">Please Select</option>
-                        {allBuckets.map((post) => ( 
-                        <>
-                            <option className='m-5 text-black bg-white hover:bg-red-400 hover:text-white hover:cursor-pointer"' key={post} value={post}>{post}</option>
-                        </>
-                        ))} 
-                    </select>
-                </div>
-                <div className="flex flex-col items-start w-full my-2">
-                        <label><b>File Name</b></label>
-                        <input onChange={(e) => setFileName(e.target.value)} type="text" placeholder="input file name" className="border px-2 rounded-lg w-full h-10 mt-2" required/>
-                </div>
-                <div className="w-full flex flex-col justify-center items-center gap-2 md:flex-row">
-                    <div className="flex flex-col items-start w-full">
-                        <label><b>Company Name</b></label>
-                        <input onChange={(e) => setCompanyName(e.target.value)} type="text" placeholder="company name" className="border px-2 rounded-lg w-full h-10 mt-2" required/>
-                    </div>
-                    <div className="flex flex-col items-start w-full">
-                        <label><b>Company Website</b></label>
-                        <input onChange={(e) => setCompanyUrl(e.target.value)} type="text" placeholder="company website" className="border px-2 rounded-lg w-full h-10 mt-2" required/>
-                    </div>
-                </div>
-                <hr className="my-2"/>
-                <h1 className="text-center font-bold border-fuchsia-400 border-b-8 ">Input User Information</h1>
-                
-                <div className="w-full my-2 border border-gray-100 p-2 bg-gray-300 flex flex-col items-center gap-2 md:grid md:grid-cols-2 xl:grid-cols-3">
-                    <div className="flex flex-col items-start w-full">
-                        <label><b>Name</b></label>
-                        <input 
-                            value={newUser.name} 
-                            onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-                            type="text" 
-                            placeholder="your name" 
-                            className="border px-2 rounded-lg w-full h-10 mt-2"  required
-                        />
-                    </div>
-                    <div className="flex flex-col items-start w-full">
-                        <label><b>Age</b></label>
-                        <input 
-                            value={newUser.age} 
-                            onChange={(e) => setNewUser({ ...newUser, age: e.target.value })} 
-                            type="number" 
-                            placeholder="your age" 
-                            className="border px-2 rounded-lg w-full h-10 mt-2"  required
-                        />
-                    </div>
-                    <div className="flex flex-col items-start w-full">
-                        <label><b>Gender</b></label>
-                        <select 
-                            value={newUser.gender} 
-                            onChange={(e) => setNewUser({ ...newUser, gender: e.target.value })} 
-                            name="gender"  
-                            className="border px-2 rounded-lg w-full h-10 mt-2"  required
-                        >
-                            <option value="">Select</option>
-                            <option value="male">Male</option>
-                            <option value="female">FeMale</option>
-                        </select>
-                    </div>
-                    <div className="flex flex-col items-start w-full">
-                        <label><b>Phone</b></label>
-                        <input 
-                            value={newUser.phone} 
-                            onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })} 
-                            type="number" 
-                            placeholder="your phone" 
-                            className="border px-2 rounded-lg w-full h-10 mt-2"  required
-                        />
-                    </div>
-                    <div className="flex flex-col items-start w-full">
-                        <label><b>Birthday</b></label>
-                        <input 
-                            value={newUser.birthday} 
-                            onChange={(e) => setNewUser({ ...newUser, birthday: e.target.value })} 
-                            type="date" 
-                            placeholder="your birthday" 
-                            className="border px-2 rounded-lg w-full h-10 mt-2" required
-                        />
-                    </div>
-                </div>
+                        )}
+                        {template == "2" && (
+                            <>
+                                <InsertCompany/>
+                            </>
+                        )}
+                    </div> 
+            </div>
 
-                <button type="submit" onClick={handleAddUser} className="w-full h-10 bg-red-500 text-white font-bold my-2 hover:bg-red-800">Add User</button>
-                <button type="submit" onClick={handleGeneratePdf} className="w-full h-10 bg-green-500 text-white font-bold my-2 hover:bg-green-800">Generate PDF</button>
-            </form>
-        </div>
+       </div>
     )
 }
 

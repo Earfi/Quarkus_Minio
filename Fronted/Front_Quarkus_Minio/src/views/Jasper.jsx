@@ -13,7 +13,7 @@ function Jasper() {
                     <Sidebar/>  
                 </div>
                 <div className="ml-[80px] flex flex-col w-[100%]"> 
-                    <div className="w-fit mx-auto">
+                    <div className="w-fit mx-auto"> 
                         <div className="mt-5">
                             <label className="text-xl font-mono">Gen PDF with Database : </label>
                             <Link to="/jasper/db">

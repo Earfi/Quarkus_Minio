@@ -63,10 +63,10 @@ function AddBucket() {
                 Add Bucket
             </button> 
             {showAdd == true && (
-                <div className="flex flex-col mt-5 bg-white p-2 absolute top-32 shadow-2xl border-black border-2">
+                <div className="flex flex-col mt-5 bg-white p-2 absolute top-32 shadow-2xl border-black border-2 w-48">
                     <h1 className="font-mono">Input Bucket!!!</h1>
                     <input onChange={(e) => setInputBucket(e.target.value)} type="text" className="border px-2 py-1"/> 
-                    <p className="text-red-500">*letter no</p>
+                    <p className="text-red-500">&#42; Only lowercase English letters are allowed. Special characters are not permitted. &#42;</p>
                     <button onClick={uploadBucket} className="bg-red-500 mt-2 text-white px-2 py-1 rounded-md font-semibold border shadow-md hover:bg-red-800">Add</button>
                 </div>
             )

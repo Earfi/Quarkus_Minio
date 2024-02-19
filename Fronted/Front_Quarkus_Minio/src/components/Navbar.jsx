@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 function Navbar() {
     const [allBuckets,setAllBuckets] = useState([]);
@@ -30,7 +31,10 @@ function Navbar() {
         setTimeout(() => {
             window.location.reload();
         }, 700);
+ 
     }
+
+    
     return (
         <div className="z-50">
             <div className="w-full h-20 bg-blue-950 text-xl font-medium text-white flex justify-around items-center fixed "> 
