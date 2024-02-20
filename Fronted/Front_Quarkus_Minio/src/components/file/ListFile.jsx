@@ -6,6 +6,8 @@ function Information({bucket}) {
     const [files,setFiles] = useState([]);
     const [editBtn, setEditBtn] = useState(false);
     const [filesEditName, setFilesEditName] = useState("");
+    const [newName, setNewName] = useState("");
+ 
 
     useEffect(() => { 
  
@@ -132,6 +134,41 @@ function Information({bucket}) {
         }
     }
 
+    const renameFile = async () => {
+        const typeFile = filesEditName.slice(-3);
+
+        let newValue = newName + "." + typeFile;
+        // console.log("Bucket name : " + bucket);
+        // console.log("Old name : " + filesEditName);
+        // console.log("Type File : " + typeFile);
+        // console.log("New name : " + newValue);
+
+        const res = await fetch(`http://localhost:8080/minio/file/edit/${bucket}/${filesEditName}/${newValue}`, {
+            method: "PUT",
+        }); 
+    
+        if (res.ok) {
+            Swal.fire({
+                title: "Edit File Successfully!!",
+                text: "Please Check your File!!!",
+                icon: "success",
+                showConfirmButton: false, 
+                timer: 1000
+              });
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000); 
+        } else { 
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error Edit file Name!!!",
+                showConfirmButton: false,  
+                timer: 1000
+            });
+        }
+    };
+
     return (
         <>
             <div className='bg-slate-100 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] py-5 mt-10 '>
@@ -160,7 +197,7 @@ function Information({bucket}) {
                             <div className={` ${editBtn === true && filesEditName === file.fileName ? 'h-44 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl mb-2`}>
                                     <label className="text-xl my-2"><b>Input new File Bucket Name!!</b></label>
                                     <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-2 rounded-md w-full border" />
-                                    <button className="bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>
+                                    <button onClick={() => renameFile(file)} className="bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>
                             </div>
                         </div>
                     </div>

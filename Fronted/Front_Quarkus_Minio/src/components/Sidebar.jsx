@@ -7,7 +7,7 @@ function Sidebar() {
     return (
         <div className="z-10"> 
             <div className={` lg:flex flex-col items-center h-[120vh] overflow-y-auto bg-black text-white overflow-hidden transition-all relative ${fullWidth ? 'w-[250px]' : 'w-[80px]'}`}> 
-                <div className="w-full bg-gray-900 p-4 sm:p-5 mt-10 ">
+                <div className="w-full bg-black p-4 sm:p-5 mt-10 ">
                     <p onClick={() => setFullWidth((prev) => !prev)} 
                         className={`absolute text-gray-500 cursor-pointer hover:text-orange-500  ${fullWidth ? 'rotate-180 right-2 top-1 text-3xl ' : 'right-7 top-1 text-2xl'}`} >&#10132;</p>
                     <h1 className={`text-xl font-bold border-b-2 border-gray-600 ${fullWidth ? '' : 'hidden'}`}>User</h1> 

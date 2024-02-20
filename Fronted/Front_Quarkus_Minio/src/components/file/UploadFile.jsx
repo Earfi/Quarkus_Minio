@@ -93,7 +93,7 @@ function UploadFile() {
       
 
     return (
-        <div className='bg-blue-950 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-5 py-5  border-2 shadow-xl'>
+        <div className='bg-gray-950 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-5 py-5  border-2 shadow-xl'>
           <h1 className='font-bold text-xl text-white '>UploadFile</h1>
           <div className=' sm:flex justify-center flex-row h-fit  '> 
             <div className='m-2 w-full'>

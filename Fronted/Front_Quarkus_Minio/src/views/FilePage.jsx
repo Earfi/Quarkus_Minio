@@ -15,7 +15,7 @@ function FilePage() {
                 <div className="ml-[80px] flex flex-col w-[100%]"> 
                     <div className="mx-auto">
                         <UploadFile/> 
-                        <ListFile bucket={"1testbacket"} />
+                        <ListFile bucket={"1testbucket"} />
                         <ListFile bucket={"2testbucket"} />
                     </div>
                 </div>

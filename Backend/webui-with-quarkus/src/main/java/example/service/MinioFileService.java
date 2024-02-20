@@ -8,7 +8,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +93,33 @@ public class MinioFileService{
         }
     }
 
+    public Object renameFile(String bucketName, String oldName, String newName) {
+        try {
+            minioClient.copyObject(
+                    CopyObjectArgs.builder()
+                            .source(io.minio.CopySource.builder().bucket(bucketName).object(oldName).build())
+                            .bucket(bucketName)
+                            .object(newName)
+                            .build());
 
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(oldName)
+                            .build());
+
+            System.out.println("ไฟล์ถูกเปลี่ยนชื่อเรียบร้อยแล้ว");
+        } catch (MinioException e) {
+            System.out.println("เกิดข้อผิดพลาดจาก MinIO: " + e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 
 
 }

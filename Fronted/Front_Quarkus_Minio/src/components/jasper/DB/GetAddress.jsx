@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2'
 
 function GetAddress() {
     const [allBuckets,setAllBuckets] = useState([]);  
@@ -28,13 +29,20 @@ function GetAddress() {
         
             const res = await fetch(`http://localhost:8080/address/${id}`, {
                 method: "DELETE"
-            });
-    
+            }); 
             if (!res.ok) {
                 throw new Error("Failed to Delete Id" + id);
             } else{ 
-                alert("Delete Id " + id +  " successfully!");
-                window.location.reload();
+                Swal.fire({
+                    title: "Delete successfully",
+                    text: "Please Check your Address!!!",
+                    icon: "success" ,
+                    showConfirmButton: false, 
+                    timer: 1000
+                });
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1000); 
             } 
     }
 
@@ -86,15 +94,15 @@ function GetAddress() {
                 </div>
             )}
             {infoAddress.length > 0 && (
-                <div className="p-5 flex gap-5 flex-wrap justify-center">
+                <div className="p-5 flex gap-5 flex-wrap justify-start">
                     {infoAddress.map((a) => (
                         <div>
-                            <div className="bg-gray-800 p-5 w-[200px] h-[200px] font-sans text-white border-white border">
+                            <div className="bg-white p-5 w-[200px] h-[200px] font-sans text-black border-white border">
                                 <h1><b>Firstname :</b> {a.firstname}</h1>
                                 <h1><b>Lastname :</b> {a.lastname}</h1>
                                 <h1><b>Street :</b> {a.street}</h1>
                                 <h1><b>City :</b> {a.city}</h1>
-                                <button onClick={() => removeAddress(a.id)} className="bg-red-500 cursor-pointer p-1 rounded-md mt-3 hover:bg-red-800">DELETE</button>
+                                <button onClick={() => removeAddress(a.id)} className="bg-red-500 cursor-pointer text-white p-1 rounded-md mt-3 hover:bg-red-800">DELETE</button>
                             </div>
                         </div>
                     ))}

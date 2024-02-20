@@ -78,6 +78,20 @@ public class MinioResource {
         }
     }
 
+    @PUT
+    @Path("/file/edit/{bucket}/{oldName}/{newName}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response renameFile(@PathParam("bucket") String bucketName,
+                               @PathParam("oldName") String oldName,
+                               @PathParam("newName") String newName) throws Exception {
+        try  {
+            return Response.status(200).entity(fileService.renameFile(bucketName, oldName, newName)).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(500).entity("Failed to upload file").build();
+        }
+    }
+
     @DELETE
     @Path("/file/delete/{bucket}/{fileName}")
     public Response deleteFile(@PathParam("bucket") String bucketName,
