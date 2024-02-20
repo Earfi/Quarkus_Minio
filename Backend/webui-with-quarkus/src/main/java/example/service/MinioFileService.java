@@ -3,6 +3,7 @@ package example.service;
 import example.dto.FileInfo;
 import io.minio.*;
 import io.minio.errors.MinioException;
+import io.minio.http.Method;
 import io.minio.messages.Item;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -27,7 +28,15 @@ public class MinioFileService{
         try {
             for (Result<Item> file : listObj) {
                 Item item = file.get();
-                fileReturn.add(new FileInfo(item.objectName(),String.valueOf(item.size()),item.lastModified().toString()));
+                String url = minioClient.getPresignedObjectUrl(
+                        GetPresignedObjectUrlArgs.builder()
+                                .method(Method.GET)
+                                .bucket(bucket)
+                                .object(item.objectName())
+                                .expiry(24 * 60 *60)
+                                .build()
+                );
+                fileReturn.add(new FileInfo(item.objectName(),String.valueOf(item.size()),item.lastModified().toString() ,url));
             }
         } catch (MinioException e) {
             e.printStackTrace();

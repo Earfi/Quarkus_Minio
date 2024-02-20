@@ -131,7 +131,7 @@ function InsertCompany() {
         <div className="my-5 px-5 w-full  "> 
             <form className="w-full md:w-[600px] lg:w-[800px]  h-fit p-2 py-10 mx-auto border-black border-2 ">
                 <div className="w-full bg-gray-500 overflow-hidden rounded-2xl transition-all">
-                    <h1 className="bg-purple-700 p-2 cursor-pointer text-3xl hover:bg-red-300 px-10 text-white font-bold rounded-xl" onClick={() => setOpenJson(!openJson)}>Json</h1>
+                    <h1 className="bg-orange-700 p-2 cursor-pointer text-3xl hover:bg-red-300 px-10 text-white font-bold rounded-xl" onClick={() => setOpenJson(!openJson)}>Json</h1>
                         <div className={` ${openJson == true ? 'h-[500px]' : 'h-0'} overflow-hidden transition-all`}>
                             <div className="left-0 z-20  w-full mx-auto flex flex-col lg:flex-row md:justify-center items-center md:items-start gap-5 p-2 transition-all">
         

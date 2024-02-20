@@ -4,11 +4,14 @@ public class FileInfo {
     private String fileName;
     private String fileSize;
     private String creationDate;
+    private String url;
 
-    public FileInfo(String fileName, String fileSize, String creationDate) {
+
+    public FileInfo(String fileName, String fileSize, String creationDate, String url) {
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.creationDate = creationDate;
+        this.url = url;
     }
 
     public String getFileName() {
@@ -33,5 +36,13 @@ public class FileInfo {
 
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -7,6 +7,7 @@ function Information({bucket}) {
     const [editBtn, setEditBtn] = useState(false);
     const [filesEditName, setFilesEditName] = useState("");
     const [newName, setNewName] = useState("");
+    const [link, setLink] = useState("");
  
 
     useEffect(() => { 
@@ -97,9 +98,9 @@ function Information({bucket}) {
                 showConfirmButton: false, 
                 timer: 1000
               });
-            setTimeout(() => {
-                window.location.reload()
-            }, 1500); 
+            // setTimeout(() => {
+            //     window.location.reload()
+            // }, 1500); 
         } else { 
             Swal.fire({
                 icon: "error",
@@ -169,6 +170,12 @@ function Information({bucket}) {
         }
     };
 
+    const openPreview = async (Link) => {
+        document.getElementById('my_modal_2').showModal()  
+        setLink(Link) 
+        console.log(link);
+    };
+
     return (
         <>
             <div className='bg-slate-100 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] py-5 mt-10 '>
@@ -186,16 +193,34 @@ function Information({bucket}) {
                             <div className="flex flex-col hover:bg-gray-400 hover:text-white transition-all duration-200 w-[240px] sm:w-full mx-auto overflow-hidden bg-white p-2 border-black border rounded-xl">
                                 <p className='break-words'><b>Name : </b>{file.fileName}</p>
                                 <p><b>Size : </b>{convertBytes(file.fileSize)}</p>
-                                <p><b>Last Modified : </b>{convertDate(file.creationDate)}</p>
+                                <p><b>Last Modified : </b>{convertDate(file.creationDate)}</p>  
+                                 
+                                <dialog id="my_modal_2" className="modal">
+                                    <div className="modal-box">
+                                        {(link.includes("jpg") || link.includes("png")) && (
+                                            <img src={link} width="500" height="600"></img>  
+                                        )}
+                                        {/* <p className='text-black'>{link}</p> */}
+                                        {(link.includes("pdf")) && (
+                                            <p className='text-black'>Open New Tab</p>
+                                        )}
+                                    </div>
+                                    <form method="dialog" className="modal-backdrop">
+                                        <button>close</button>
+                                    </form>
+                                </dialog>  
                             </div>
-                            <div className='flex flex-row flex-wrap gap-3 mt-2 md:mt-0 sm:ml-2 w-full justify-center sm:justify-end'>
-                                <button className='bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'>PREVIEW</button>
+                            <div className='flex flex-row flex-wrap gap-3 mt-2 md:mt-0 sm:ml-2 w-full justify-center sm:justify-end'> 
+                                {/* <button className='bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'><a href={file.url}>PREVIEW</a></button> */}
+                                {/* <button  onClick={() => window.open(file.url)}  className='bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'>PREVIEW</button> */}
+                                <button onClick={()=> openPreview(file.url)} className='btn bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'>PREVIEW</button>
                                 <button onClick={() => downloadFile(file.fileName)}  className='bg-blue-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-blue-800'>Download</button>
                                 <button onClick={() => setFileEditedName(file.fileName)} className='bg-gray-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-gray-800'>Edit</button>
                                 <button onClick={() => deleteFile(file.fileName)} className='bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800'>DELETE</button>
-                            </div> 
+                            </div>  
+                                   
                             <div className={` ${editBtn === true && filesEditName === file.fileName ? 'h-44 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl mb-2`}>
-                                    <label className="text-xl my-2"><b>Input new File Bucket Name!!</b></label>
+                                    <label className="text-xl my-2"><b>Input new File Name!!</b></label>
                                     <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-2 rounded-md w-full border" />
                                     <button onClick={() => renameFile(file)} className="bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>
                             </div>

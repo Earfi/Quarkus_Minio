@@ -100,7 +100,7 @@ function InsertLetter() {
       <div className="w-full md:w-[600px] lg:w-[800px]  bg-gray-200 h-fit p-2 py-10 mx-auto border-black border-2">
         <div className="w-full overflow-hidden rounded-2xl transition-all">
           <h1
-            className="bg-purple-700 p-2 cursor-pointer text-3xl hover:bg-red-300 px-10 text-white font-bold rounded-xl"
+            className="bg-orange-500 p-2 cursor-pointer text-3xl hover:bg-red-300 px-10 text-white font-bold rounded-xl"
             onClick={() => setOpenJson(!openJson)}
           >
             Json

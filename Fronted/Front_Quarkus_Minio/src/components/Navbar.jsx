@@ -57,7 +57,7 @@ function Navbar() {
                             value={searchValue} 
                             onChange={(e) => setSearchValue(e.target.value)} 
                         />
-                        <p onClick={() => setSearch(false)} className="absolute right-[-15px] sm:right-5 h-full bg-white text-black w-10 text-center text-2xl font-bold cursor-pointer hover:text-blue-500 rounded-md bg-transparent">&#9747;</p>
+                        {/* <p onClick={() => setSearch(false)} className="absolute right-[-15px] sm:right-5 h-full bg-white text-black w-10 text-center text-2xl font-bold cursor-pointer hover:text-blue-500 rounded-md bg-transparent">&#9747;</p> */}
                     </div>
                     <h1 onClick={() => setOpenBar(!openBar)} className="block lg:hidden mr-10 text-2xl cursor-pointer hover:text-red-500">&#9776;</h1>
                 </div>
