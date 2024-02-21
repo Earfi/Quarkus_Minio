@@ -10,7 +10,7 @@ function FileBucket() {
     const navigate = useNavigate();
     
     return (
-        <div className="w-full overflow-hidden mb-20"> 
+        <div className="w-full overflow-hidden mb-20 "> 
             <Navbar/>
             <div className="flex flex-row pt-20">
                 <div className="fixed ">

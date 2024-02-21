@@ -27,8 +27,12 @@ function AddBucket() {
 
     const uploadBucket = async () => {
         try{
-            if(inputBucket == null){
-                alert("Please Input Bucket Name !!!") 
+            if(inputBucket == null){ 
+                Swal.fire({
+                    title: "Please Input Bucket Name !!",
+                    text: "Please Input Bucket Name !!",
+                    icon: "warning"
+                  });
                 return;
             }  
 

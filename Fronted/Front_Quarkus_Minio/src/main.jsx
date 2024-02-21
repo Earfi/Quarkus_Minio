@@ -17,11 +17,16 @@ import Profile from './views/Profile.jsx';
 import Jasper from './views/Jasper.jsx';
 import JasperDB from './views/Jasper/JasperDB.jsx';
 import JasperJSON from './views/Jasper/JasperJSON.jsx';
+import Login from './views/Login.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/login",
+    element: <Login/>,
   },
   {
     path: "/bucket",

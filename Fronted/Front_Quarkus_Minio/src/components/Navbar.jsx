@@ -38,15 +38,15 @@ function Navbar() {
     return (
         <div className="z-50 relative">
             <div className="w-full h-20 bg-gradient-to-l from-blue-600 to-blue-950 text-xl font-medium text-white flex justify-between sm:justify-around items-center fixed "> 
-                <Link to="/" className="block ml-10 text-sm md:ml-30 border py-2 px-2 rounded-full">Minio With Quarkus</Link>
-                <div className="hidden lg:flex p-5 text-sm sm:text-md md:text-xl gap-7 cursor-pointer items-center">
+                <Link to="/" className="block ml-10 text-xs md:ml-30 border py-2 px-2 rounded-full">Minio With Quarkus</Link>
+                <div className="hidden lg:flex p-5 text-xs sm:text-sm md:text-xl gap-7 cursor-pointer items-center">
                     <Link to="/" className="hover:text-orange-400">HOME</Link> 
                     <Link to="/bucket" className="hover:text-orange-400">BUCKET</Link> 
                     <Link to="/jasper" className="hover:text-orange-400">JASPER</Link> 
                     <Link to="/about" className="hover:text-orange-400">ABOUT</Link> 
                     <Link to="/service" className="hover:text-orange-400">SERVICE</Link>  
                 </div>
-                <div className="flex gap-10">
+                <div className="flex gap-10 items-center">
                     <div className=" flex flex-row relative overflow-hidden">
                         <input 
                             onClick={() => setSearch(true)}  
@@ -59,13 +59,9 @@ function Navbar() {
                         />
                         {/* <p onClick={() => setSearch(false)} className="absolute right-[-15px] sm:right-5 h-full bg-white text-black w-10 text-center text-2xl font-bold cursor-pointer hover:text-blue-500 rounded-md bg-transparent">&#9747;</p> */}
                     </div>
-                    <h1 onClick={() => setOpenBar(!openBar)} className="block lg:hidden mr-10 text-2xl cursor-pointer hover:text-red-500">&#9776;</h1>
+                    <h1 onClick={() => setOpenBar(!openBar)} className="block lg:hidden text-2xl cursor-pointer hover:text-red-500">&#9776;</h1>
+                    <Link to="/login"><h1 className="hover:text-orange-400 text-xs sm:text-sm mr-10">LOG IN</h1></Link>
                 </div>
-                <div className="hidden xl:flex p-5 text-sm sm:text-xl gap-5 cursor-pointer items-center"> 
-                    <Link to="/profile"><h1 className="hover:text-orange-400 text-sm sm:text-xl ">Profile</h1></Link>
-                    <h1 className="text-5xl">&#9996;</h1>
-                </div>
-                
                 
                 <div className={`block lg:hidden absolute ${openBar ? 'right-0' : 'right-[-100%]'} w-[250px] bg-gray-800 h-[90vh] top-20 py-5 transition-all border-4 border-black`}>
                     <div className="flex flex-col justify-center items-center gap-6">

@@ -112,17 +112,17 @@ function Information({bucket}) {
         }
     };
     
+    const setFileEditedName = (file) => {
+        setFilesEditName(file);
+        setEditBtn(!editBtn);
+    }; 
+    
     const convertDate = (dateString) => { 
         const formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' });
         const dateObj = new Date(dateString);
         dateObj.setHours(dateObj.getHours() + 7);
         return formatter.format(dateObj);
     };
-    
-    const setFileEditedName = (file) => {
-        setFilesEditName(file);
-        setEditBtn(!editBtn);
-    }; 
     
     const convertBytes = (bytes) => {
 
@@ -133,6 +133,14 @@ function Information({bucket}) {
         } else {
             return (bytes / 1024).toFixed(2) + ' KB';
         }
+    }
+
+    const convertFileName = (name) => {
+        let text = name.replace(/\+%28/g, " (");
+        text = text.replace(/%29/g, ")");
+        text = text.replace(/\+/g, " ");
+
+        return text;
     }
 
     const renameFile = async () => {
@@ -171,10 +179,27 @@ function Information({bucket}) {
     };
 
     const openPreview = async (Link) => {
-        document.getElementById('my_modal_2').showModal()  
         setLink(Link) 
-        console.log(link);
+        // console.log(link);
+        if(Link.includes("pdf")){ 
+            
+            window.open(link)
+            // window.open(String(link), "_blank");
+            // window.open(window.URL.createObjectURL(String(Link)))
+            // alert(Link)
+        }else{
+            document.getElementById('my_modal_2').showModal()  
+        }
+
     };
+
+    const previewPdf = async () => {
+        // const url = window.URL.createObjectURL(link);
+        window.open(link)
+        // saveAs(link + ".pdf");
+        console.log(link);
+        console.log("pdf");
+    }
 
     return (
         <>
@@ -190,19 +215,19 @@ function Information({bucket}) {
                 {files.map((file) => (
                     <div className='flex flex-col items-center justify-center border p-5 wza-full'>
                         <div className='w-full mx-auto flex flex-col justify-end items-start gap-5'>
-                            <div className="flex flex-col hover:bg-gray-400 hover:text-white transition-all duration-200 w-[240px] sm:w-full mx-auto overflow-hidden bg-white p-2 border-black border rounded-xl">
-                                <p className='break-words'><b>Name : </b>{file.fileName}</p>
+                            <div className="flex flex-col transition-all duration-200 w-[240px] sm:w-full mx-auto overflow-hidden bg-white p-2 border-black border rounded-xl">
+                                <p className='break-words'><b>Name : </b>{convertFileName(file.fileName)}</p>
                                 <p><b>Size : </b>{convertBytes(file.fileSize)}</p>
                                 <p><b>Last Modified : </b>{convertDate(file.creationDate)}</p>  
                                  
                                 <dialog id="my_modal_2" className="modal">
                                     <div className="modal-box">
                                         {(link.includes("jpg") || link.includes("png")) && (
-                                            <img src={link} width="500" height="600"></img>  
+                                            <img src={link} width="1000" height="600"></img>  
                                         )}
                                         {/* <p className='text-black'>{link}</p> */}
                                         {(link.includes("pdf")) && (
-                                            <p className='text-black'>Open New Tab</p>
+                                            <button onClick={() => previewPdf} className='btn bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 w-full'>Open New Tab</button>
                                         )}
                                     </div>
                                     <form method="dialog" className="modal-backdrop">
@@ -210,19 +235,17 @@ function Information({bucket}) {
                                     </form>
                                 </dialog>  
                             </div>
-                            <div className='flex flex-row flex-wrap gap-3 mt-2 md:mt-0 sm:ml-2 w-full justify-center sm:justify-end'> 
-                                {/* <button className='bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'><a href={file.url}>PREVIEW</a></button> */}
-                                {/* <button  onClick={() => window.open(file.url)}  className='bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'>PREVIEW</button> */}
-                                <button onClick={()=> openPreview(file.url)} className='btn bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800'>PREVIEW</button>
-                                <button onClick={() => downloadFile(file.fileName)}  className='bg-blue-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-blue-800'>Download</button>
-                                <button onClick={() => setFileEditedName(file.fileName)} className='bg-gray-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-gray-800'>Edit</button>
-                                <button onClick={() => deleteFile(file.fileName)} className='bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800'>DELETE</button>
+                            <div className='flex flex-row flex-wrap gap-3 mt-2 md:mt-0 sm:ml-2 w-full justify-center sm:justify-end'>  
+                                <button onClick={()=> openPreview(file.url)} className='btn bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800 hover:skeleton'>PREVIEW</button>
+                                <button onClick={() => downloadFile(file.fileName)}  className='bg-blue-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-blue-800 hover:skeleton'>Download</button>
+                                <button onClick={() => setFileEditedName(file.fileName)} className='bg-gray-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-gray-800 hover:skeleton'>Edit</button>
+                                <button onClick={() => deleteFile(file.fileName)} className='bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 hover:skeleton'>DELETE</button>
                             </div>  
                                    
                             <div className={` ${editBtn === true && filesEditName === file.fileName ? 'h-44 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl mb-2`}>
                                     <label className="text-xl my-2"><b>Input new File Name!!</b></label>
                                     <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-2 rounded-md w-full border" />
-                                    <button onClick={() => renameFile(file)} className="bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>
+                                    <button onClick={() => renameFile(file)} className="skeleton bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>
                             </div>
                         </div>
                     </div>

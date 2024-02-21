@@ -8,7 +8,7 @@ import Introduce from './components/Introduce';
 function App() { 
   
   return (
-    <div className="w-full overflow-hidden"> 
+    <div className="w-full overflow-hidden "> 
         <div className='z-40'>
           <Navbar/>
         </div>

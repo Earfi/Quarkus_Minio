@@ -93,12 +93,12 @@ function UploadFile() {
       
 
     return (
-        <div className='bg-gray-950 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-5 py-5  border-2 shadow-xl'>
+        <div className='bg-gradient-to-bl to-purple-800 from-red-800 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-5 py-5  border-2 shadow-xl'>
           <h1 className='font-bold text-xl text-white '>UploadFile</h1>
           <div className=' sm:flex justify-center flex-row h-fit  '> 
             <div className='m-2 w-full'>
               <p className='text-md font-serif text-white'>Select Bucket</p> 
-              <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white '>
+              <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='select select-bordered h-10 border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white '>
                 {allBuckets.length == 0 &&
                   (
                     <>
@@ -115,11 +115,11 @@ function UploadFile() {
               </select>
             </div>
             <div className='mb-5'>
-              <label className='text-md font-serif ms-2 text-white'>Select file : </label>
-              <input multiple onChange={handleFileChange} className='bg-white border w-full' type="file"  />
+              <label className='text-md font-serif ms-2 text-white'>Select file : </label> 
+              <input type="file" onChange={handleFileChange} className="file-input file-input-bordered w-full max-w-xs h-10" />
             </div>
           </div>
-          <button onClick={uploadFile} className='w-full bg-red-600 text-white p-2 cursor-pointer hover:bg-red-800'>Upload File</button>
+          <button onClick={uploadFile} className='skeleton w-full bg-red-600 text-white p-2 cursor-pointer hover:bg-red-800'>Upload File</button>
           <div className="flex flex-col mt-2 bg-white px-2 py-1">
             <p><b>file select : </b>{file ? file.name : 'No file selected'}</p>  
             <p><b>bucket select : </b>{bucket ? bucket : 'No bucket selected'}</p>
