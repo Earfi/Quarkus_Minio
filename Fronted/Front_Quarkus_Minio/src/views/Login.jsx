@@ -14,7 +14,7 @@ function Login() {
     <div>
         <Navbar/>
         <div className="w-full h-[100vh] flex justify-center items-center pt-20">
-            <div className="bg-gray-500 w-[90%] h-[80vh] grid justify-center items-center rounded-3xl">
+            <div className="md:bg-gray-500 w-[90%] h-[80vh] grid justify-center items-center rounded-3xl">
                 <div className="bg-white w-[100%] h-fit flex justify-center items-center rounded-2xl overflow-hidden border border-black shadow-2xl">
                     <div className="relative h-full hidden lg:block overflow-hidden">
                         <div className="h-[500px] w-[500px] bg-[url('../../login//crash.jpg')] bg-cover brightness-75  ">
