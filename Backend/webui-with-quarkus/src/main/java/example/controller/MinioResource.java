@@ -41,7 +41,6 @@ public class MinioResource {
     @Path("/file/all/{bucket}")
     @Produces(MediaType.APPLICATION_JSON)
     @Schema(implementation = MinioFileService.class)
-    @RolesAllowed({"User","Admin"})
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "ok" , content = @Content(mediaType = "application/json")),
             @APIResponse(responseCode = "404", description = "Nooo Bucket")
@@ -65,6 +64,7 @@ public class MinioResource {
 
     @POST
     @Path("/file/upload/{bucket}")
+//    @RolesAllowed({"User","Admin"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(@PathParam("bucket") String bucketName,
                            @MultipartForm FileService file) throws Exception {

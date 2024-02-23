@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 
-function Information({bucket}) { 
-
+function Information({bucket}) {  
     const [files,setFiles] = useState([]);
     const [editBtn, setEditBtn] = useState(false);
     const [filesEditName, setFilesEditName] = useState("");
     const [newName, setNewName] = useState("");
     const [link, setLink] = useState("");
- 
+    const [token,setToken] = useState(null); 
 
     useEffect(() => { 
+        setToken(localStorage.getItem("token"))
  
         const getFileFromBucket = async () => { 
             const res = await fetch(`http://localhost:8080/minio/file/all/${bucket}`)
@@ -203,7 +203,7 @@ function Information({bucket}) {
 
     return (
         <>
-            <div className='bg-slate-100 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] py-5 mt-10 '>
+            <div className='bg-slate-100 w-full md:w-[550px] lg:w-[650px] xl:w-[800px] py-5'>
                 <h1 className='text-xl font-bold border-b-2 p-2'>Bucket : <span className='text-red-500'>${bucket}</span></h1>
                 {files.length == 0 &&
                     (
@@ -238,8 +238,8 @@ function Information({bucket}) {
                             <div className='flex flex-row flex-wrap gap-3 mt-2 md:mt-0 sm:ml-2 w-full justify-center sm:justify-end'>  
                                 <button onClick={()=> openPreview(file.url)} className='btn bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800 hover:skeleton'>PREVIEW</button>
                                 <button onClick={() => downloadFile(file.fileName)}  className='bg-blue-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-blue-800 hover:skeleton'>Download</button>
-                                <button onClick={() => setFileEditedName(file.fileName)} className='bg-gray-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-gray-800 hover:skeleton'>Edit</button>
-                                <button onClick={() => deleteFile(file.fileName)} className='bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 hover:skeleton'>DELETE</button>
+                                <button onClick={() => setFileEditedName(file.fileName)} className={`${token == null ? 'hidden' : 'block'} bg-gray-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-gray-800 hover:skeleton`}>Edit</button>
+                                <button onClick={() => deleteFile(file.fileName)} className={`${token == null ? 'hidden' : 'block'} bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 hover:skeleton`}>DELETE</button>
                             </div>  
                                    
                             <div className={` ${editBtn === true && filesEditName === file.fileName ? 'h-44 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl mb-2`}>

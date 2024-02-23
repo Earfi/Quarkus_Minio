@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
+    const navigate = useNavigate();
     const [allBuckets,setAllBuckets] = useState([]);
     const [searchValue,setSearchValue] = useState("");  
     const [filteredBuckets, setFilteredBuckets] = useState([]); // เพิ่ม state เพื่อเก็บ bucket ที่ถูกค้นหา
@@ -10,7 +12,12 @@ function Navbar() {
     const [openBar,setOpenBar] = useState(false);
     const [search,setSearch] = useState(false);
 
+    const [token,setToken] = useState(null);
+
     useEffect(() => { 
+
+        setToken(localStorage.getItem("token"))
+
         const getAllBacket = async () => {
             const res = await fetch("http://localhost:8080/minio/all/bucket")
             const data = await res.json()
@@ -34,6 +41,22 @@ function Navbar() {
  
     }
 
+    const logout = () => {
+        localStorage.removeItem("token")
+
+        Swal.fire({
+            title: "Logout successfully",
+            text: "Bye Bye!!!",
+            icon: "success",
+            showConfirmButton: false, 
+            timer: 1000
+        });
+        setTimeout(() => {
+            navigate('/');
+            window.location.reload()
+        }, 1500); 
+    }
+
     
     return (
         <div className="z-50 relative">
@@ -45,8 +68,9 @@ function Navbar() {
                     <Link to="/jasper" className="hover:text-orange-400">JASPER</Link> 
                     <Link to="/about" className="hover:text-orange-400">ABOUT</Link> 
                     <Link to="/service" className="hover:text-orange-400">SERVICE</Link>  
+                    <Link to="/" onClick={logout} className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 border-b-2`}>LOGOUT</Link> 
                 </div>
-                <div className="flex gap-10 items-center">
+                <div className="flex justify-center gap-2 items-center">
                     <div className=" flex flex-row relative overflow-hidden">
                         <input 
                             onClick={() => setSearch(true)}  
@@ -56,20 +80,15 @@ function Navbar() {
                             placeholder="Search Bucket" 
                             value={searchValue} 
                             onChange={(e) => setSearchValue(e.target.value)} 
-                        />
-                        {/* <p onClick={() => setSearch(false)} className="absolute right-[-15px] sm:right-5 h-full bg-white text-black w-10 text-center text-2xl font-bold cursor-pointer hover:text-blue-500 rounded-md bg-transparent">&#9747;</p> */}
+                        /> 
                     </div>
-                    <h1 onClick={() => setOpenBar(!openBar)} className="block lg:hidden text-2xl cursor-pointer hover:text-red-500">&#9776;</h1>
-                    <Link to="/login"><h1 className="hover:text-orange-400 text-xs sm:text-sm mr-10">LOG IN</h1></Link>
+                    <Link to="/login"><h1 className={`${token == null ? 'block' : 'hidden'} hover:text-orange-400 text-xl sm:text-sm mx-5`}>LOG IN</h1></Link>
+                    <Link to="/profile"><img src="../..//Suzuki-36-42-stand.jpg" className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 text-xs sm:text-sm mr-10 max-w-12 object-contain bg-white rounded-full`}></img></Link>
+                    <h1 onClick={() => setOpenBar(!openBar)} className="block lg:hidden text-4xl cursor-pointer hover:text-red-500 mr-5">&#9776;</h1>
                 </div>
                 
                 <div className={`block lg:hidden absolute ${openBar ? 'right-0' : 'right-[-100%]'} w-[250px] bg-gray-800 h-[90vh] top-20 py-5 transition-all border-4 border-black`}>
                     <div className="flex flex-col justify-center items-center gap-6">
-                        <Link to="/" className="hover:text-orange-400 border-b-2">HOME</Link> 
-                        <Link to="/bucket" className="hover:text-orange-400 border-b-2">BUCKET &#9778;</Link> 
-                        <Link to="/jasper" className="hover:text-orange-400 border-b-2">JASPER &#8464;</Link> 
-                        <Link to="/about" className="hover:text-orange-400 border-b-2">ABOUT &#8471;</Link> 
-                        <Link to="/service" className="hover:text-orange-400 border-b-2">SERVICE &#9743;</Link>  
                         <input 
                             onClick={() => setSearch(true)}  
                             type="text" 
@@ -79,6 +98,12 @@ function Navbar() {
                             value={searchValue} 
                             onChange={(e) => setSearchValue(e.target.value)} 
                         />
+                        <Link to="/" className="hover:text-orange-400 border-b-2">HOME</Link> 
+                        <Link to="/bucket" className="hover:text-orange-400 border-b-2">BUCKET &#9778;</Link> 
+                        <Link to="/jasper" className="hover:text-orange-400 border-b-2">JASPER &#8464;</Link> 
+                        <Link to="/about" className="hover:text-orange-400 border-b-2">ABOUT &#8471;</Link> 
+                        <Link to="/service" className="hover:text-orange-400 border-b-2">SERVICE &#9743;</Link> 
+                        <Link to="/" onClick={logout} className={`${token == null ? 'hidden' : 'block'} absolute bottom-10 hover:text-orange-400 border-b-2`}>LOGOUT</Link> 
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ function Bucket() {
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div className="flex flex-col w-full ">
+                <div className="flex flex-col w-full mt-16">
                     <ListBuckets/>
                 </div>
             </div>

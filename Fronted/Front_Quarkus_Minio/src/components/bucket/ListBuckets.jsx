@@ -8,8 +8,12 @@ function ListBuckets() {
     const [editBtn, setEditBtn] = useState(false);
     const [bucketEditName, setBucketEditName] = useState("");
     const [newName, setNewName] = useState("");
-     
+    const [token,setToken] = useState(null);
+
     useEffect(() => { 
+
+        setToken(localStorage.getItem("token"))
+
         const getBucket = async () => {
             try {
                 const res = await fetch(`http://localhost:8080/minio/all/bucket`, {
@@ -89,7 +93,9 @@ function ListBuckets() {
 
     return ( 
         <div className='mx-auto bg-gray-300 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-1 py-5 mt-0 h-fit border border-black shadow-xl'>
-            <AddBucket/>
+            <div className={`${token == null ? 'hidden' : 'block'}`}> 
+                <AddBucket/> 
+            </div>
             <h1 className='text-xl font-bold border-b-2 border-black pb-2 mt-3'>ALL : <span className="text-purple-600">Bucket &#9778;</span></h1>
             <div className='flex flex-col my-2 border-2 border-gray-600 bg-white w-full '>
                 <div className="flex justify-between my-5 mx-10 border-b-gray-900 font-bold text-lg bg-black text-white py-2 px-5">
@@ -107,11 +113,11 @@ function ListBuckets() {
                                         <p className="w-[100px] md:w-[200px]">&#9778; <b className="font-extrabold">{bucket}</b></p>
                                     </div>
                                 </Link>
-                                <div className="flex justify-center gap-5 md:justify-end md:mr-20 my-2"> 
+                                <div className={`flex justify-center gap-5 md:justify-end md:mr-20 my-2 ${token == null ? 'hidden' : 'block'}`}> 
                                     <button onClick={() => deleteBucket(bucket)}  className="bg-red-500 w-[100px] text-white px-2 py-1 hover:bg-red-800">Delete</button>
                                     <button onClick={() => setBucketEditedName(bucket)} className="bg-purple-500 w-[100px] text-white px-2 py-1 hover:bg-purple-800">Edit</button>
                                 </div>
-                                <div className={` ${editBtn === true && bucketEditName === bucket ? 'h-40 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl`}>
+                                <div className={`${token == null ? 'hidden' : 'block'} ${editBtn === true && bucketEditName === bucket ? 'h-40 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl`}>
                                     <label className="text-xl my-2">Input new Bucket Name!!</label>
                                     <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-2 rounded-md w-full border" />
                                     <button className="bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>

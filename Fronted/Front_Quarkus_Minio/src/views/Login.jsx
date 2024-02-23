@@ -1,13 +1,70 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
+import Swal from 'sweetalert2'
+import {jwtDecode} from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+    const navigate = useNavigate();
     const [mode,setMode] = useState("login");
+
+    const [username,setUsername] = useState(null);
+    const [password,setPassword] = useState(null);
+
     const handleMode = () => { 
         mode === "login" ? setMode("signUp") : setMode("login");
         // console.log("mode : " + mode);
         // console.log("---------------------");
   }
+
+  const login = async () => {
+    const formData = JSON.stringify({
+        username: username,
+        password: password
+    });
+      
+    const res = await fetch(`http://localhost:8080/auth/login`, {
+        method: "POST",
+        body: formData,
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+ 
+
+    if (res.ok) {
+        const data = await res.json();
+        const token = data.token.string;
+        console.log("Token : " + token);
+
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', decodedToken.upn);
+        localStorage.setItem('role', decodedToken.groups); 
+
+        Swal.fire({
+            title: "Login successfully",
+            text: "Hello Please Check your File!!!",
+            icon: "success",
+            showConfirmButton: false, 
+            timer: 1000
+        });
+ 
+        setTimeout(() => {
+            navigate('/');
+            window.location.reload()
+        }, 1500); 
+    } else {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Error Login !!!", 
+        }); 
+    } 
+};
+
 
 
   return (
@@ -32,13 +89,13 @@ function Login() {
                         <h1 className="text-center pt-3">Blog</h1>
                         <div className="flex flex-col">
                             <label className="text-xs pt-3">USERNAME</label>
-                            <input className="rounded-xl h-10 py-0 px-3 border" type="text" placeholder="username..." />
+                            <input onChange={(e) => setUsername(e.target.value)} className="rounded-xl h-10 py-0 px-3 border" type="text" placeholder="username..." required/>
                         </div>
                         <div className="flex flex-col">
                             <label className="text-xs pt-3">PASSWORD</label>
-                            <input className="rounded-xl h-10 py-0 px-3 border" type="text" placeholder="password..." />
+                            <input onChange={(e) => setPassword(e.target.value)} className="rounded-xl h-10 py-0 px-3 border" type="password" placeholder="password..." required/>
                         </div>
-                        <button className="rounded-xl h-10 w-full mt-4 bg-red-500 text-white cursor-pointer hover:bg-red-800">LOGIN</button>
+                        <button onClick={login} className="rounded-xl h-10 w-full mt-4 bg-red-500 text-white cursor-pointer hover:bg-red-800">LOGIN</button>
                         <div className="mt-5">
                             <div className="flex items-center mb-3 gap-3 cursor-pointer pl-[20%] hover:text-red-300">
                             <img src="../../login//google.png" width={24} height={24}></img>

@@ -2,8 +2,14 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar"; 
 import UploadFile from "../components/file/UploadFile";
 import ListFile from "../components/file/ListFile";
+import { useEffect, useState } from "react";
 
 function FilePage() { 
+    const [token,setToken] = useState(null);
+
+    useEffect(() => { 
+        setToken(localStorage.getItem("token"))
+    }, []);
  
     return (
         <div className="w-full overflow-hidden mb-20"> 
@@ -14,7 +20,9 @@ function FilePage() {
                 </div>
                 <div className="flex flex-col w-[100%] mt-16"> 
                     <div className="mx-auto">
-                        <UploadFile/> 
+                        <div className={`${token == null ? 'hidden' : 'block'}`}>
+                            <UploadFile/>  
+                        </div>
                         <ListFile bucket={"pichaya"} />
                         <ListFile bucket={"student"} />
                     </div>

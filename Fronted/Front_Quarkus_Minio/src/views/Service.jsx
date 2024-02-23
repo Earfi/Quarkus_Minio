@@ -11,7 +11,7 @@ function Service() {
                 </div>
                 <div className="ml-[80px] flex flex-col w-[100%]"> 
                     <div className="mx-auto w-full md:w-[900px] my-10 overflow-hidden rounded-3xl h-full">
-                        <div className="card xl:card-side bg-base-100 shadow-xl">
+                        {/* <div className="card xl:card-side bg-base-100 shadow-xl">
                             <figure><img src="https://images.unsplash.com/photo-1707343848873-d6a834b5f9b9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" className="w-96" alt="Album"/></figure>
                             <div className="card-body w-96 h-fit">
                                 <h2 className="card-title">มีปัญหาสอบถาม!!</h2>
@@ -46,7 +46,7 @@ function Service() {
                             <div className="carousel-item">
                                 <img src="https://daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.jpg" alt="Drink" />
                             </div>
-                        </div>
+                        </div> */}
 
                     </div>
                     

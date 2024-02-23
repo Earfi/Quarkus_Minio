@@ -18,13 +18,12 @@ import org.eclipse.microprofile.jwt.Claims;
 public class AuthenticationResource {
 
     @Inject
-    UserRepository userRepository; // Inject the UserRepository
+    UserRepository userRepository;
 
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(UserCredentials credentials) {
-        // Check if credentials are valid
         User user = userRepository.findByUsernameAndPassword(credentials.getUsername(), credentials.getPassword());
         if (user != null) {
             String token = generateToken(user.getUsername(), user.getRoles());
@@ -35,7 +34,6 @@ public class AuthenticationResource {
         }
     }
 
-    // Method to generate JWT token
     private String generateToken(String username, String roles) {
         return Jwt.issuer("https://example.com/issuer")
                 .upn(username)
