@@ -50,7 +50,8 @@ function ListBuckets() {
                   method: "DELETE",
                   headers: {
                     'X-HTTP-Method-Override': 'DELETE', 
-                  },
+                    'Authorization': `Bearer ` + localStorage.getItem("token")
+                    },
                 });
 
                 if (res.ok) {

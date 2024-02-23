@@ -64,7 +64,7 @@ public class MinioResource {
 
     @POST
     @Path("/file/upload/{bucket}")
-//    @RolesAllowed({"User","Admin"})
+    @RolesAllowed({"User","Admin"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(@PathParam("bucket") String bucketName,
                            @MultipartForm FileService file) throws Exception {
@@ -82,6 +82,7 @@ public class MinioResource {
 
     @PUT
     @Path("/file/edit/{bucket}/{oldName}/{newName}")
+    @RolesAllowed({"User","Admin"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response renameFile(@PathParam("bucket") String bucketName,
                                @PathParam("oldName") String oldName,
@@ -96,6 +97,7 @@ public class MinioResource {
 
     @DELETE
     @Path("/file/delete/{bucket}/{fileName}")
+    @RolesAllowed({"User","Admin"})
     public Response deleteFile(@PathParam("bucket") String bucketName,
                                @PathParam("fileName") String fileName) {
         try {
@@ -120,6 +122,7 @@ public class MinioResource {
     @POST
     @Path("/bucket/upload")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"User","Admin"})
     public Response uploadBucket(BucketService requestBody) {
         try {
             String bucketName = requestBody.getBucketName();
@@ -133,6 +136,7 @@ public class MinioResource {
 
     @DELETE
     @Path("/{bucket}/delete")
+    @RolesAllowed({"User","Admin"})
     public Response deleteBucket(@PathParam("bucket") String bucketName) {
         try {
             bucketService.removeBucket(bucketName);

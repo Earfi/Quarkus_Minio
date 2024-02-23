@@ -42,6 +42,9 @@ function UploadFile() {
           const res = await fetch(`http://localhost:8080/minio/file/upload/${bucket}`, {
             method: "POST",
             body: formData,
+            headers: { 
+                'Authorization': `Bearer ` + localStorage.getItem("token")
+            },
           });
 
           if (res.ok) {

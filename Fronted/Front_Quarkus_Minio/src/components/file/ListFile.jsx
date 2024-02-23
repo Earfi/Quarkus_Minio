@@ -43,6 +43,7 @@ function Information({bucket}) {
                     method: "DELETE",
                     headers: {
                         'X-HTTP-Method-Override': 'DELETE', 
+                        'Authorization': `Bearer ` + localStorage.getItem("token")
                     },
                 });
             
@@ -154,6 +155,9 @@ function Information({bucket}) {
 
         const res = await fetch(`http://localhost:8080/minio/file/edit/${bucket}/${filesEditName}/${newValue}`, {
             method: "PUT",
+            headers: { 
+                'Authorization': `Bearer ` + localStorage.getItem("token")
+            },
         }); 
     
         if (res.ok) {
