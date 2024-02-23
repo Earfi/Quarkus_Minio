@@ -27,22 +27,19 @@ public class AuthenticationResource {
         // Check if credentials are valid
         User user = userRepository.findByUsernameAndPassword(credentials.getUsername(), credentials.getPassword());
         if (user != null) {
-            // Generate JWT token
-            String token = generateToken(user.getUsername());
-            // Return token in the response
+            String token = generateToken(user.getUsername(), user.getRoles());
             JsonObject tokenJson = Json.createObjectBuilder().add("token", token).build();
             return Response.ok(tokenJson).build();
         } else {
-            // Return 401 Unauthorized if credentials are invalid
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
     }
 
     // Method to generate JWT token
-    private String generateToken(String username) {
+    private String generateToken(String username, String roles) {
         return Jwt.issuer("https://example.com/issuer")
                 .upn(username)
-                .claim(Claims.groups.name(), "User")
+                .claim(Claims.groups.name(), roles)
                 .claim(Claims.birthdate.name(), "2001-07-13")
                 .sign();
     }

@@ -1,15 +1,10 @@
-package example.model;
+package example.dto;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
-@Entity
-@Table(name = "users")
-public class User extends PanacheEntityBase {
-
+public class UserDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
@@ -17,18 +12,6 @@ public class User extends PanacheEntityBase {
     public String password;
     public LocalDate birthdate;
     public String roles;
-
-    public static User findByUsername(String username) {
-        return find("username", username).firstResult();
-    }
-
-    public static List<User> findByRole(String role) {
-        return list("roles", role);
-    }
-
-    public static User findByUsernameAndPassword(String username, String password) {
-        return find("username = ?1 and password = ?2", username, password).firstResult();
-    }
 
     public String getUsername() {
         return username;

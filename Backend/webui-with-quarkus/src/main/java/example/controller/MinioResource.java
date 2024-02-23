@@ -41,7 +41,7 @@ public class MinioResource {
     @Path("/file/all/{bucket}")
     @Produces(MediaType.APPLICATION_JSON)
     @Schema(implementation = MinioFileService.class)
-    @RolesAllowed("User")
+    @RolesAllowed({"User","Admin"})
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "ok" , content = @Content(mediaType = "application/json")),
             @APIResponse(responseCode = "404", description = "Nooo Bucket")

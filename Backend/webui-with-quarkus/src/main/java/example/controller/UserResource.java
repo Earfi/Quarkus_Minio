@@ -1,8 +1,11 @@
 package example.controller;
 
 import example.dto.AddressDto;
+import example.dto.UserDto;
 import example.model.Address;
+import example.model.User;
 import example.service.AddressService;
+import example.service.UserService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -13,34 +16,34 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 
-@Path("/address")
+@Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class AddressResource {
+public class UserResource {
     @Inject
-    AddressService service;
+    UserService service;
 
     @GET
     @PermitAll
     @Produces(MediaType.TEXT_PLAIN)
     public Response listAll(){
-        List<Address> list = service.listAllAddress();
+        List<User> list = service.listAllUser();
         return Response.ok(list).build();
     }
 
     @POST
     @RolesAllowed({"Admin"})
     @Path("/add")
-    public Response addAddress(AddressDto dto){
-        Address address = service.addAddress(dto);
-        return Response.ok(address).status(201).build();
+    public Response addUser(UserDto dto){
+        User user = service.addUser(dto);
+        return Response.ok(user).status(201).build();
     }
 
     @DELETE
     @RolesAllowed("Admin")
     @Path("/{id}")
-    public Response deleteAddress(@PathParam("id") Long id){
-        service.removeAddress(id);
+    public Response deleteUser(@PathParam("id") Integer id){
+        service.removeUser(id);
         return Response.status(204).build();
     }
 
