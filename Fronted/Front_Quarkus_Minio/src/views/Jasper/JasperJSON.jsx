@@ -13,8 +13,8 @@ function JasperJSON() {
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div style={{ width: "calc(100% - 80px)" }} className="ml-[80px] flex flex-col w-[100%-80px] mb-40"> 
-                    <h1 className="text-xl font-bold my-5 ml-5">Gen PDF with JSON :</h1>
+                <div className="flex flex-col w-full mb-40"> 
+                    <h1 className="text-xl font-bold my-5 ml-5 text-center">Gen PDF with JSON :</h1>
                     <hr />
                     <div className="p-5">
                         <h1 className="text-center text-2xl font-bold text-black my-5">Example output file!!</h1>    

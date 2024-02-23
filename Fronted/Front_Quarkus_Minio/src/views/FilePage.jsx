@@ -12,7 +12,7 @@ function FilePage() {
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div className="ml-[80px] flex flex-col w-[100%]"> 
+                <div className="flex flex-col w-[100%] mt-16"> 
                     <div className="mx-auto">
                         <UploadFile/> 
                         <ListFile bucket={"pichaya"} />

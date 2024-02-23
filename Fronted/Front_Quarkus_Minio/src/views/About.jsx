@@ -9,7 +9,7 @@ function About() {
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div className="ml-[80px] flex flex-col w-[100%]"> 
+                <div className="flex flex-col w-[100%]"> 
                     <div className="mx-auto"> 
                         <h1 className="my-5 text-4xl font-mono border-b-2 border-b-red-500">About</h1> 
                     </div>

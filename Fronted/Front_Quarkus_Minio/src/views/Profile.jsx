@@ -9,7 +9,7 @@ function Profile() {
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div className="ml-[80px] flex flex-col w-[100%]"> 
+                <div className="flex flex-col w-[100%]"> 
                     <div className="mx-auto">
                         <h1 className="text-2xl my-5 font-medium text-center border-b-2">Profile</h1>
                         <img className="w-[200px] mx-auto border-4 border-black rounded-full" src="../..//profile-icon.png" alt="" />

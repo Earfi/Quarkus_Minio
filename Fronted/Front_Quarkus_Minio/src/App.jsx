@@ -16,7 +16,7 @@ function App() {
             <div className="fixed z-10">
                 <Sidebar/>  
             </div>
-            <div className="ml-[80px] flex flex-col w-[100%] z-0">
+            <div className="flex flex-col w-[100%] z-0">
                 <div className='w-full bg-gradient-to-tr from-blue-600 to-red-500 h-fit overflow-hidden'>
                   <Introduce/>
                   <div className='bg-black w-full h-fit flex flex-col md:flex-row items-center justify-between px-5 '>

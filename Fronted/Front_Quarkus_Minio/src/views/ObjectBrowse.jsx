@@ -9,7 +9,7 @@ function ObjectBrowse() {
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div className="ml-[80px] flex flex-col w-[100%]">
+                <div className="flex flex-col w-[100%]">
                     <img src="../..//M1-20-21.jpg" alt="" />
                 </div>
             </div>

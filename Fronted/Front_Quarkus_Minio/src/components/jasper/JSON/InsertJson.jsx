@@ -9,9 +9,9 @@ function InsertJson() {
     return (
        <div  className="w-full h-fit ">
         <hr />
-            <div className="w-full bg-emerald-300 ">
-                <h1 className="ml-5 text-xl font-bold my-2 text-center">Select Template</h1>
-                <select onChange={(e) => setTemplate(e.target.value) } className="w-[50%] mx-auto h-18 border text-lg p-5 bg-blue-800 font-bold text-white text-center hover:bg-blue-900" >
+            <div className="w-full">
+                <h1 className="text-xl font-bold my-2 text-center">Select Template</h1>
+                <select onChange={(e) => setTemplate(e.target.value) } className="ml-5 h-18 border text-lg p-5 bg-blue-800 font-bold text-white text-center hover:bg-blue-900" >
                     {/* <option value="0" className="bg-black hover:bg-gray-800">Select Template</option> */}
                     <option value="0" className="bg-black text-white hover:bg-gray-800 cursor-none" >select</option> 
                     <option value="1" className="bg-white text-black">Letter</option> 
@@ -20,7 +20,7 @@ function InsertJson() {
             </div>
             <div className="w-full min-h-[100vh]"> 
                     <div>
-                        {(template == null || template == "1") && (
+                        {(template == null || template == "1" || template == "0") && (
                             <>
                                 <InsertLetter/>
                             </>

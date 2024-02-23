@@ -10,7 +10,7 @@ function Bucket() {
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div style={{ width: "calc(100% - 80px)" }} className="ml-[80px] flex flex-col w-[100%-80px] ">
+                <div className="flex flex-col w-full ">
                     <ListBuckets/>
                 </div>
             </div>
