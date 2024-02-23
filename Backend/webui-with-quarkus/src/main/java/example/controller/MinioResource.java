@@ -8,6 +8,7 @@ import example.service.serviceInject.FileService;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import io.minio.messages.Item;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -40,6 +41,7 @@ public class MinioResource {
     @Path("/file/all/{bucket}")
     @Produces(MediaType.APPLICATION_JSON)
     @Schema(implementation = MinioFileService.class)
+    @RolesAllowed("User")
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "ok" , content = @Content(mediaType = "application/json")),
             @APIResponse(responseCode = "404", description = "Nooo Bucket")

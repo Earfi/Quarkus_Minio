@@ -3,6 +3,8 @@ package example.controller;
 import example.dto.AddressDto;
 import example.model.Address;
 import example.service.AddressService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -19,12 +21,15 @@ public class AddressResource {
     AddressService service;
 
     @GET
+    @PermitAll
+    @Produces(MediaType.TEXT_PLAIN)
     public Response listAll(){
         List<Address> list = service.listAllAddress();
         return Response.ok(list).build();
     }
 
     @POST
+    @RolesAllowed({"admin","writer"})
     @Path("/add")
     public Response addAddress(AddressDto dto){
         Address address = service.addAddress(dto);
@@ -32,6 +37,7 @@ public class AddressResource {
     }
 
     @DELETE
+    @RolesAllowed("admin")
     @Path("/{id}")
     public Response deleteAddress(@PathParam("id") Long id){
         service.removeAddress(id);

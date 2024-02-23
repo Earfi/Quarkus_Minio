@@ -99,6 +99,14 @@
       <version>3.0.8</version>
     </dependency>
 
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt-build</artifactId>
+    </dependency>
 
   </dependencies>
   <build>
@@ -184,8 +192,10 @@
           <target>16</target>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>native</id>
