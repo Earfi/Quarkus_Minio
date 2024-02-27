@@ -7,17 +7,22 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import Bucket from './views/Bucket.jsx';
 import ObjectBrowse from './views/ObjectBrowse.jsx';
-import FileBucket from './views/FileBucket.jsx';
 import FilePage from './views/FilePage.jsx';
 import About from './views/About.jsx';
 import Service from './views/Service.jsx';
 import Profile from './views/Profile.jsx';
-import Jasper from './views/Jasper.jsx';
+import Jasper from './views/Jasper/Jasper.jsx';
 import JasperDB from './views/Jasper/JasperDB.jsx';
 import JasperJSON from './views/Jasper/JasperJSON.jsx';
 import Login from './views/Login.jsx';
+
+import Bucket from './views/Minio/Bucket.jsx';
+import FileBucket from './views/Minio/FileBucket.jsx';
+
+import Mode from './views/Admin/Mode.jsx';
+import ListUser from './views/Admin/ListUser.jsx';
+import Dashboard from './views/Admin/Dashboard.jsx';
 
 const router = createBrowserRouter([
   {
@@ -67,6 +72,22 @@ const router = createBrowserRouter([
   {
     path: "/obj-browse",
     element: <ObjectBrowse/>,
+  },
+
+  // Admin
+
+  
+  {
+    path: "/mode",
+    element: <Mode/>,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard/>,
+  },
+  {
+    path: "/user",
+    element: <ListUser/>,
   },
 ]);
 

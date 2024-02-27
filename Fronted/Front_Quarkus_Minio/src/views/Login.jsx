@@ -52,10 +52,18 @@ function Login() {
             timer: 1000
         });
  
-        setTimeout(() => {
-            navigate('/');
-            window.location.reload()
-        }, 1500); 
+        if(decodedToken.groups === "User"){
+            setTimeout(() => {
+                navigate('/');
+                window.location.reload()
+            }, 1500); 
+        }else if(decodedToken.groups === "Admin"){
+            setTimeout(() => {
+                navigate('/mode');
+                window.location.reload()
+            }, 1500); 
+        }
+
     } else {
         Swal.fire({
             icon: "error",

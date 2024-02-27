@@ -24,8 +24,7 @@ public class UserResource {
     UserService service;
 
     @GET
-    @PermitAll
-    @Produces(MediaType.TEXT_PLAIN)
+    @RolesAllowed({"Admin"})
     public Response listAll(){
         List<User> list = service.listAllUser();
         return Response.ok(list).build();
@@ -41,7 +40,7 @@ public class UserResource {
 
     @DELETE
     @RolesAllowed("Admin")
-    @Path("/{id}")
+    @Path("/delete/{id}")
     public Response deleteUser(@PathParam("id") Integer id){
         service.removeUser(id);
         return Response.status(204).build();

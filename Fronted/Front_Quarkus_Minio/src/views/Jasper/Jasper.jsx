@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
-import GetAddress from "../components/jasper/DB/GetAddress";
-import InsertAddress from "../components/jasper/DB/InsertAddress";
+import Navbar from "../../components/Navbar";
+import Sidebar from "../../components/Sidebar";
+import GetAddress from "../../components/jasper/DB/GetAddress";
+import InsertAddress from "../../components/jasper/DB/InsertAddress";
 
 function Jasper() {
     return (

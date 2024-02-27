@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function Sidebar() {
     const [fullWidth,setFullWidth] = useState(false);
+    const [role,setRole] = useState(null);
+
+    useEffect(() => { 
+
+        setRole(localStorage.getItem("role"))
+
+    },[]) 
     
     return (
         <div className="z-10 shadow-2xl relative"> 
@@ -11,24 +18,27 @@ function Sidebar() {
                 <div className="w-full p-4 sm:p-5 mt-10 bg-gradient-to-bl from-blue-600 to-blue-950">
                     <p onClick={() => setFullWidth((prev) => !prev)} 
                         className={`absolute text-gray-500 cursor-pointer hover:text-orange-500  ${fullWidth ? 'rotate-180 right-2 top-1 text-3xl ' : 'right-7 top-1 text-2xl'}`} >&#10132;</p>
+
+
+                    <h1 className={`text-xl font-bold border-b-2 border-gray-600 ${fullWidth ? '' : 'hidden'} ${role == "Admin" ? 'block' : 'hidden'}`}>Administrator</h1>
+                    <ul className={`my-2 font-semibold  text-black bg-gray-200 ${role == "Admin" ? 'block' : 'hidden'}`}>
+                        <Link to="/dashboard"><li className="p-2 cursor-pointer hover:bg-gray-300 my-2"><span className={`${fullWidth ? '' : 'hidden'}`}>DASHBOARD</span></li></Link>
+                        <Link to="/obj-browse"><li className="p-2 cursor-pointer hover:bg-gray-300 my-2"><span className={`${fullWidth ? '' : 'hidden'}`}>Object Browser</span></li></Link>
+                        <li className="p-2 cursor-pointer hover:bg-gray-300 my-2"><span className={`${fullWidth ? '' : 'hidden'}`}>Access Keys</span></li>
+                        <li className="p-2 cursor-pointer hover:bg-gray-300 my-2"><span className={`${fullWidth ? '' : 'hidden'}`}>Documentation</span></li> 
+                        <li className="p-2 cursor-pointer hover:bg-gray-300 my-2"><span className={`${fullWidth ? '' : 'hidden'}`}>Policies</span></li>
+                        <li className="p-2 cursor-pointer hover:bg-gray-300 my-2"><span className={`${fullWidth ? '' : 'hidden'}`}>Identity</span></li> 
+                    </ul> 
+
+                    <hr className="h-1 bg-red-500 my-5"/>
+
                     <h1 className={`text-xl font-bold border-b-2 border-gray-600 ${fullWidth ? '' : 'hidden'}`}>User</h1> 
                     <ul className="my-2 font-semibold  text-white">
                         <Link to="/bucket"><li className="p-2 cursor-pointer hover:bg-blue-800 my-2"><span className="border bg-white rounded-full -ml-2 p-2 text-black">&#9778;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>Buckets</span></li></Link>
                         <Link to="/file"><li className="p-2 cursor-pointer hover:bg-blue-800 my-2"><span className="border bg-white rounded-full -ml-2 p-2 text-black">&#10063;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>File</span></li></Link> 
                         <Link to="/jasper"><li className="p-2 cursor-pointer hover:bg-blue-800 my-2"><span className="border bg-white rounded-full -ml-2 p-2 text-black">&#8464;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>Jasper</span></li></Link> 
                     </ul>
-
-                    <hr className="h-1 bg-red-500 my-5"/>
-
-                    <h1 className={`text-xl font-bold border-b-2 border-gray-600 ${fullWidth ? '' : 'hidden'} `}>Administrator</h1>
-                    <ul className="my-2 font-semibold  text-white">
-                        <Link to="/obj-browse"><li className="p-2 cursor-pointer hover:bg-blue-800 my-2"><span className="border bg-white rounded-full -ml-2 p-2 text-black">&#9737;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>Object Browser</span></li></Link>
-                        <li className="p-2 cursor-pointer hover:bg-blue-800 my-2"><span className="border bg-white rounded-full -ml-2 p-2 text-black">&#9729;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>Access Keys</span></li>
-                        <li className="p-2 cursor-pointer hover:bg-blue-800 my-2"><span className="border bg-white rounded-full -ml-2 p-2 text-black">&#9733;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>Documentation</span></li> 
-                        <li className="p-2 cursor-pointer hover:bg-blue-800 my-2"><span className="border bg-white rounded-full -ml-2 p-2 text-black">&#9738;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>Policies</span></li>
-                        <li className="p-2 cursor-pointer hover:bg-blue-800 my-2"><span className="border bg-white rounded-full -ml-2 p-2 text-black">&#9750;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>Identity</span></li> 
-                    </ul> 
-
+ 
                     <hr className="h-1 bg-red-500 my-5"/>
 
                     <h1 className={`text-xl font-bold border-b-2 border-gray-600 ${fullWidth ? '' : 'hidden'} `}>Jasper</h1> 
