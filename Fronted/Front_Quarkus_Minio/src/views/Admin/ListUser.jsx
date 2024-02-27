@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Swal from 'sweetalert2'
+import CreateUser from "./CreateUser";
 
 function ListUser() {
     const [user,setUser] = useState([]); 
@@ -79,18 +80,25 @@ function ListUser() {
         }
     };   
 
+    const convertDate = (dateString) => { 
+        const formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' });
+        const dateObj = new Date(dateString);
+        dateObj.setHours(dateObj.getHours() + 7);
+        return formatter.format(dateObj);
+    };
+
     return(
-        <div className="w-full h-[100vh] flex min-w-[1300px]">
+        <div className="w-full h-[100vh] flex min-w-[1300px] overflow-hidden">
             <div className="w-[20%] h-full shadow-2xl">
                 <Sidebar/>
             </div>
 
-            <div className="w-[80%] h-full">
+            <div className="w-[80%] h-full overflow-hidden">
                 <div className="w-[90%] h-[100vh] overflow-auto mx-auto bg-slate-100">
                     <div className="h-full">
-                        <div className="h-16 w-full bg-gray-900 flex justify-between items-center px-20"> 
+                        <div className="h-16 w-full bg-gray-900 flex justify-between items-center px-20 "> 
                             <input className="w-96 h-10 text-black rounded-2xl p-2" placeholder="Search User..." type="text" />
-                            <button className="border rounded-xl p-2 bg-red-500 text-white font-bold cursor-pointer">Creat User</button>
+                            <CreateUser/>
                         </div>
 
                         <table class="w-[90%] mx-auto bg-white shadow-md rounded my-6">
@@ -112,8 +120,8 @@ function ListUser() {
                                                 <td className="py-4 px-6">{u.username}</td>
                                                 <td className="py-4 px-6">{u.birthdate}</td>
                                                 <td className="py-4 px-6">{u.roles}</td>
-                                                <td className="py-4 px-6">2024-02-23 11:01:42</td>
-                                                <td className="py-4 px-6">2024-02-23 11:37:17</td>
+                                                <td className="py-4 px-6">{convertDate(u.created_at)}</td>
+                                                <td className="py-4 px-6">{convertDate(u.updated_at)}</td>
                                                 <td onClick={() => deleteUser(u.id)} className="py-1 px-2 bg-red-500 cursor-pointer text-white font-bold hover:bg-red-800"><button>DELETE</button></td>
                                             </tr>
                                         ))}
@@ -129,6 +137,7 @@ function ListUser() {
                     </div>
                 </div>
             </div>
+ 
         </div>
     )
 }

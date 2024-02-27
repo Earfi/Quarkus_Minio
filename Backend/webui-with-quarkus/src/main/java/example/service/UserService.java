@@ -6,6 +6,7 @@ import example.model.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,10 @@ public class UserService {
         user.setPassword(dto.getPassword());
         user.setBirthdate(dto.getBirthdate());
         user.setRoles(dto.getRoles());
+        user.setCreated_at(ZonedDateTime.now());
+        user.setUpdated_at(ZonedDateTime.now());
         user.persist();
+
         return user;
     }
 

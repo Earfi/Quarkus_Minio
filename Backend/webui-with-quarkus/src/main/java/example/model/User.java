@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -12,24 +13,21 @@ public class User extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
-    public String username;
-    public String password;
-    public LocalDate birthdate;
-    public String roles;
+    private int id;
+    private String username;
+    private String password;
+    private String birthdate;
+    private String roles;
+    private ZonedDateTime created_at;
+    private ZonedDateTime updated_at;
 
-    public static User findByUsername(String username) {
-        return find("username", username).firstResult();
+    public int getId() {
+        return id;
     }
 
-    public static List<User> findByRole(String role) {
-        return list("roles", role);
+    public void setId(int id) {
+        this.id = id;
     }
-
-    public static User findByUsernameAndPassword(String username, String password) {
-        return find("username = ?1 and password = ?2", username, password).firstResult();
-    }
-
     public String getUsername() {
         return username;
     }
@@ -46,11 +44,11 @@ public class User extends PanacheEntityBase {
         this.password = password;
     }
 
-    public LocalDate getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(LocalDate birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 
@@ -60,5 +58,21 @@ public class User extends PanacheEntityBase {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    public ZonedDateTime getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(ZonedDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+    public ZonedDateTime getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(ZonedDateTime updated_at) {
+        this.updated_at = updated_at;
     }
 }

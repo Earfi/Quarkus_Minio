@@ -31,7 +31,6 @@ public class UserResource {
     }
 
     @POST
-    @RolesAllowed({"Admin"})
     @Path("/add")
     public Response addUser(UserDto dto){
         User user = service.addUser(dto);
