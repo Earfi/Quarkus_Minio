@@ -9,10 +9,12 @@ import example.service.UserService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -59,7 +61,24 @@ public class UserResource {
         return Response.status(204).build();
     }
 
+    @PUT
+    @Path("/update/{id}")
+    public Response updateUser(@PathParam("id") Integer id,User user) {
+        User existingUser = User.findById(user.getId());
+        if (existingUser == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
+        existingUser.setUsername(user.getUsername());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setBirthdate(user.getBirthdate());
+        existingUser.setRoles(user.getRoles());
+        existingUser.setUpdated_at(LocalDateTime.now());
+
+        existingUser.persist();
+
+        return Response.ok(existingUser).build();
+    }
 
 
 

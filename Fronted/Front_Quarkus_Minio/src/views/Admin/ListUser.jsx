@@ -3,9 +3,13 @@ import Sidebar from "./Sidebar";
 import Swal from 'sweetalert2'
 import CreateUser from "./CreateUser";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function ListUser() {
+    const navigate = useNavigate();
     const [user,setUser] = useState([]); 
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchValue,setSearchValue] = useState("");  
     
     useEffect(() => {  
  
@@ -16,14 +20,35 @@ function ListUser() {
                     'Authorization': `Bearer ` + localStorage.getItem("token")
                 },
             }) 
-            const data = await res.json() 
-            console.log(data);
-            setUser(data) 
+
+            if (res.ok) {
+                const data = await res.json()  
+                setUser(data)  
+            } else if(res.status == 401) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops... Session does Exits!!",
+                    text: "Please Login!!!",  
+                }).then(async (result) => {
+                    if (result.isConfirmed) {  
+                        localStorage.removeItem("token")
+                        localStorage.removeItem("roles")
+                        navigate('/login');
+                    }
+                });
+            } 
+            
+            
 
         }
  
         getUser()
     },[])
+    
+    useEffect(() => { 
+        const filtered = user.filter(u => u.username.includes(searchValue));
+        setSearchTerm(filtered); 
+    }, [searchValue, user]);
 
     const deleteUser = async (id) => { 
         try {
@@ -88,6 +113,7 @@ function ListUser() {
         dateObj.setHours(dateObj.getHours() + 7);
         return formatter.format(dateObj);
     };
+ 
 
     return(
         <div className="w-full h-[100vh] flex min-w-[1300px] overflow-hidden bg-slate-100">
@@ -99,7 +125,7 @@ function ListUser() {
                 <div className="w-[90%] h-[100vh] overflow-auto mx-auto bg-white">
                     <div className="h-full">
                         <div className="h-16 w-full bg-gray-900 flex justify-between items-center px-20 "> 
-                            <input className="w-96 h-10 text-black rounded-2xl p-2" placeholder="Search User..." type="text" />
+                            <input value={searchValue} onChange={(e) => setSearchValue(e.target.value)}  className="w-52 h-10 text-black rounded-2xl p-2" placeholder="Search User..." type="text" />
                             <CreateUser/>
                         </div>
 
@@ -116,28 +142,40 @@ function ListUser() {
                                 </tr>
                             </thead>
                             <tbody class="text-gray-700">
-                                {user.length > 0 ? (
+                                {searchTerm.length > 0 ? (
                                     <>
-                                        {user.map((u) => (
+                                        {searchTerm.map((u) => (
                                             <tr key={u.id} className="bg-white text-gray-700 border-b-2 border-gray-300 text-center">
                                                 <td className="py-4 px-6">{u.username}</td>
                                                 <td className="py-4 px-6">{u.birthdate}</td>
                                                 <td className="py-4 px-6">{u.roles}</td>
                                                 <td className="py-4 px-6">{convertDate(u.created_at)}</td>
                                                 <td className="py-4 px-6">{convertDate(u.updated_at)}</td> 
-                                                <Link to={`/edituser/${u.id}`}><td ><h1 className="py-1 px-2 bg-blue-500 cursor-pointer text-white font-bold hover:bg-blue-800 w-28 m-1 mt-6">EDIT</h1></td></Link>
-                                                <td onClick={() => deleteUser(u.id)}><h1 className="py-1 px-2 bg-red-500 cursor-pointer text-white font-bold hover:bg-red-800 w-28 m-1">DELETE</h1></td>
+                                                <td ><Link to={`/edituser/${u.id}`}><h1 className="py-1 px-2 bg-blue-500 cursor-pointer text-white font-bold hover:bg-blue-800 w-28 m-1">EDIT</h1></Link></td>
+                                                <td ><h1 onClick={() => deleteUser(u.id)} className="py-1 px-2 bg-red-500 cursor-pointer text-white font-bold hover:bg-red-800 w-28 m-1">DELETE</h1></td>
                                             </tr>
                                         ))}
                                     </>
                                 ) : (
                                     <tr className="bg-white text-gray-700 border-b-2 border-gray-300 text-center">
                                         <td className="py-4 px-6" colSpan="5">No User</td>
+                                        
                                     </tr>
                                 )} 
                             </tbody>
-                        </table> 
+                        </table>  
 
+                        <div className="w-full">
+                            <div className="w-fit mx-auto"> 
+                                <div className="join ">
+                                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="1" checked />
+                                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="2" />
+                                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="3" />
+                                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="4" />
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>

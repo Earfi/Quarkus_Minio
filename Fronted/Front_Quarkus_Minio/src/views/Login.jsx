@@ -35,10 +35,10 @@ function Login() {
     if (res.ok) {
         const data = await res.json();
         const token = data.token.string;
-        console.log("Token : " + token);
+        // console.log("Token : " + token);
 
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
+        // console.log(decodedToken);
 
         localStorage.setItem('token', token);
         localStorage.setItem('username', decodedToken.upn);

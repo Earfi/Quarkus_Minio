@@ -18,7 +18,10 @@ public class generateReport {
     @Path("/generate/{filename}/{bucket}/{jasper}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("application/pdf")
-    public Response generateReport(JsonObject jsonObject, @PathParam("filename") String filename, @PathParam("bucket")String bucket, @PathParam("jasper")String jasper) throws Exception {
+    public Response generateReport(JsonObject jsonObject,
+                                   @PathParam("filename") String filename,
+                                   @PathParam("bucket")String bucket,
+                                   @PathParam("jasper")String jasper) throws Exception {
         String fileName = filename+".pdf";
         byte[] pdfBytes = reportService.generatePdfReport(jsonObject,fileName,bucket,jasper);
         return Response.ok(pdfBytes, "application/pdf")

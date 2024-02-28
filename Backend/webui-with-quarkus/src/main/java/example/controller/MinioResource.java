@@ -8,6 +8,7 @@ import example.service.serviceInject.FileService;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import io.minio.messages.Item;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -56,7 +57,9 @@ public class MinioResource {
 
     @GET
     @Path("/download/file/{bucket}/{fileName}")
-    public Response downloadFile(@PathParam("bucket") String bucket, @PathParam("fileName") String fileName) throws Exception {
+    @PermitAll
+    public Response downloadFile(@PathParam("bucket") String bucket,
+                                 @PathParam("fileName") String fileName) throws Exception {
         InputStream stream = fileService.downloadFile(bucket,fileName);
         return Response.ok(stream).build();
     }
