@@ -31,6 +31,7 @@ function CreateUser() {
             });
 
             console.log(formData);
+            console.log(res);
 
             if (res.ok) {
                 console.log(res);
@@ -41,10 +42,18 @@ function CreateUser() {
                     showConfirmButton: false,
                     timer: 1000
                 });
-                // setTimeout(() => {
-                //     window.location.reload()
-                // }, 1500);
-            } else {
+                setCreate(false)
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1500);
+            } else if (res.status == 400) {
+                console.log(res);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops... Username already exists",
+                    text: "Error Create User!!! Please Check your User!!", 
+                }); 
+            }else {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -56,7 +65,7 @@ function CreateUser() {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Error Create User!!!",
+                text: "ระบบมีปัญหา!!!",
             });
         }
     };
@@ -122,9 +131,9 @@ function CreateUser() {
                                             onChange={handleChange}
                                             className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
                                         >
+                                            <option value="Editor">Select Role</option>
                                             <option value="User">User</option>
                                             <option value="Admin">Admin</option>
-                                            <option value="Editor">Editor</option>
                                         </select>
                                     </div>
                                     <div>

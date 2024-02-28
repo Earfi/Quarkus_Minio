@@ -4,12 +4,12 @@ import Sidebar from "./Sidebar";
 
 function Dashboard() {
     return(
-        <div className="w-full h-[100vh] flex min-w-[1300px]">
-            <div className="w-[20%] h-full shadow-2xl">
+        <div className="w-full h-[100vh] flex min-w-[1300px] bg-slate-100">
+            <div className="w-[15%] h-full shadow-2xl">
                 <Sidebar/>
             </div>
 
-            <div className="w-[80%] h-[100vh] overflow-auto">
+            <div className="w-[85%] h-[100vh] overflow-auto">
                 <div className="w-full h-full">
                     <div className="w-full shadow-xl h-44 flex justify-center items-center gap-5">
                         <div className="relative w-[20%] h-[80%] bg-gradient-to-r from-blue-500 to-blue-800 rounded-2xl p-2 text-white flex flex-col justify-center">

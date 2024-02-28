@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class User extends PanacheEntityBase {
     private String password;
     private String birthdate;
     private String roles;
-    private ZonedDateTime created_at;
-    private ZonedDateTime updated_at;
+    private LocalDateTime created_at;
+    private LocalDateTime  updated_at;
 
     public int getId() {
         return id;
@@ -60,19 +61,19 @@ public class User extends PanacheEntityBase {
         this.roles = roles;
     }
 
-    public ZonedDateTime getCreated_at() {
+    public LocalDateTime  getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(ZonedDateTime created_at) {
+    public void setCreated_at(LocalDateTime  created_at) {
         this.created_at = created_at;
     }
 
-    public ZonedDateTime getUpdated_at() {
+    public LocalDateTime  getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(ZonedDateTime updated_at) {
+    public void setUpdated_at(LocalDateTime  updated_at) {
         this.updated_at = updated_at;
     }
 }

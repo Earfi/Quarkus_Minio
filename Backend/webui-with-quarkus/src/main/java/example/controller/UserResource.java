@@ -25,6 +25,14 @@ public class UserResource {
 
     @GET
     @RolesAllowed({"Admin"})
+    @Path("/{id}")
+    public Response getUserById(@PathParam("id") Long id){
+        User user = service.getUserById(id);
+        return Response.ok(user).build();
+    }
+
+    @GET
+    @RolesAllowed({"Admin"})
     public Response listAll(){
         List<User> list = service.listAllUser();
         return Response.ok(list).build();
@@ -33,6 +41,12 @@ public class UserResource {
     @POST
     @Path("/add")
     public Response addUser(UserDto dto){
+        if (service.existsByUsername(dto.getUsername())) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Username already exists")
+                    .build();
+        }
+
         User user = service.addUser(dto);
         return Response.ok(user).status(201).build();
     }

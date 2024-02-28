@@ -23,6 +23,7 @@ import FileBucket from './views/Minio/FileBucket.jsx';
 import Mode from './views/Admin/Mode.jsx';
 import ListUser from './views/Admin/ListUser.jsx';
 import Dashboard from './views/Admin/Dashboard.jsx';
+import EditUser from './views/Admin/EditUser.jsx';
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <ListUser/>,
+  },
+  {
+    path: "/edituser/:id",
+    element: <EditUser/>,
   },
 ]);
 

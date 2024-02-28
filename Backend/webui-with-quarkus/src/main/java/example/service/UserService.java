@@ -6,6 +6,7 @@ import example.model.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,15 +25,21 @@ public class UserService {
     public User addUser(UserDto dto) {
         User user = new User();
 
+        System.out.println(ZonedDateTime.now());
+
         user.setUsername(dto.getUsername());
         user.setPassword(dto.getPassword());
         user.setBirthdate(dto.getBirthdate());
         user.setRoles(dto.getRoles());
-        user.setCreated_at(ZonedDateTime.now());
-        user.setUpdated_at(ZonedDateTime.now());
+        user.setCreated_at(LocalDateTime.now());
+        user.setUpdated_at(LocalDateTime.now());
         user.persist();
 
         return user;
+    }
+    @Transactional
+    public boolean existsByUsername(String username) {
+        return User.count("username", username) > 0;
     }
 
     public void updateUser(User user) {

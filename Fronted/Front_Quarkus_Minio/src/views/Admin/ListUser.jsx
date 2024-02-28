@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Swal from 'sweetalert2'
 import CreateUser from "./CreateUser";
+import { Link } from "react-router-dom";
 
 function ListUser() {
     const [user,setUser] = useState([]); 
@@ -16,6 +17,7 @@ function ListUser() {
                 },
             }) 
             const data = await res.json() 
+            console.log(data);
             setUser(data) 
 
         }
@@ -59,7 +61,7 @@ function ListUser() {
                     });
                     setTimeout(() => {
                         window.location.reload()
-                    }, 1500); 
+                    }, 1000); 
                 } else {
                     Swal.fire({
                         icon: "error",
@@ -88,13 +90,13 @@ function ListUser() {
     };
 
     return(
-        <div className="w-full h-[100vh] flex min-w-[1300px] overflow-hidden">
-            <div className="w-[20%] h-full shadow-2xl">
+        <div className="w-full h-[100vh] flex min-w-[1300px] overflow-hidden bg-slate-100">
+            <div className="w-[15%] h-full shadow-2xl">
                 <Sidebar/>
             </div>
 
-            <div className="w-[80%] h-full overflow-hidden">
-                <div className="w-[90%] h-[100vh] overflow-auto mx-auto bg-slate-100">
+            <div className="w-[85%] h-full overflow-hidden">
+                <div className="w-[90%] h-[100vh] overflow-auto mx-auto bg-white">
                     <div className="h-full">
                         <div className="h-16 w-full bg-gray-900 flex justify-between items-center px-20 "> 
                             <input className="w-96 h-10 text-black rounded-2xl p-2" placeholder="Search User..." type="text" />
@@ -110,6 +112,7 @@ function ListUser() {
                                     <th class="py-4 px-6">Created At</th>
                                     <th class="py-4 px-6">Updated At</th>
                                     <th class="py-4 px-6"></th>
+                                    <th class="py-4 px-6"></th>
                                 </tr>
                             </thead>
                             <tbody class="text-gray-700">
@@ -121,8 +124,9 @@ function ListUser() {
                                                 <td className="py-4 px-6">{u.birthdate}</td>
                                                 <td className="py-4 px-6">{u.roles}</td>
                                                 <td className="py-4 px-6">{convertDate(u.created_at)}</td>
-                                                <td className="py-4 px-6">{convertDate(u.updated_at)}</td>
-                                                <td onClick={() => deleteUser(u.id)} className="py-1 px-2 bg-red-500 cursor-pointer text-white font-bold hover:bg-red-800"><button>DELETE</button></td>
+                                                <td className="py-4 px-6">{convertDate(u.updated_at)}</td> 
+                                                <Link to={`/edituser/${u.id}`}><td ><h1 className="py-1 px-2 bg-blue-500 cursor-pointer text-white font-bold hover:bg-blue-800 w-28 m-1 mt-6">EDIT</h1></td></Link>
+                                                <td onClick={() => deleteUser(u.id)}><h1 className="py-1 px-2 bg-red-500 cursor-pointer text-white font-bold hover:bg-red-800 w-28 m-1">DELETE</h1></td>
                                             </tr>
                                         ))}
                                     </>
