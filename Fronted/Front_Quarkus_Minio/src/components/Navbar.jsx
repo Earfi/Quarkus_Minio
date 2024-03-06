@@ -13,6 +13,8 @@ function Navbar() {
     const [search,setSearch] = useState(false);
 
     const [token,setToken] = useState(null);
+    
+    const [path,setPath] = useState(window.location.pathname);
 
     useEffect(() => { 
 
@@ -61,19 +63,20 @@ function Navbar() {
 
     
     return (
-        <div className="z-50 relative">
+        <div className="z-50 relative h-20">
             <div className="w-full h-20 bg-gradient-to-l from-blue-600 to-blue-950 text-xl font-medium text-white flex justify-between sm:justify-around items-center fixed "> 
                 <Link to="/" className="block ml-10 text-xs md:ml-30 border py-2 px-2 rounded-full">Minio With Quarkus</Link>
-                <div className="hidden lg:flex p-5 text-xs sm:text-sm md:text-xl gap-7 cursor-pointer items-center">
+                <div className="hidden xl:flex p-5 text-xs sm:text-sm md:text-xl gap-7 cursor-pointer items-center">
                     <Link to="/" className="hover:text-orange-400">HOME</Link> 
                     <Link to="/bucket" className="hover:text-orange-400">BUCKET</Link> 
                     <Link to="/jasper" className="hover:text-orange-400">JASPER</Link> 
+                    <Link to="/products" className="hover:text-orange-400">PRODUCTS</Link>  
                     <Link to="/about" className="hover:text-orange-400">ABOUT</Link> 
                     <Link to="/service" className="hover:text-orange-400">SERVICE</Link>  
-                    <Link to="/" onClick={logout} className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 border-b-2`}>LOGOUT</Link> 
+                    {/* <Link to="/" onClick={logout} className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 border-b-2`}>LOGOUT</Link>  */}
                 </div>
                 <div className="flex justify-center gap-2 items-center">
-                    <div className=" flex flex-row relative overflow-hidden">
+                    <div className={` ${path.includes("products") ? 'hidden' : 'block'} flex flex-row relative overflow-hidden`}>
                         <input 
                             onClick={() => setSearch(true)}  
                             type="text" 
@@ -86,15 +89,15 @@ function Navbar() {
                     </div>
                     <Link to="/login"><h1 className={`${token == null ? 'block' : 'hidden'} hover:text-orange-400 text-xl sm:text-sm mx-5`}>LOG IN</h1></Link>
                     <Link to="/profile"><img src="../..//Suzuki-36-42-stand.jpg" className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 text-xs sm:text-sm mr-10 max-w-12 object-contain bg-white rounded-full`}></img></Link>
-                    <h1 onClick={() => setOpenBar(!openBar)} className="block lg:hidden text-4xl cursor-pointer hover:text-red-500 mr-5">&#9776;</h1>
+                    <h1 onClick={() => setOpenBar(!openBar)} className="block xl:hidden text-4xl cursor-pointer hover:text-red-500 mr-5">&#9776;</h1>
                 </div>
                 
-                <div className={`block lg:hidden absolute ${openBar ? 'right-0' : 'right-[-100%]'} w-[250px] bg-gray-800 h-[90vh] top-20 py-5 transition-all border-4 border-black`}>
+                <div className={`block xl:hidden absolute ${openBar ? 'right-0' : 'right-[-100%]'} w-[250px] bg-gray-800 h-[90vh] top-20 py-5 transition-all border-4 border-black`}>
                     <div className="flex flex-col justify-center items-center gap-6">
                         <input 
                             onClick={() => setSearch(true)}  
                             type="text" 
-                            className="p-1 rounded-md text-black mx-8 w-52" 
+                            className={`${path.includes("products") ? 'hidden' : 'block'} p-1 rounded-md text-black mx-8 w-52`} 
                             name="search" 
                             placeholder="Search Bucket" 
                             value={searchValue} 
@@ -105,12 +108,13 @@ function Navbar() {
                         <Link to="/jasper" className="hover:text-orange-400 border-b-2">JASPER &#8464;</Link> 
                         <Link to="/about" className="hover:text-orange-400 border-b-2">ABOUT &#8471;</Link> 
                         <Link to="/service" className="hover:text-orange-400 border-b-2">SERVICE &#9743;</Link> 
+                        <Link to="/products" className="hover:text-orange-400 border-b-2">PRODUCTS</Link> 
                         <Link to="/" onClick={logout} className={`${token == null ? 'hidden' : 'block'} absolute bottom-10 hover:text-orange-400 border-b-2`}>LOGOUT</Link> 
                     </div>
                 </div>
             </div>
-            <div className={`fixed top-20 ${search ? 'h-full' : 'h-0'} w-full backdrop-blur-3xl transition-all duration-500 overflow-hidden z-50 flex justify-center `}>
-                <div className="max-w-screen-lg w-full p-4">
+            <div className={`fixed top-20 ${search ? 'h-full' : 'h-0'} w-full bg-blue-200  transition-all duration-500 overflow-hidden z-50 flex justify-center `}>
+                <div className="max-w-screen-lg w-full p-4 backdrop-blur-xl">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 relative">
                         <h1 className="text-white text-right cursor-pointer absolute right-2" onClick={() => setSearch(!search)}>&#10006;</h1>
                         {filteredBuckets.map((bucket) => (

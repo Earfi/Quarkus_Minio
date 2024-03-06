@@ -14,7 +14,7 @@ function FilePage() {
     return (
         <div className="w-full overflow-hidden mb-20"> 
             <Navbar/>
-            <div className="flex flex-row pt-20">
+            <div className="flex flex-row ">
                 <div className="fixed">
                     <Sidebar/>  
                 </div>

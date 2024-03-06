@@ -20,7 +20,7 @@ function App() {
         <div className='z-40'>
           <Navbar/>
         </div>
-        <div className="flex flex-row mt-20 overflow-hidden z-20">
+        <div className="flex flex-row overflow-hidden z-20">
             <div className="fixed z-10">
                 <Sidebar/>  
             </div>

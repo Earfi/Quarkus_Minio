@@ -6,7 +6,7 @@ function Bucket() {
     return (
         <div className="w-full overflow-hidden"> 
             <Navbar/>
-            <div className="flex flex-row pt-20">
+            <div className="flex flex-row ">
                 <div className="fixed">
                     <Sidebar/>  
                 </div>

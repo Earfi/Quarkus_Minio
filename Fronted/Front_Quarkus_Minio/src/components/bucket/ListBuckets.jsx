@@ -118,7 +118,7 @@ function ListBuckets() {
                                     <button onClick={() => deleteBucket(bucket)}  className="bg-red-500 w-[100px] text-white px-2 py-1 hover:bg-red-800">Delete</button>
                                     <button onClick={() => setBucketEditedName(bucket)} className="bg-purple-500 w-[100px] text-white px-2 py-1 hover:bg-purple-800">Edit</button>
                                 </div>
-                                <div className={`${token == null ? 'hidden' : 'block'} ${editBtn === true && bucketEditName === bucket ? 'h-40 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl`}>
+                                <div className={`${(token == null || token.value == undefined) ? 'hidden' : 'block'} ${editBtn === true && bucketEditName === bucket ? 'h-40 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl`}>
                                     <label className="text-xl my-2">Input new Bucket Name!!</label>
                                     <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-2 rounded-md w-full border" />
                                     <button className="bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>

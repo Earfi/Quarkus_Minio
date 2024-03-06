@@ -20,6 +20,7 @@ function ListUser() {
                     'Authorization': `Bearer ` + localStorage.getItem("token")
                 },
             }) 
+            console.log(res);
 
             if (res.ok) {
                 const data = await res.json()  
@@ -32,14 +33,11 @@ function ListUser() {
                 }).then(async (result) => {
                     if (result.isConfirmed) {  
                         localStorage.removeItem("token")
-                        localStorage.removeItem("roles")
+                        localStorage.removeItem("role")
                         navigate('/login');
                     }
                 });
             } 
-            
-            
-
         }
  
         getUser()
