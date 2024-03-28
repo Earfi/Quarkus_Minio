@@ -5,29 +5,22 @@ import example.service.MinioBucketService;
 import example.service.MinioFileService;
 import example.service.serviceInject.BucketService;
 import example.service.serviceInject.FileService;
-import io.minio.*;
-import io.minio.errors.MinioException;
-import io.minio.messages.Item;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.openapi.annotations.media.Content;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import java.io.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
 @Path("/minio")
 @Produces(MediaType.APPLICATION_JSON)
+@ApplicationScoped
 public class MinioResource {
     @Inject
     MinioFileService fileService;
@@ -35,17 +28,14 @@ public class MinioResource {
     @Inject
     MinioBucketService bucketService;
 
-    @Inject
-    private MinioClient minioClient;
-
     @GET
     @Path("/file/all/{bucket}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Schema(implementation = MinioFileService.class)
-    @APIResponses(value = {
-            @APIResponse(responseCode = "200", description = "ok" , content = @Content(mediaType = "application/json")),
-            @APIResponse(responseCode = "404", description = "Nooo Bucket")
-    })
+//    @Schema(implementation = MinioFileService.class)
+//    @APIResponses(value = {
+//            @APIResponse(responseCode = "200", description = "ok" , content = @Content(mediaType = "application/json")),
+//            @APIResponse(responseCode = "404", description = "Nooo Bucket")
+//    })
     public Response getAllFile(@PathParam("bucket") String bucket) {
         try {
             List<FileInfo> files = fileService.getAllFile(bucket);
@@ -59,11 +49,32 @@ public class MinioResource {
     @Path("/download/file/{bucket}/{fileName}")
     @PermitAll
     public Response downloadFile(@PathParam("bucket") String bucket,
-                                 @PathParam("fileName") String fileName) throws Exception {
-        InputStream stream = fileService.downloadFile(bucket,fileName);
-        return Response.ok(stream).build();
-    }
+                                 @PathParam("fileName") String fileName) {
+        try {
+            // Check if bucket or fileName is empty
+            if (bucket == null || bucket.isEmpty() || fileName == null || fileName.isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Bucket or fileName is empty.")
+                        .build();
+            }
 
+            InputStream stream = fileService.downloadFile(bucket, fileName);
+
+            if (stream == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("File not found.")
+                        .build();
+            }
+
+            // Return response with the file stream
+            return Response.ok(stream).build();
+        } catch (Exception e) {
+            // Return server error response
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error downloading file.")
+                    .build();
+        }
+    }
 
     @POST
     @Path("/file/upload/{bucket}")
@@ -86,7 +97,7 @@ public class MinioResource {
     @PUT
     @Path("/file/edit/{bucket}/{oldName}/{newName}")
     @RolesAllowed({"User","Admin"})
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.MULTIPART_FORM_DATA) 
     public Response renameFile(@PathParam("bucket") String bucketName,
                                @PathParam("oldName") String oldName,
                                @PathParam("newName") String newName) throws Exception {
@@ -150,30 +161,4 @@ public class MinioResource {
         }
     }
 
-
-
-
 }
-
-//@QueryParam("bucket") String bucketName
-
-
-//@POST
-//@Path("/upload/{bucket}")
-//@Consumes(MediaType.MULTIPART_FORM_DATA)
-//public void uploadFile(@PathParam("bucket") String bucketName,
-//                       @MultipartForm FileService file) throws Exception {
-//    try{
-//        InputStream filStream = file.file;
-//        minioClient.putObject(
-//                PutObjectArgs.builder()
-//                        .bucket(bucketName)
-//                        .object(file.fileName)
-//                        .stream(filStream,-1,10485760)
-//                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                        .build()
-//        );
-//    }catch (Exception e){
-//        e.printStackTrace();
-//    }
-//}

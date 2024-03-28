@@ -80,15 +80,4 @@ public class UserResource {
         return Response.ok(existingUser).build();
     }
 
-
-
-
-
-
-
-//    @GET
-//    @Path("/{id}")
-//    public Response listById(@PathParam("id") String id){
-//        return Response.ok(service.getAddressById(id)).build();
-//    }
 }

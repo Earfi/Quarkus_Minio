@@ -58,46 +58,51 @@ function InsertLetter() {
             icon: "warning"
           });
         return;
-      }
+      // }else if(senderAddress.length == 0 || date.length == 0 || recipientName.length == 0 || recipientAddress.length == 0 || salutation.length == 0 || content1.length == 0 || content2.length == 0 || content3.length == 0 || closing.length == 0 || signature.length == 0){
+        // alert("senderAddress")
+      
+      }else{
+        const dataToSend = {
+          senderAddress: senderAddress,
+          date: date,
+          recipientName: recipientName,
+          recipientAddress: recipientAddress,
+          salutation: salutation,
+          content1: content1,
+          content2: content2,
+          content3: content3,
+          closing: closing,
+          signature: signature,
+        };
 
-      const dataToSend = {
-        senderAddress: senderAddress,
-        date: date,
-        recipientName: recipientName,
-        recipientAddress: recipientAddress,
-        salutation: salutation,
-        content1: content1,
-        content2: content2,
-        content3: content3,
-        closing: closing,
-        signature: signature,
-      };
+        const response = await fetch(
+          `http://localhost:8080/api/v1/report/generate/${fileName}/${bucket}/3`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dataToSend),
+          }
+        );
 
-      const response = await fetch(
-        `http://localhost:8080/api/v1/report/generate/${fileName}/${bucket}/3`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataToSend),
+        if (!response.ok) {
+          throw new Error("Failed to generate PDF");
         }
-      );
 
-      if (!response.ok) {
-        throw new Error("Failed to generate PDF");
+        const responseData = await response.blob();
+        saveAs(responseData, `${fileName}` + ".pdf");
       }
 
-      const responseData = await response.blob();
-      saveAs(responseData, `${fileName}` + ".pdf");
+      
     } catch (error) {
       console.error("Error generating PDF:", error);
     }
   };
-
+  
   return (
-    <div className="my-5 px-5 w-full  ">
-      <div className="w-full md:w-[600px] lg:w-[800px]  bg-gray-200 h-fit p-2 py-10 mx-auto border-black border-2">
+    <form className="my-5 px-5 w-full">
+      <div className="w-full bg-gray-200 h-fit p-2 py-10 mx-auto border-black border-2">
         <h1 className="text-3xl font-bold text-red-700 text-center">Letter</h1>
         <div className="my-2">
           <h1>
@@ -141,134 +146,147 @@ function InsertLetter() {
             type="text"
             placeholder="input file name"
             className="border px-2 rounded-lg w-full h-10 mt-2"
+            required
           />
         </div>
         <hr className="h-2 bg-black" />
-        <div className="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Sender Address</b>
-          </label>
-          <input
-            type="text"
-            placeholder="input Sender Address"
-            className="border px-2 rounded-lg w-full h-10 mt-2"
-            value={senderAddress}
-            onChange={(e) => setSenderAddress(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Date</b>
-          </label>
-          <input
-            type="text"
-            placeholder="input date"
-            className="border px-2 rounded-lg w-full h-10 mt-2"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Recipient Name</b>
-          </label>
-          <input
-            type="text"
-            placeholder="input recipient name"
-            className="border px-2 rounded-lg w-full h-10 mt-2"
-            value={recipientName}
-            onChange={(e) => setRecipientName(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Recipient Address</b>
-          </label>
-          <input
-            type="text"
-            placeholder="input recipient Address"
-            className="border px-2 rounded-lg w-full h-10 mt-2"
-            value={recipientAddress}
-            onChange={(e) => setRecipientAddress(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Salutation</b>
-          </label>
-          <input
-            type="text"
-            placeholder="input salutation"
-            className="border px-2 rounded-lg w-full h-10 mt-2"
-            value={salutation}
-            onChange={(e) => setSalutation(e.target.value)}
-          />
-        </div>
-        <div class="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Paragraph 1</b>
-          </label>
-          <textarea
-            type="text"
-            placeholder="input paragraph 1"
-            class="border px-2 rounded-lg w-full mt-2 h-44"
-            value={content1}
-            onChange={(e) => setContent1(e.target.value)}
-          />
-        </div>
+        <div className="flex w-full flex-wrap md:gap-10 h-fit">
+          <div className="flex flex-col items-start my-2 w-full md:w-auto">
+            <label>
+              <b>Sender Address</b>
+            </label>
+            <textarea
+              type="text"
+              placeholder="input Sender Address"
+              className="border px-2 rounded-lg h-20 w-full md:w-96 mt-2"
+              value={senderAddress}
+              onChange={(e) => setSenderAddress(e.target.value)}
+              required
+              />
+          </div>
+          <div className="flex flex-col items-start md:w-64 my-2 w-full md:w-auto">
+            <label>
+              <b>Date</b>
+            </label>
+            <input
+              type="text"
+              placeholder="input date"
+              className="border px-2 rounded-lg w-full md:w-64 h-10 mt-2"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+              />
+          </div>
+          <div className="flex flex-col items-start my-2 w-full md:w-auto">
+            <label>
+              <b>Recipient Name</b>
+            </label>
+            <input
+              type="text"
+              placeholder="input recipient name"
+              className="border px-2 rounded-lg w-full md:w-64 h-10 mt-2"
+              value={recipientName}
+              onChange={(e) => setRecipientName(e.target.value)}
+              required
+              />
+          </div>
+          <div className="flex flex-col items-start my-2 w-full md:w-auto">
+            <label>
+              <b>Recipient Address</b>
+            </label>
+            <textarea
+              type="text"
+              placeholder="input recipient Address"
+              className="border px-2 rounded-lg w-full h-20 md:w-96 mt-2"
+              value={recipientAddress}
+              onChange={(e) => setRecipientAddress(e.target.value)}
+              required
+              />
+          </div>
+          <div className="flex flex-col items-start my-2 w-full md:w-auto">
+            <label>
+              <b>Salutation</b>
+            </label>
+            <input
+              type="text"
+              placeholder="input salutation"
+              className="border px-2 rounded-lg w-full md:w-64 h-10 mt-2"
+              value={salutation}
+              onChange={(e) => setSalutation(e.target.value)}
+              required
+              />
+          </div>
+          <div className="flex flex-col items-start my-2 w-full md:w-auto">
+            <label>
+              <b>Paragraph 1</b>
+            </label>
+            <textarea
+              type="text"
+              placeholder="input paragraph 1"
+              class="border px-2 rounded-lg w-full h-28 md:w-96 mt-2"
+              value={content1}
+              onChange={(e) => setContent1(e.target.value)}
+              required
+              />
+          </div>
 
-        <div className="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Paragraph 2</b>
-          </label>
-          <textarea
-            type="text"
-            placeholder="input paragraph 2"
-            className="border px-2 rounded-lg w-full mt-2 h-44"
-            value={content2}
-            onChange={(e) => setContent2(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Paragraph 3</b>
-          </label>
-          <textarea
-            type="text"
-            placeholder="input paragraph 3"
-            className="border px-2 rounded-lg w-full mt-2 h-44"
-            value={content3}
-            onChange={(e) => setContent3(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Closing</b>
-          </label>
-          <input
-            type="text"
-            placeholder="input closing"
-            className="border px-2 rounded-lg w-full h-10 mt-2"
-            value={closing}
-            onChange={(e) => setClosing(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col items-start w-full my-2">
-          <label>
-            <b>Signature</b>
-          </label>
-          <input
-            type="text"
-            placeholder="input signature"
-            className="border px-2 rounded-lg w-full h-10 mt-2"
-            value={signature}
-            onChange={(e) => setSignature(e.target.value)}
-          />
-        </div>
+          <div className="flex flex-col items-start my-2 w-full md:w-auto">
+            <label>
+              <b>Paragraph 2</b>
+            </label>
+            <textarea
+              type="text"
+              placeholder="input paragraph 2"
+              className="border px-2 rounded-lg w-full h-28 md:w-96 mt-2"
+              value={content2}
+              onChange={(e) => setContent2(e.target.value)}
+              required
+              />
+          </div>
+          <div className="flex flex-col items-start my-2 w-full md:w-auto">
+            <label>
+              <b>Paragraph 3</b>
+            </label>
+            <textarea
+              type="text"
+              placeholder="input paragraph 3"
+              className="border px-2 rounded-lg w-full h-28 md:w-96 mt-2"
+              value={content3}
+              onChange={(e) => setContent3(e.target.value)}
+              required
+              />
+          </div>
+          <div className="flex flex-col my-2 w-full md:w-auto">
+            <label>
+              <b>Closing</b>
+            </label>
+            <input
+              type="text"
+              placeholder="input closing"
+              className="border px-2 rounded-lg w-full md:w-64 h-10 mt-2"
+              value={closing}
+              onChange={(e) => setClosing(e.target.value)}
+              required
+              />
+          </div>
+          <div className="flex flex-col items-start my-2 w-full md:w-auto">
+            <label>
+              <b>Signature</b>
+            </label>
+            <input
+              type="text"
+              placeholder="input signature"
+              className="border px-2 rounded-lg w-full md:w-64 h-10 mt-2"
+              value={signature}
+              onChange={(e) => setSignature(e.target.value)}
+              required
+              />
+          </div>
+         </div>
       <button
-        type="submit"
-        onClick={handleGeneratePdf}
+        type="submit" 
         className="w-full h-10 bg-green-500 text-white font-bold my-2 hover:bg-green-800"
+        onClick={handleGeneratePdf}
       >
         Generate PDF
       </button>
@@ -307,7 +325,7 @@ function InsertLetter() {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 

@@ -1,8 +1,8 @@
 package example.service;
 
 import example.dto.UserDto;
-import example.model.Address;
 import example.model.User;
+import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
@@ -27,8 +27,9 @@ public class UserService {
 
         System.out.println(ZonedDateTime.now());
 
+
         user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
+        user.setPassword(BcryptUtil.bcryptHash(dto.getPassword()));
         user.setBirthdate(dto.getBirthdate());
         user.setRoles(dto.getRoles());
         user.setCreated_at(LocalDateTime.now());

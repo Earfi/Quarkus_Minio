@@ -65,7 +65,7 @@ function ListBuckets() {
                     
                     setTimeout(() => {
                         window.location.reload()
-                    }, 1500); 
+                    }, 1200); 
                 } else {
                     Swal.fire({
                         icon: "error",

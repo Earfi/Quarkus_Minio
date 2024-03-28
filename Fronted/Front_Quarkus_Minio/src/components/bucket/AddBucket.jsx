@@ -52,8 +52,8 @@ function AddBucket() {
             if (res.status == 200) {
                 showSwal();  
                 setTimeout(() => {
-                    // window.location.reload()
-                }, 1500); 
+                    window.location.reload()
+                }, 1200); 
             } else if (!res.ok){
                 showSwalErr(); 
             }

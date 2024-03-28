@@ -33,23 +33,37 @@ function Profile() {
     }
 
     return (
-        <div className="w-full overflow-hidden mb-20"> 
+        <div className="w-full overflow-hidden"> 
             <Navbar/>
-            <div className="flex flex-row ">
+            <div className="flex flex-row bg-slate-200 min-h-[100vh]">
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div className="flex flex-col w-[100%]"> 
-                    <div className="mx-auto">
+                <div className="flex flex-col w-[100%] min-h-[100vh]"> 
+                    <div className="mx-auto flex flex-col justify-start items-center bg-white w-[100%] sm:w-[60%] md:w-[50%] min-h-[100vh]">
                         <h1 className="text-2xl my-5 font-medium text-center border-b-2">Profile</h1>
                         <img className="w-[300px] mx-auto border-4 border-black rounded-full" src="../..//Suzuki-36-42-stand.jpg" alt="" />
-                        <input type="file" className="file-input file-input-bordered my-5 bg-gray-100 border"/>
-                        <div className="flex flex-col gap-5 md:flex-row w-full">
-                            <Link to="/" onClick={logout} className={`text-white border-2 p-2 bg-red-500 hover:bg-red-800 my-5`}>LOGOUT</Link> 
-                            {/* <h1><span className="font-bold">Name : </span>{decodedToken.upn}</h1> */}
-                            {/* <h1><span className="font-bold">Role : </span>{decodedToken.groups}</h1> */}
-                            {/* <h1><span className="font-bold">Birthday : </span>{decodedToken.birthdate}</h1> */}
+                        <input type="file" className="file-input file-input-bordered my-5 bg-gray-100 border "/> 
+                        <div className="px-2 sm:px-10 my-3 gap-10 w-full flex flex-wrap justify-around">
+                            <div className="flex items-center gap-1">
+                                <label className="text-lg text-gray-600 font-medium">Name: </label>
+                                <p className="text-md">Earf</p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <label className="text-lg text-gray-600 font-medium">Email: </label>
+                                <p className="text-md">pichaya.chan.work@gmail.com</p>
+                            </div>
+                            
+                            <div className="flex items-center gap-1">
+                                <label className="text-lg text-gray-600 font-medium">Call: </label>
+                                <p className="text-md">082-XXX-XXXX</p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <label className="text-lg text-gray-600 font-medium">Github: </label>
+                                <p className="text-md">Earfi</p>
+                            </div>
                         </div>
+                        <Link to="/" onClick={logout} className={`text-white border-2 p-2 bg-red-500 hover:bg-red-800 my-5 w-[100px]`}>LOGOUT</Link> 
                     </div>
                 </div>
             </div>
