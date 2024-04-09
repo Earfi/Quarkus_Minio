@@ -1,18 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import {jwtDecode} from 'jwt-decode';
 import Swal from 'sweetalert2'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Profile() { 
+    const navigate = useNavigate();
+
     const [decodedToken,setDecodedToken] = useState(null)
     const [token,setToken] = useState(null);
 
+    const inputRef = useRef(null);
+    const [image,setImage] = useState("");
+
     useEffect(()=>{
         const token = localStorage.getItem("token")
+
+        if (token == '' || token == null) {
+            navigate('/');
+        }
         setDecodedToken(jwtDecode(token)); 
     },[])
+
+    const handleImageClick = () => {
+        inputRef.current.click();
+    }
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0]; 
+        setImage(event.target.files[0]);
+    }
 
     const logout = () => {
         localStorage.removeItem("token")
@@ -42,8 +60,15 @@ function Profile() {
                 <div className="flex flex-col w-[100%] min-h-[100vh]"> 
                     <div className="mx-auto flex flex-col justify-start items-center bg-white w-[100%] sm:w-[60%] md:w-[50%] min-h-[100vh]">
                         <h1 className="text-2xl my-5 font-medium text-center border-b-2">Profile</h1>
-                        <img className="w-[300px] mx-auto border-4 border-black rounded-full" src="../..//Suzuki-36-42-stand.jpg" alt="" />
-                        <input type="file" className="file-input file-input-bordered my-5 bg-gray-100 border "/> 
+
+
+                        <div onClick={handleImageClick}>
+                            
+                            {image ? <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={URL.createObjectURL(image)} alt="" />  : <img className="w-[200px] h-[200px] object-contain mx-auto border-4 border-black rounded-full" src="../..//profile-icon.png" alt="" /> }
+                            <input type="file" ref={inputRef} onChange={handleImageChange} className="file-input file-input-bordered my-5 bg-gray-100 border "/>
+                        </div>
+
+
                         <div className="px-2 sm:px-10 my-3 gap-10 w-full flex flex-wrap justify-around">
                             <div className="flex items-center gap-1">
                                 <label className="text-lg text-gray-600 font-medium">Name: </label>
@@ -63,7 +88,7 @@ function Profile() {
                                 <p className="text-md">Earfi</p>
                             </div>
                         </div>
-                        <Link to="/" onClick={logout} className={`text-white border-2 p-2 bg-red-500 hover:bg-red-800 my-5 w-[100px]`}>LOGOUT</Link> 
+                        <Link to="/" onClick={logout} className={`text-white border-2 p-2 bg-red-500 hover:bg-red-800 my-5 w-[100px] text-center`}>LOGOUT</Link> 
                     </div>
                 </div>
             </div>

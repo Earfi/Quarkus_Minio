@@ -129,9 +129,9 @@ function InsertCompany() {
 
     return (
         <div className="my-5 px-5 w-full  "> 
-            <form className="w-full md:w-[600px] lg:w-[800px]  h-fit p-2 py-10 mx-auto border-black border-2 ">
+            <form className="w-full md:w-[600px] lg:w-[800px]  h-fit p-2 py-10 mx-auto border-black border-2 bg-gray-200">
                 <h1 className="text-3xl font-bold text-red-700 text-center">Company</h1>
-                <div className="my-2">
+                <div className="my-2 ">
                     <h1><b>Select Bucket to Collect Files!!</b></h1>
                     <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white my-2' required>
                         {allBuckets.length == 0 &&

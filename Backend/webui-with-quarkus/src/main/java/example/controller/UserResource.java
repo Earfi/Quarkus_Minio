@@ -42,6 +42,7 @@ public class UserResource {
 
     @POST
     @Path("/add")
+//    @RolesAllowed({"Admin"})
     public Response addUser(UserDto dto){
         if (service.existsByUsername(dto.getUsername())) {
             return Response.status(Response.Status.BAD_REQUEST)
@@ -64,7 +65,7 @@ public class UserResource {
     @PUT
     @Path("/update/{id}")
     public Response updateUser(@PathParam("id") Integer id,User user) {
-        User existingUser = User.findById(user.getId());
+        User existingUser = User.findById(id);
         if (existingUser == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

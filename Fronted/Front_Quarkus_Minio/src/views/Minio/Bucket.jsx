@@ -1,6 +1,6 @@
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar"; 
-import ListBuckets from "../../components/bucket/ListBuckets";
+import ListBuckets from "../../components/minio/bucket/ListBuckets";
 
 function Bucket() {
     return (

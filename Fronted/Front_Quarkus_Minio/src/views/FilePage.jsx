@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar"; 
-import UploadFile from "../components/file/UploadFile";
-import ListFile from "../components/file/ListFile";
+import UploadFile from "../components/minio/file/UploadFile";
+import ListFile from "../components/minio/file/ListFile";
 import { useEffect, useState } from "react";
 
 function FilePage() { 

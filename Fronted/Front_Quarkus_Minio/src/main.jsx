@@ -17,16 +17,16 @@ import JasperDB from './views/Jasper/JasperDB.jsx';
 import JasperJSON from './views/Jasper/JasperJSON.jsx';
 import Login from './views/Login.jsx';
 import Products from './views/Product/Products.jsx';
+import ProductSelect from './views/Product/ProductSelect.jsx';
 import { useNavigate } from 'react-router-dom';
 
 import Bucket from './views/Minio/Bucket.jsx';
 import FileBucket from './views/Minio/FileBucket.jsx';
 
 import Mode from './views/Admin/Mode.jsx';
-import ListUser from './views/Admin/ListUser.jsx';
 import Dashboard from './views/Admin/Dashboard.jsx';
-import EditUser from './views/Admin/EditUser.jsx';
-import ProductSelect from './views/Product/ProductSelect.jsx';
+import ListUser from './views/Admin/UserPage/ListUser.jsx';
+import EditUser from './views/Admin/UserPage/EditUser.jsx';
 
 // const navigate = useNavigate();
 
@@ -109,11 +109,11 @@ const router = createBrowserRouter([
     element: <Dashboard/>,
   },
   {
-    path: "/user",
+    path: "/dashboard/user",
     element: <ListUser/>,
   },
   {
-    path: "/edituser/:id",
+    path: "/dashboard/edituser/:id",
     element: <EditUser/>,
   },
 ]);

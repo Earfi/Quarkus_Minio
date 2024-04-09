@@ -21,6 +21,7 @@ function ListBuckets() {
                 });
                 const data = await res.json();
                 setBuckets(data); 
+                // console.log(data);
             } catch (error) {
                 console.error("Error fetching buckets:", error);
             }
@@ -116,7 +117,7 @@ function ListBuckets() {
                                 </Link>
                                 <div className={`flex justify-center gap-5 md:justify-end md:mr-20 my-2 ${token == null ? 'hidden' : 'block'}`}> 
                                     <button onClick={() => deleteBucket(bucket)}  className="bg-red-500 w-[100px] text-white px-2 py-1 hover:bg-red-800">Delete</button>
-                                    <button onClick={() => setBucketEditedName(bucket)} className="bg-purple-500 w-[100px] text-white px-2 py-1 hover:bg-purple-800">Edit</button>
+                                    {/* <button onClick={() => setBucketEditedName(bucket)} className="bg-purple-500 w-[100px] text-white px-2 py-1 hover:bg-purple-800">Edit</button> */}
                                 </div>
                                 <div className={`${(token == null || token.value == undefined) ? 'hidden' : 'block'} ${editBtn === true && bucketEditName === bucket ? 'h-40 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl`}>
                                     <label className="text-xl my-2">Input new Bucket Name!!</label>

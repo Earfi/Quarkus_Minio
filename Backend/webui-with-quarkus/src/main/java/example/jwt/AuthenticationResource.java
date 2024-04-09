@@ -36,7 +36,7 @@ public class AuthenticationResource {
             String token = generateToken(user.getUsername(), user.getRoles());
             JsonObject tokenJson = Json.createObjectBuilder().add("token", token).build();
             return Response.ok(tokenJson).build();
-        } else { 
+        } else {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
     }

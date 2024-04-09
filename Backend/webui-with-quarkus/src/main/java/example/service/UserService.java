@@ -27,7 +27,6 @@ public class UserService {
 
         System.out.println(ZonedDateTime.now());
 
-
         user.setUsername(dto.getUsername());
         user.setPassword(BcryptUtil.bcryptHash(dto.getPassword()));
         user.setBirthdate(dto.getBirthdate());

@@ -31,6 +31,7 @@ public class MinioResource {
     @GET
     @Path("/file/all/{bucket}")
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
 //    @Schema(implementation = MinioFileService.class)
 //    @APIResponses(value = {
 //            @APIResponse(responseCode = "200", description = "ok" , content = @Content(mediaType = "application/json")),
