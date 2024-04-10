@@ -12,13 +12,11 @@ function Mode() {
         if (localStorage.getItem("token") === null) {
             navigate('/'); 
         }
-        const token = localStorage.getItem("token") 
-        // console.log(jwtDecode(token));  
+        const token = localStorage.getItem("token")  
 
         setName(localStorage.getItem("username"));  
         if (token) {   
-            const decodedToken = jwtDecode(token);
-            console.log(decodedToken.groups);  
+            const decodedToken = jwtDecode(token); 
             setRole(decodedToken.groups);  
             if (decodedToken.groups !== 'Admin') {
                 navigate('/'); 

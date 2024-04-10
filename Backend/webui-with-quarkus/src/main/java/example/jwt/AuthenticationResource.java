@@ -33,7 +33,7 @@ public class AuthenticationResource {
         }
 
         if (passwordMatches) {
-            String token = generateToken(user.getUsername(), user.getRoles());
+            String token = generateToken(user);
             JsonObject tokenJson = Json.createObjectBuilder().add("token", token).build();
             return Response.ok(tokenJson).build();
         } else {
@@ -42,10 +42,11 @@ public class AuthenticationResource {
     }
 
 
-    private String generateToken(String username, String roles) {
+    private String generateToken(User user) {
         return Jwt.issuer("https://example.com/issuer")
-                .upn(username)
-                .claim(Claims.groups.name(), roles)
+                .upn(user.getUsername())
+                .claim("userId", user.getId())
+                .claim(Claims.groups.name(), user.getRoles())
                 .sign();
     }
 }

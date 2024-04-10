@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode'; 
 
 function Navbar() {
     const navigate = useNavigate();
@@ -16,7 +17,15 @@ function Navbar() {
     
     const [path,setPath] = useState(window.location.pathname);
 
+    const [id,setId] = useState(window.location.pathname);
+
     useEffect(() => { 
+        const token = localStorage.getItem("token") 
+
+        if (token) {   
+            const decodedToken = jwtDecode(token); 
+            setId(decodedToken.userId);
+          }
 
         setToken(localStorage.getItem("token"))
 
@@ -88,7 +97,8 @@ function Navbar() {
                         /> 
                     </div>
                     <Link to="/login"><h1 className={`${token == null ? 'block' : 'hidden'} hover:text-orange-400 text-xl sm:text-sm mx-5`}>LOG IN</h1></Link>
-                    <Link to="/profile"><img src="../..//profile-icon.png" className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 text-xs sm:text-sm mr-10 max-w-12 object-contain bg-white rounded-full`}></img></Link>
+                    {/* <Link to="/profile"><img src="../..//profile-icon.png" className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 text-xs sm:text-sm mr-10 max-w-12 object-contain bg-white rounded-full`}></img></Link> */}
+                    <Link to="/profile"><img  className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 text-xs sm:text-sm mr-10 max-w-12 object-contain bg-white rounded-full`} src={`http://localhost:8080/user/${id}/profile-image`} alt="" /></Link>
                     <h1 onClick={() => setOpenBar(!openBar)} className="block xl:hidden text-4xl cursor-pointer hover:text-red-500 mr-5">&#9776;</h1>
                 </div>
                 
