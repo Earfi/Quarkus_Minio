@@ -1,15 +1,12 @@
-package example.service;
+package example.service.minio;
 
-import example.dto.BucketInfo;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
-import io.minio.RemoveBucketArgs;
 import io.minio.errors.MinioException;
 import io.minio.messages.Bucket;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
 
 import java.util.ArrayList;
 import java.util.List;

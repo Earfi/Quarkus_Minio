@@ -1,60 +1,33 @@
-package example.model;
-
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import jakarta.persistence.*;
+package example.dto.user;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "users")
-public class User extends PanacheEntityBase {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class UserDto {
+    private Long id;
     private String username;
     private String password;
     private String birthdate;
     private String roles;
-    private LocalDateTime created_at;
-    private LocalDateTime  updated_at;
-    @Column(name = "profile_image_path")
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private String profileImagePath;
-
-    @Column(name = "first_name")
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "nickname")
     private String nickname;
-
-
-    @Column(name = "age")
     private Integer age;
-
-    @Column(name = "gender")
     private String gender;
-
-    @Column(name = "phone_number")
     private String phoneNumber;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "address")
     private String address;
-
-    @Column(name = "github")
     private String github;
 
-    public int getId() {
+    // Getters and setters
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -90,20 +63,20 @@ public class User extends PanacheEntityBase {
         this.roles = roles;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getProfileImagePath() {
@@ -137,6 +110,7 @@ public class User extends PanacheEntityBase {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
 
     public Integer getAge() {
         return age;

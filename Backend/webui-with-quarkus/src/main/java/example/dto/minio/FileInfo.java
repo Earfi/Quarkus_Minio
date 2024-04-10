@@ -1,4 +1,4 @@
-package example.dto;
+package example.dto.minio;
 
 public class FileInfo {
     private String fileName;

@@ -1,4 +1,4 @@
-package example.dto;
+package example.dto.minio;
 
 public class BucketInfo {
     private String name;

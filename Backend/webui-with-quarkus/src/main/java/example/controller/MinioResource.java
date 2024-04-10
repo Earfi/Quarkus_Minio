@@ -1,8 +1,8 @@
 package example.controller;
 
-import example.dto.FileInfo;
-import example.service.MinioBucketService;
-import example.service.MinioFileService;
+import example.dto.minio.FileInfo;
+import example.service.minio.MinioBucketService;
+import example.service.minio.MinioFileService;
 import example.service.serviceInject.BucketService;
 import example.service.serviceInject.FileService;
 import jakarta.annotation.security.PermitAll;

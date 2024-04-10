@@ -1,15 +1,10 @@
-package example.controller;
+package example.controller.User;
 
-import example.dto.AddressDto;
-import example.dto.UserDto;
-import example.model.Address;
+import example.dto.user.UserDto;
 import example.model.User;
-import example.service.AddressService;
-import example.service.UserService;
-import jakarta.annotation.security.PermitAll;
+import example.service.user.UserService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -42,7 +37,7 @@ public class UserResource {
 
     @POST
     @Path("/add")
-//    @RolesAllowed({"Admin"})
+    @RolesAllowed({"Admin"})
     public Response addUser(UserDto dto){
         if (service.existsByUsername(dto.getUsername())) {
             return Response.status(Response.Status.BAD_REQUEST)
@@ -50,35 +45,28 @@ public class UserResource {
                     .build();
         }
 
-        User user = service.addUser(dto);
+        User user = service.createUser(dto);
         return Response.ok(user).status(201).build();
     }
 
     @DELETE
     @RolesAllowed("Admin")
     @Path("/delete/{id}")
-    public Response deleteUser(@PathParam("id") Integer id){
+    public Response deleteUser(@PathParam("id") Long id){
         service.removeUser(id);
         return Response.status(204).build();
     }
 
     @PUT
-    @Path("/update/{id}")
-    public Response updateUser(@PathParam("id") Integer id,User user) {
-        User existingUser = User.findById(id);
-        if (existingUser == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+    @Path("/update/{userId}")
+    public Response updateUser(@PathParam("userId") Long userId, UserDto dto) {
+        try {
+            User updatedUser = service.updateUser(userId, dto);
+            return Response.ok(updatedUser).build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
-
-        existingUser.setUsername(user.getUsername());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setBirthdate(user.getBirthdate());
-        existingUser.setRoles(user.getRoles());
-        existingUser.setUpdated_at(LocalDateTime.now());
-
-        existingUser.persist();
-
-        return Response.ok(existingUser).build();
     }
+
 
 }

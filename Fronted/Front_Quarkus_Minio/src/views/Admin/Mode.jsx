@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {jwtDecode} from 'jwt-decode'; // แก้จาก {jwtDecode} เป็น jwtDecode
+import {jwtDecode} from 'jwt-decode'; 
 
 function Mode() {
     const navigate = useNavigate();
@@ -9,21 +9,21 @@ function Mode() {
     const [role, setRole] = useState(null);
 
     useEffect(() => {  
-        // if (localStorage.getItem("token") === null) {
-        //     navigate('/'); 
-        // }
-        // const token = localStorage.getItem("token") 
+        if (localStorage.getItem("token") === null) {
+            navigate('/'); 
+        }
+        const token = localStorage.getItem("token") 
         // console.log(jwtDecode(token));  
 
         setName(localStorage.getItem("username"));  
-        // if (token) {   
-        //     const decodedToken = jwtDecode(token);
-        //     console.log(decodedToken.groups);  
-        //     setRole(decodedToken.groups);  
-        //     if (decodedToken.groups !== 'Admin') {
-        //         navigate('/'); 
-        //     } 
-        // }
+        if (token) {   
+            const decodedToken = jwtDecode(token);
+            console.log(decodedToken.groups);  
+            setRole(decodedToken.groups);  
+            if (decodedToken.groups !== 'Admin') {
+                navigate('/'); 
+            } 
+        }
     }, [navigate]);
 
     return(

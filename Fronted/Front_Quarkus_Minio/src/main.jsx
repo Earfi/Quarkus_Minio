@@ -93,16 +93,7 @@ const router = createBrowserRouter([
   
   {
     path: "/mode",
-    element: <Mode/>,
-    beforeEnter: (to, form, next) => { 
-      if(localStorage.getItem("role") === 'Admin'){
-        next()
-      }else if(localStorage.getItem("role") === 'User'){ 
-        // navigate('/');
-      }else{
-        // navigate('/');
-      }
-    }
+    element: <Mode/>, 
   },
   {
     path: "/dashboard",

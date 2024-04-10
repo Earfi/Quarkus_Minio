@@ -3,15 +3,37 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     birthdate DATE,
-    roles VARCHAR(255), -- เพิ่มคอลัมน์ roles เพื่อเก็บข้อมูล roles ภายในตาราง users
+    roles VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    profile_image_path VARCHAR(255),
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    nickname VARCHAR(255), 
+    age INT,
+    gender VARCHAR(10),
+    phone_number VARCHAR(20),
+    email VARCHAR(255),
+    address VARCHAR(255),
+    github VARCHAR(255)
 );
 
-INSERT INTO users (username, password, birthdate, roles)
-VALUES
-('Admin', 'admin', '2000-01-01', "Admin"),
-('User', 'user', '2000-02-02', "User"),
-('user3', 'password3', '2000-03-03', "Admin"),
-('user4', 'password4', '2000-04-04', "Admin"),
-('user5', 'password5', '2000-05-05', "User");
+
+
+{
+  "username": "john_doe",
+  "password": "john_doe",
+  "birthdate": "1990-05-15",
+  "roles": "User",
+  "profileImagePath": "/path/to/profile/image.jpg",
+  "firstName": "John",
+  "lastName": "Doe",
+  "nickname": "Johnny",
+  "dateOfBirth": "1990-05-15",
+  "age": 31,
+  "gender": "Male",
+  "phoneNumber": "1234567890",
+  "email": "john.doe@example.com",
+  "address": "123 Main Street, City, Country",
+  "github": "johnny_github_username"
+}

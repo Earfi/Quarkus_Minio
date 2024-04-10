@@ -46,7 +46,6 @@ public class AuthenticationResource {
         return Jwt.issuer("https://example.com/issuer")
                 .upn(username)
                 .claim(Claims.groups.name(), roles)
-                .claim(Claims.birthdate.name(), "2001-07-13")
                 .sign();
     }
 }

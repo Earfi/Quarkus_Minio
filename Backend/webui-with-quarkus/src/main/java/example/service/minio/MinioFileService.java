@@ -1,6 +1,6 @@
-package example.service;
+package example.service.minio;
 
-import example.dto.FileInfo;
+import example.dto.minio.FileInfo;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import io.minio.http.Method;

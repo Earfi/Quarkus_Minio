@@ -1,20 +1,17 @@
 package example.service.jasper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import example.dto.AddressDto;
 import example.dto.jasper.temp1.ReportDto;
 import example.dto.jasper.temp2.AddressJasperRowDto;
 import example.dto.jasper.temp3.LetterDto;
-import example.service.MinioFileService;
+import example.service.minio.MinioFileService;
 import io.vertx.core.json.JsonObject;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
