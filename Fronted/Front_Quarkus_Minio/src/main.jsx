@@ -27,17 +27,29 @@ import Mode from './views/Admin/Mode.jsx';
 import Dashboard from './views/Admin/Dashboard.jsx';
 import ListUser from './views/Admin/UserPage/ListUser.jsx';
 import EditUser from './views/Admin/UserPage/EditUser.jsx';
+import SignUp from './views/SignUp.jsx';
+import Navbar from './components/Navbar.jsx';
 
 // const navigate = useNavigate();
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: 
+      ( 
+        <>
+          <Navbar/>
+          <App />
+        </>
+      ),
   },
   {
     path: "/login",
     element: <Login/>,
+  },
+  {
+    path: "/signUp",
+    element: <SignUp/>,
   },
   {
     path: "/bucket",

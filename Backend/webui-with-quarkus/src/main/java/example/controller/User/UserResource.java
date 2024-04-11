@@ -89,6 +89,7 @@ public class UserResource {
     @Path("/{userId}/profile-image")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"Admin","User"})
     @Transactional
     public Response uploadProfileImage(
             @PathParam("userId") Long userId,
@@ -135,6 +136,7 @@ public class UserResource {
 
     @GET
     @Path("/{userId}/profile-image")
+    @RolesAllowed({"Admin","User"})
     @Produces("image/jpeg")
     public Response getProfileImage(@PathParam("userId") Long userId) {
         UserDto user = service.getUserById(userId);

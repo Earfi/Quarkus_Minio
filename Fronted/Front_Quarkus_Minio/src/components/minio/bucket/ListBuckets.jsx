@@ -105,28 +105,32 @@ function ListBuckets() {
                     <h1 className="hidden lg:block w-[300px]">Creation Date</h1>
                 </div>
                 <div className="flex flex-col justify-between border pb-5">
-                    {buckets.map((bucket) => (
-                       <div className="flex flex-col"  >
-                            <div className="border-b-4 border-gray-300 p-2">
-                                <Link to={`/file/${bucket}`}>
-                                    <div className="flex flex-col lg:flex-row items-start lg:justify-between lg:items-center my-2 mx-10 font-mono bg-gray-100 py-2 px-5 border-b-2 cursor-pointer hover:bg-gray-200 text-md h-fit lg:h-20">
-                                        {/* <p className="w-[100px] md:w-[200px]">&#9778; <b className="font-extrabold">{bucket.name}</b></p> */}
-                                        {/* <p className="w-[300px]">{  convertDate(bucket.creationDate)}</p> */}
-                                        <p className="w-[100px] md:w-[200px]">&#9778; <b className="font-extrabold">{bucket}</b></p>
-                                    </div>
-                                </Link>
-                                <div className={`flex justify-center gap-5 md:justify-end md:mr-20 my-2 ${token == null ? 'hidden' : 'block'}`}> 
-                                    <button onClick={() => deleteBucket(bucket)}  className="bg-red-500 w-[100px] text-white px-2 py-1 hover:bg-red-800">Delete</button>
-                                    {/* <button onClick={() => setBucketEditedName(bucket)} className="bg-purple-500 w-[100px] text-white px-2 py-1 hover:bg-purple-800">Edit</button> */}
-                                </div>
-                                <div className={`${(token == null || token.value == undefined) ? 'hidden' : 'block'} ${editBtn === true && bucketEditName === bucket ? 'h-40 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl`}>
-                                    <label className="text-xl my-2">Input new Bucket Name!!</label>
-                                    <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-2 rounded-md w-full border" />
-                                    <button className="bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>
-                                </div>
-                            </div>
-                       </div>
-                    ))}
+                    {buckets.length > 0 && (
+                        <>
+                            {buckets.map((bucket) => (
+                                <div className="flex flex-col"  >
+                                        <div className="border-b-4 border-gray-300 p-2">
+                                            <Link to={`/file/${bucket}`}>
+                                                <div className="flex flex-col lg:flex-row items-start lg:justify-between lg:items-center my-2 mx-10 font-mono bg-gray-100 py-2 px-5 border-b-2 cursor-pointer hover:bg-gray-200 text-md h-fit lg:h-20">
+                                                    {/* <p className="w-[100px] md:w-[200px]">&#9778; <b className="font-extrabold">{bucket.name}</b></p> */}
+                                                    {/* <p className="w-[300px]">{  convertDate(bucket.creationDate)}</p> */}
+                                                    <p className="w-[100px] md:w-[200px]">&#9778; <b className="font-extrabold">{bucket}</b></p>
+                                                </div>
+                                            </Link>
+                                            <div className={`flex justify-center gap-5 md:justify-end md:mr-20 my-2 ${token == null ? 'hidden' : 'block'}`}> 
+                                                <button onClick={() => deleteBucket(bucket)}  className="bg-red-500 w-[100px] text-white px-2 py-1 hover:bg-red-800">Delete</button>
+                                                {/* <button onClick={() => setBucketEditedName(bucket)} className="bg-purple-500 w-[100px] text-white px-2 py-1 hover:bg-purple-800">Edit</button> */}
+                                            </div>
+                                            <div className={`${(token == null || token.value == undefined) ? 'hidden' : 'block'} ${editBtn === true && bucketEditName === bucket ? 'h-40 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl`}>
+                                                <label className="text-xl my-2">Input new Bucket Name!!</label>
+                                                <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-2 rounded-md w-full border" />
+                                                <button className="bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>
+                                            </div>
+                                        </div>
+                                </div> 
+                            ))} 
+                        </>
+                    )}
                     {buckets.length === 0 && (
                         <p className='m-5 bg-red-500 text-white font-mono border-l-red-500 border p-2'>No Buckets!!!</p>
                     )}

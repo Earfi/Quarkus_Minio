@@ -5,26 +5,25 @@ import {jwtDecode} from 'jwt-decode';
 import Swal from 'sweetalert2'
 import { Link, useNavigate } from "react-router-dom";
 
-function Profile() { 
+function Profile() {
     const navigate = useNavigate();
-
-    const [decodedToken,setDecodedToken] = useState(null) 
-
     const inputRef = useRef(null);
-    const [image,setImage] = useState("");
 
-    const [info,setInfo] = useState([]);
-    const [profile,setProfile] = useState("");
+    const [decodedToken, setDecodedToken] = useState(null)
+
+    const [image, setImage] = useState("");
+    const [profile, setProfile] = useState("");
+
+    const [info, setInfo] = useState([]);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         const username = localStorage.getItem("username");
-    
+
         if (token === '' || token === null) {
             navigate('/');
         }
         setDecodedToken(jwtDecode(token));
-        // http://localhost:8080/user/50/profile-image
 
         const getUserById = async () => {
             try {
@@ -39,9 +38,9 @@ function Profile() {
                     Swal.fire({
                         icon: "error",
                         title: "Oops... Session does Exits!!",
-                        text: "Please Login!!!",  
+                        text: "Please Login!!!",
                     }).then(async (result) => {
-                        if (result.isConfirmed) {  
+                        if (result.isConfirmed) {
                             localStorage.removeItem("token")
                             localStorage.removeItem("role")
                             navigate('/login');
@@ -50,18 +49,21 @@ function Profile() {
                 }
                 const data = await res.json(); 
                 setInfo(data);
-     
+                getUserProfile(data.id);
+
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
         };
 
-        const getUserProfile = async () => {
-            try {
-                const res = await fetch(`http://localhost:8080/user/${info.id}/profile-image`, {
+        getUserById();
+
+        const getUserProfile = async (id) => { 
+            try { 
+                const res = await fetch(`http://localhost:8080/user/${id}/profile-image`, {
                     method: "GET",
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ` + localStorage.getItem("token"),
                     },
                 });
 
@@ -69,36 +71,39 @@ function Profile() {
                     Swal.fire({
                         icon: "error",
                         title: "Oops... Session does Exits!!",
-                        text: "Please Login!!!",  
+                        text: "Please Login!!!",
                     }).then(async (result) => {
-                        if (result.isConfirmed) {  
+                        if (result.isConfirmed) {
                             localStorage.removeItem("token")
                             localStorage.removeItem("role")
                             navigate('/login');
                         }
                     });
+                }else if(res.ok){
+                    const blob = await res.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+                    setProfile(imageUrl);
+
                 }
-                const data = await res.json(); 
-                setProfile(data);
-                // setProfile("http://localhost:8080/user/${info.id}/profile-image");
-     
+
             } catch (error) {
                 console.error("Error fetching user data:", error);
-            }
+            } 
         };
-    
-    
-        getUserById();
-        getUserProfile();
-    }, []);
-    
+
+        // if (info.id) {
+        //     console.log(info.id);
+        //     getUserProfile();
+        // }
+
+    }, [navigate, info.id]);
 
     const handleImageClick = () => {
         inputRef.current.click();
     }
 
     const handleImageChange = (event) => {
-        const file = event.target.files[0]; 
+        const file = event.target.files[0];
         setImage(event.target.files[0]);
     }
 
@@ -111,14 +116,54 @@ function Profile() {
             title: "Logout successfully",
             text: "Bye Bye!!!",
             icon: "success",
-            showConfirmButton: false, 
+            showConfirmButton: false,
             timer: 1000
         });
         setTimeout(() => {
             navigate('/');
             window.location.reload()
-        }, 1500); 
+        }, 1500);
     }
+
+    const updateProfile = async (file, id) => {
+        const formData = new FormData(); 
+        formData.append('file', file);
+
+        const res = await fetch(`http://localhost:8080/user/${id}/profile-image`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ` + localStorage.getItem("token"),
+                    },
+                    body: formData
+                });
+
+                if (res.status === 401) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops... Session does Exits!!",
+                        text: "Please Login!!!",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem("token")
+                            localStorage.removeItem("role")
+                            navigate('/login');
+                        }
+                    });
+                } else if(res.ok){
+                    console.log("Successfull Update Profile");
+                    
+                    Swal.fire({
+                        title: "Update Profile Successfully", 
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(() => { 
+                        window.location.reload()
+                    }, 1500);
+                }
+    };
+    
 
     function convertToThaiDateTime(dateTimeString) {
         const thaiLocaleOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
@@ -152,19 +197,19 @@ function Profile() {
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div className="flex flex-col w-[100%] min-h-[100vh]"> 
+                <div className="flex flex-col w-[100%] min-h-[100vh] p-0"> 
                     <div className="mx-auto flex flex-col justify-start items-center bg-white w-[100%] sm:w-[60%] md:w-[50%] min-h-[100vh]">
                         <h1 className="text-2xl my-5 font-medium text-center border-b-2">Profile</h1>
 
 
-                        <div onClick={handleImageClick}>
-                            
-                            {image ? <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={URL.createObjectURL(image)} alt="" />  : <img className="w-[200px] h-[200px] object-contain mx-auto border-4 border-black rounded-full" src={`http://localhost:8080/user/${info.id}/profile-image`} alt="" /> }
-                            <input type="file" ref={inputRef} onChange={handleImageChange} className="file-input file-input-bordered my-5 bg-gray-100 border "/>
+                        <div onClick={() => handleImageClick}> 
+                            {image ? <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={URL.createObjectURL(image)} alt="" />  : <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={profile} alt="" /> }
+                            <input type="file" ref={inputRef} onChange={handleImageChange} className="file-input file-input-bordered my-5 text-xs bg-gray-100 border "/>
                         </div>
+                        <button onClick={() => updateProfile(image,info.id)} className="mx-5 px-2 py-2 bg-red-500 text-white font-bold text-sm rounded-xl hover:bg-red-800 cursor-pointer">UPDATE PROFILE</button>
 
 
-                        <div className="px-5 sm:px-10 my-3 mx-auto gap-10 w-full flex flex-wrap">
+                        <div className="px-5 sm:px-10 my-3 mx-auto gap-10 w-full flex flex-wrap mt-10">
                             <div className="flex items-center gap-1">
                                 <label className="text-md text-gray-600 font-bold">Username: </label>
                                 <input type="text" className="text-md px-2 border rounded-md max-w-32" value={formattedUserInfo.username}/>
@@ -199,7 +244,7 @@ function Profile() {
                             </div>
                             <div className="flex items-center gap-1">
                                 <label className="text-md text-gray-600 font-medium">Address: </label>
-                                <input type="text" className="text-md px-2 border rounded-md" value={formattedUserInfo.address}/>    
+                                <input type="text" className="text-md px-2 border rounded-md max-w-full" value={formattedUserInfo.address}/>    
                             </div>
                             <div className="flex items-center gap-1">
                                 <label className="text-md text-gray-600 font-medium">Phone Number: </label>

@@ -18,9 +18,36 @@ function Navbar() {
     const [path,setPath] = useState(window.location.pathname);
 
     const [id,setId] = useState(window.location.pathname);
+    
+    const [profile, setProfile] = useState("");
 
     useEffect(() => { 
         const token = localStorage.getItem("token") 
+        
+        const getUserProfile = async () => {  
+            try { 
+                const res = await fetch(`http://localhost:8080/user/${id}/profile-image`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ` + localStorage.getItem("token"),
+                    },
+                });
+                if(res.ok){
+                    const blob = await res.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+                    setProfile(imageUrl);
+
+                }
+
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            } 
+        };
+
+        if (token) {
+            getUserProfile();
+        }
+
 
         if (token) {   
             const decodedToken = jwtDecode(token); 
@@ -36,10 +63,10 @@ function Navbar() {
             setFilteredBuckets(data); // เริ่มต้นให้ filteredBuckets เป็น allBuckets เมื่อโหลดข้อมูลครั้งแรก
         }  
         getAllBacket() 
-    },[]) 
 
-    useEffect(() => {
-        // หา bucket ที่ตรงกับค่าที่ค้นหาแล้วเก็บใน filteredBuckets
+    },[id]) 
+
+    useEffect(() => { 
         const filtered = allBuckets.filter(bucket => bucket.includes(searchValue));
         setFilteredBuckets(filtered);
     }, [searchValue, allBuckets]);
@@ -98,7 +125,7 @@ function Navbar() {
                     </div>
                     <Link to="/login"><h1 className={`${token == null ? 'block' : 'hidden'} hover:text-orange-400 text-xl sm:text-sm mx-5`}>LOG IN</h1></Link>
                     {/* <Link to="/profile"><img src="../..//profile-icon.png" className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 text-xs sm:text-sm mr-10 max-w-12 object-contain bg-white rounded-full`}></img></Link> */}
-                    <Link to="/profile"><img  className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 text-xs sm:text-sm mr-10 max-w-12 object-contain bg-white rounded-full`} src={`http://localhost:8080/user/${id}/profile-image`} alt="" /></Link>
+                    <Link to="/profile"><img className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 text-xs sm:text-sm mr-10 max-w-12 object-contain bg-white rounded-full`} src={profile} alt="" /></Link>
                     <h1 onClick={() => setOpenBar(!openBar)} className="block xl:hidden text-4xl cursor-pointer hover:text-red-500 mr-5">&#9776;</h1>
                 </div>
                 

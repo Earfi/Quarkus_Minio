@@ -2,7 +2,7 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Swal from 'sweetalert2'
 import {jwtDecode} from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
     const navigate = useNavigate();
@@ -12,9 +12,7 @@ function Login() {
     const [password,setPassword] = useState(null);
 
     const handleMode = () => { 
-        mode === "login" ? setMode("signUp") : setMode("login");
-        // console.log("mode : " + mode);
-        // console.log("---------------------");
+        mode === "login" ? setMode("signUp") : setMode("login"); 
   }
 
   const login = async () => {
@@ -34,11 +32,9 @@ function Login() {
 
     if (res.ok) {
         const data = await res.json();
-        const token = data.token.string;
-        // console.log("Token : " + token);
+        const token = data.token.string; 
 
-        const decodedToken = jwtDecode(token);
-        // console.log(decodedToken);
+        const decodedToken = jwtDecode(token); 
 
         localStorage.setItem('token', token);
         localStorage.setItem('username', decodedToken.upn);
@@ -119,9 +115,10 @@ function Login() {
                             </div>
                         </div>
                         <hr />
-                        <p className="text-center mt-1">
+                        {/* <p className="text-center mt-1">
                             Dont't have an account ? <span className="text-red cursor-pointer hover:text-red-800" onClick={handleMode}>Sign Up</span>
-                        </p>
+                        </p> */}
+                        <Link to="/signUp" className="text-center mt-1"> Dont't have an account ? <span className="text-red cursor-pointer hover:text-red-800" onClick={handleMode}>Sign Up</span></Link>
                     </div>
                 )
                 :

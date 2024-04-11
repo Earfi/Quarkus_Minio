@@ -17,9 +17,9 @@ function App() {
   
   return (
     <div className="w-full h-full overflow-hidden"> 
-        <div className='z-40'>
+        {/* <div className='z-40'>
           <Navbar/>
-        </div>
+        </div> */}
         <div className="flex flex-row overflow-hidden z-20">
             <div className="fixed z-10">
                 <Sidebar/>  
