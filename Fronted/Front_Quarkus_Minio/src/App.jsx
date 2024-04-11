@@ -16,7 +16,7 @@ function App() {
   },[])
   
   return (
-    <div className="w-full h-full overflow-hidden"> 
+    <div className="w-full h-full overflow-hidden bg-gradient-to-tl from-blue-800 to-red-800"> 
         {/* <div className='z-40'>
           <Navbar/>
         </div> */}

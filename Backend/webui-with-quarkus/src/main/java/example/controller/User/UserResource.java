@@ -5,6 +5,7 @@ import example.dto.user.UserDto;
 import example.model.User;
 import example.service.user.UserService;
 import io.quarkus.elytron.security.common.BcryptUtil;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -40,7 +41,7 @@ public class UserResource {
 
     @GET
     @Path("/find/{name}")
-    public Response getUserById(@PathParam("name") String name){
+    public Response getUserByUserName(@PathParam("name") String name){
         UserDto user = service.getUserByUsername(name);
         return Response.ok(user).build();
     }
@@ -54,8 +55,8 @@ public class UserResource {
 
     @POST
     @Path("/add")
-    @RolesAllowed({"Admin"})
-    public Response addUser(UserDto dto){
+    @PermitAll
+    public Response addUser(UserDto dto,@MultipartForm ProfileImageUploadForm form){
         if (service.existsByUsername(dto.getUsername())) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Username already exists")
@@ -67,7 +68,7 @@ public class UserResource {
     }
 
     @DELETE
-    @RolesAllowed("Admin")
+    @RolesAllowed({"Admin","User"})
     @Path("/delete/{id}")
     public Response deleteUser(@PathParam("id") Long id){
         service.removeUser(id);
@@ -76,6 +77,7 @@ public class UserResource {
 
     @PUT
     @Path("/update/{userId}")
+    @RolesAllowed({"Admin","User"})
     public Response updateUser(@PathParam("userId") Long userId, UserDto dto) {
         try {
             UserDto updatedUser = service.updateUser(userId, dto);

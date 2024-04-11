@@ -1,29 +1,108 @@
 import React, { useRef, useState } from 'react'
 import Navbar from '../components/Navbar'
-import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2' 
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+    const navigate = useNavigate();
     const inputRef = useRef(null);
+ 
+    const [profile, setProfile] = useState(""); 
+    const [confirmPassword, setConfirmPassword] = useState(""); 
 
-    const [image, setImage] = useState("");
-    const [profile, setProfile] = useState("");
+    const addUser = async (userData) => { 
+        if(confirmPassword !== userData.password){
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error Password not Match !!!", 
+            }); 
+            return;
+        }
+        const fileProfile = new FormData(); 
+        fileProfile.append('file', profile);
 
-    const handleImageClick = () => {
-        inputRef.current.click();
-    }
+        try {
+          const response = await fetch('http://localhost:8080/user/add', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData,fileProfile)
+          });
+      
+          if (!response.ok) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...!!",
+                text: "Please SignUp!!!",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem("token")
+                    localStorage.removeItem("role")
+                    navigate('/login');
+                }
+            });
+          }
+       
+          Swal.fire({
+            title: "Register Successfully", 
+            icon: "Success Please SignIn",
+            showConfirmButton: false,
+            timer: 1000
+            });
+            setTimeout(() => { 
+                navigate('/login');
+            }, 1500); 
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        setImage(event.target.files[0]);
-    }
+        } catch (error) {
+          console.error('Error adding user:', error.message); 
+        }
+    };
+
+    const updateProfile = async (file, id) => {
+        const formData = new FormData(); 
+        formData.append('file', file);
+
+        const res = await fetch(`http://localhost:8080/user/${id}/profile-image`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ` + localStorage.getItem("token"),
+                    },
+                    body: formData
+                });
+
+                if (res.status === 401) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops... Session does Exits!!",
+                        text: "Please Login!!!",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem("token")
+                            localStorage.removeItem("role")
+                            navigate('/login');
+                        }
+                    });
+                } else if(res.ok){  
+                    Swal.fire({
+                        title: "Update Profile Successfully", 
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(() => { 
+                        window.location.reload()
+                    }, 1500);
+                }
+    };
  
     const [formData, setFormData] = useState({
         username: '',
-        password: '',
-        confirm_password: '',
+        password: '', 
         birthdate: '',
-        roles: '',
-        profileImagePath: '',
+        roles: 'User',
+        profileImagePath: null,
         firstName: '',
         lastName: '',
         nickname: '', 
@@ -41,10 +120,18 @@ const SignUp = () => {
     };
     
     const handleSubmit = (e) => {
-        e.preventDefault();
-        // ทำสิ่งที่ต้องการเมื่อยืนยันการส่งฟอร์ม
-        console.log(formData);
+        e.preventDefault();  
+        addUser(formData)
     };
+ 
+    const handleImageClick = () => {
+        inputRef.current.click();
+    }
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setProfile(event.target.files[0]);
+    }
 
     return (
         <div>
@@ -55,9 +142,16 @@ const SignUp = () => {
                     <h2 className="text-xl font-bold my-4">Registration Form</h2>
                     <form onSubmit={handleSubmit} className='mt-5'>
                         <div onClick={() => handleImageClick} className='w-full flex flex-col justify-center'> 
-                            {image ? <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={URL.createObjectURL(image)} alt="" />  : <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={profile} alt="" /> }
+                            {profile ? <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={URL.createObjectURL(profile)} alt="" />  : <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={profile} alt="" /> }
                             <input type="file" ref={inputRef} onChange={handleImageChange} className="w-60 mx-auto file-input file-input-bordered my-5 text-xs bg-gray-100 border "/>
                         </div>
+
+                        {/* ------------------------------------------------- */}
+                        {/* ------------------------------------------------- */}
+                        {/* ------------------- DATA TEXT  ------------------ */}
+                        {/* ------------------------------------------------- */}
+                        {/* ------------------------------------------------- */}
+
                         <div className='grid grid-cols-2 gap-4 mb-5'>
                             <div className="col-span-2">
                                 <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username <span className='text-red-500 font-bold'>*</span></label>
@@ -69,7 +163,7 @@ const SignUp = () => {
                             </div>
                             <div>
                                 <label htmlFor="confirm_password" className="block text-sm font-medium text-gray-700">Confirm Password <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="password" name="confirm_password" id="confirm_password" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} />
+                                <input type="password" onChange={(e) => setConfirmPassword(e.target.value)} name="confirm_password" id="confirm_password" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" />
                             </div>
                         </div>
                         <h1 className='w-full text-md font-bold text-red-500'>**</h1>
@@ -101,7 +195,7 @@ const SignUp = () => {
                             </div>
                             <div>
                                 <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="text" name="phoneNumber" id="phoneNumber" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} maxLength={10} required/>
+                                <input type="number" name="phoneNumber" id="phoneNumber" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} maxLength={10} required/>
                             </div>
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email <span className='text-red-500 font-bold'>*</span></label>
