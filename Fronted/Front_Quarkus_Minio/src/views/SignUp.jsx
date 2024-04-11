@@ -142,7 +142,7 @@ const SignUp = () => {
                     <h2 className="text-xl font-bold my-4">Registration Form</h2>
                     <form onSubmit={handleSubmit} className='mt-5'>
                         <div onClick={() => handleImageClick} className='w-full flex flex-col justify-center'> 
-                            {profile ? <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={URL.createObjectURL(profile)} alt="" />  : <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={profile} alt="" /> }
+                            {profile ? <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={URL.createObjectURL(profile)} alt="" />  : <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={profile|| "../../..//profile-icon.png"} alt="" /> }
                             <input type="file" ref={inputRef} onChange={handleImageChange} className="w-60 mx-auto file-input file-input-bordered my-5 text-xs bg-gray-100 border "/>
                         </div>
 
@@ -155,15 +155,15 @@ const SignUp = () => {
                         <div className='grid grid-cols-2 gap-4 mb-5'>
                             <div className="col-span-2">
                                 <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="text" name="username" id="username" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} maxLength={20} required/>
+                                <input type="text" placeholder='username' name="username" id="username" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} maxLength={20} required/>
                             </div>
                             <div>
                                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="password" name="password" id="password" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} />
+                                <input type="password" placeholder='password' name="password" id="password" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} />
                             </div>
                             <div>
                                 <label htmlFor="confirm_password" className="block text-sm font-medium text-gray-700">Confirm Password <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="password" onChange={(e) => setConfirmPassword(e.target.value)} name="confirm_password" id="confirm_password" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" />
+                                <input type="password" placeholder='confirm password' onChange={(e) => setConfirmPassword(e.target.value)} name="confirm_password" id="confirm_password" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" />
                             </div>
                         </div>
                         <h1 className='w-full text-md font-bold text-red-500'>**</h1>
@@ -171,15 +171,15 @@ const SignUp = () => {
                         <div className="grid grid-cols-2 gap-4 mt-5">
                             <div>
                                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="text" name="firstName" id="firstName" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>
+                                <input type="text" placeholder='firstName' name="firstName" id="firstName" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>
                             </div>
                             <div>
                                 <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="text" name="lastName" id="lastName" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>
+                                <input type="text" placeholder='lastname' name="lastName" id="lastName" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>
                             </div>
                             <div>
                                 <label htmlFor="nickname" className="block text-sm font-medium text-gray-700">Nickname <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="text" name="nickname" id="nickname" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>
+                                <input type="text" placeholder='nickname' name="nickname" id="nickname" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>
                             </div>
                             <div>
                                 <label htmlFor="birthdate" className="block text-sm font-medium text-gray-700">Birthdate <span className='text-red-500 font-bold'>*</span></label>
@@ -187,29 +187,35 @@ const SignUp = () => {
                             </div>  
                             <div>
                                 <label htmlFor="age" className="block text-sm font-medium text-gray-700">Age <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="number" name="age" id="age" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} maxLength={2} required/>
+                                <input type="number" placeholder='age' name="age" id="age" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} maxLength={2} required/>
                             </div>
                             <div>
                                 <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="text" name="gender" id="gender" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>
-                            </div>
+                                <select name="gender" id="gender" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                    <option value="prefer_not_to_say">Prefer not to say</option>
+                                </select>
+                            </div> 
                             <div>
                                 <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="number" name="phoneNumber" id="phoneNumber" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} maxLength={10} required/>
+                                <input type="number" placeholder='phoneNumber' name="phoneNumber" id="phoneNumber" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} maxLength={10} required/>
                             </div>
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email <span className='text-red-500 font-bold'>*</span></label>
-                                <input type="email" name="email" id="email" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>
+                                <input type="email" placeholder='email' name="email" id="email" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>
                             </div>
                             <div>
                                 <label htmlFor="github" className="block text-sm font-medium text-gray-700">Github</label>
-                                <input type="text" name="github" id="github" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} />
+                                <input type="text" placeholder='github' name="github" id="github" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} />
                             </div>
                         </div>
                         
                         <div className='mt-5'>
                             <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-                            <textarea type="text" name="address" id="address" className="border mt-1 p-2 block w-full border-gray-300 rounded-md h-40" onChange={handleChange} />
+                            <textarea type="text" placeholder='address' name="address" id="address" className="border mt-1 p-2 block w-full border-gray-300 rounded-md h-40" onChange={handleChange} />
                         </div>
                         <div className="mt-6">
                             <button type="submit" className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Register</button>

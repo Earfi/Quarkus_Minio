@@ -16,6 +16,9 @@ import jakarta.ws.rs.core.Response;
 import org.bouncycastle.crypto.generators.BCrypt;
 import org.eclipse.microprofile.jwt.Claims;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 @Path("/auth")
 public class AuthenticationResource {
 
@@ -43,10 +46,14 @@ public class AuthenticationResource {
 
 
     private String generateToken(User user) {
+        Instant now = Instant.now();
+        Instant expiresAt = now.plus(5, ChronoUnit.SECONDS);
+
         return Jwt.issuer("https://example.com/issuer")
                 .upn(user.getUsername())
                 .claim("userId", user.getId())
                 .claim(Claims.groups.name(), user.getRoles())
+                .expiresAt(expiresAt)
                 .sign();
     }
 }

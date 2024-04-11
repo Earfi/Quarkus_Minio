@@ -116,15 +116,15 @@ function Navbar() {
           <Link to="/jasper" className="hover:text-orange-400">
             JASPER
           </Link>
-          <Link to="/products" className="hover:text-orange-400">
-            PRODUCTS
+          <Link to="/" className="hover:text-orange-400">
+            ANNOUNCEMENTS
           </Link>
           <Link to="/about" className="hover:text-orange-400">
             ABOUT
           </Link>
-          <Link to="/service" className="hover:text-orange-400">
+          {/* <Link to="/service" className="hover:text-orange-400">
             SERVICE
-          </Link>
+          </Link> */}
           {/* <Link to="/" onClick={logout} className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 border-b-2`}>LOGOUT</Link>  */}
         </div>
         <div className="flex justify-center gap-2 items-center">
