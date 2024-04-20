@@ -1,6 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
-
-import Navbar from "../../components/Navbar";
+import { useParams, useNavigate } from "react-router-dom"; 
 import Sidebar from "../../components/Sidebar";
 import ListFile from "../../components/minio/file/ListFile";
 import UploadFile from "../../components/minio/file/UploadFile";
@@ -16,8 +14,7 @@ function FileBucket() {
     }, []);
 
     return (
-        <div className="w-full overflow-hidden mb-20 "> 
-            <Navbar/>
+        <div className="w-full overflow-hidden min-h-[90vh]">  
             <div className="flex flex-row ">
                 <div className="fixed ">
                     <Sidebar/>  

@@ -1,5 +1,4 @@
-import React, { useRef, useState } from 'react'
-import Navbar from '../components/Navbar'
+import React, { useRef, useState } from 'react' 
 import Swal from 'sweetalert2' 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -134,8 +133,7 @@ const SignUp = () => {
     }
 
     return (
-        <div>
-            <Navbar/> 
+        <div> 
             <div className="w-full bg-gray-100 min-h-[100vh] flex justify-center">
                 <div className="w-full max-w-xl mx-auto p-6 bg-white rounded-md shadow-md">
                     <Link to="/login" className='text-red cursor-pointer bg-fuchsia-500 rounded-md font-medium text-white hover:bg-fuchsia-400 hover:text-red-800 border p-2'>Sign In</Link>

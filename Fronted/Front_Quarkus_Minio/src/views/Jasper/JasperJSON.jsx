@@ -1,5 +1,3 @@
-import { useState } from "react";
-import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar"; 
 import InsertJson from "../../components/jasper/JSON/InsertJson";
 
@@ -7,8 +5,7 @@ function JasperJSON() {
     
 
     return (
-        <div className="w-full overflow-hidden mb-20"> 
-            <Navbar/>
+        <div className="w-full overflow-hidden min-h-[90vh]">  
             <div className="flex flex-row ">
                 <div className="fixed">
                     <Sidebar/>  
@@ -35,7 +32,9 @@ function JasperJSON() {
                         </div>
                     </div>
                     <hr /> 
-                    <InsertJson/> 
+                    <div className=" xl:w-[60%] mx-auto">
+                        <InsertJson/> 
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,5 +1,4 @@
-import { useState } from "react";
-import Navbar from "../components/Navbar";
+import { useState } from "react"; 
 import Swal from 'sweetalert2'
 import {jwtDecode} from 'jwt-decode';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,7 +12,13 @@ function Login() {
 
     const handleMode = () => { 
         mode === "login" ? setMode("signUp") : setMode("login"); 
-  }
+    }
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && username !== null && password !== null  ) {
+            login();
+        }
+    }
 
   const login = async () => {
     const formData = JSON.stringify({
@@ -72,14 +77,12 @@ function Login() {
 
 
   return (
-    <div>
-        <Navbar/> 
+    <div  onKeyDown={handleKeyDown}>  
         <div className="w-full h-[100vh] flex justify-center items-center ">
             <div className="md:bg-gray-500 mt-[-80px] w-[90%] h-[80%] grid justify-center items-center rounded-3xl">
                 <div className="bg-white w-[100%] h-fit flex justify-center items-center rounded-2xl overflow-hidden border border-black shadow-2xl">
                     <div className="relative h-full hidden lg:block overflow-hidden">
-                        <div className="h-[500px] w-[500px] bg-[url('../../login//crash.jpg')] bg-cover brightness-75  ">
-                            {/* <img src="../../login//crash.jpg" width={200} height={24}></img> */}
+                        <div className="h-[500px] w-[500px] bg-[url('../../login//crash.jpg')] bg-cover brightness-75  "> 
                             <div className="w-full"></div>
                         </div>
                         <div className="absolute top-[20%] h-full w-full text-white text-2xl font-medium text-center shadow-xl">

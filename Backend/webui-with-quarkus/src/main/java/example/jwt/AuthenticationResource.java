@@ -47,7 +47,7 @@ public class AuthenticationResource {
 
     private String generateToken(User user) {
         Instant now = Instant.now();
-        Instant expiresAt = now.plus(5, ChronoUnit.SECONDS);
+        Instant expiresAt = now.plus(1, ChronoUnit.HOURS);
 
         return Jwt.issuer("https://example.com/issuer")
                 .upn(user.getUsername())

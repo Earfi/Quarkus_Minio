@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar"; 
 import UploadFile from "../components/minio/file/UploadFile";
 import ListFile from "../components/minio/file/ListFile";
@@ -12,8 +11,7 @@ function FilePage() {
     }, []);
  
     return (
-        <div className="w-full overflow-hidden mb-20"> 
-            <Navbar/>
+        <div className="w-full overflow-hidden min-h-[90vh]">  
             <div className="flex flex-row ">
                 <div className="fixed">
                     <Sidebar/>  

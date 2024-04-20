@@ -1,25 +1,29 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
+  
   const [allBuckets, setAllBuckets] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [filteredBuckets, setFilteredBuckets] = useState([]); // เพิ่ม state เพื่อเก็บ bucket ที่ถูกค้นหา
+  const [filteredBuckets, setFilteredBuckets] = useState([]); 
 
   const [openBar, setOpenBar] = useState(false);
   const [search, setSearch] = useState(false);
 
   const [token, setToken] = useState(null);
 
-  const [path, setPath] = useState(window.location.pathname);
+  const [path, setPath] = useState(location.pathname);
 
   const [id, setId] = useState(window.location.pathname);
 
   const [profile, setProfile] = useState("");
+ 
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,14 +38,40 @@ function Navbar() {
               Authorization: `Bearer ` + localStorage.getItem("token"),
             },
           }
-        );
+        ); 
         if (res.ok) {
           const blob = await res.blob();
           const imageUrl = URL.createObjectURL(blob);
           setProfile(imageUrl);
-        }
+        } else if(res.status == 401) {
+          Swal.fire({
+              icon: "error",
+              title: "Oops... Session does Exits!!",
+              text: "Please Login!!!",  
+          }).then(async (result) => {
+              if (result.isConfirmed) {  
+                  localStorage.removeItem("token")
+                  localStorage.removeItem("role")
+                  window.location.reload();
+                  // navigate('/login');
+              }
+          });
+        } 
       } catch (error) {
         console.error("Error fetching user data:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops... Session does Exits!!",
+          text: "Please Login!!!",  
+      }).then(async (result) => {
+          if (result.isConfirmed) {  
+              localStorage.removeItem("token")
+              localStorage.removeItem("role")
+              localStorage.removeItem("username");
+              window.location.reload();
+              // navigate('/login');
+          }
+      });
       }
     };
 
@@ -63,6 +93,7 @@ function Navbar() {
       setFilteredBuckets(data); // เริ่มต้นให้ filteredBuckets เป็น allBuckets เมื่อโหลดข้อมูลครั้งแรก
     };
     getAllBacket();
+ 
   }, [id]);
 
   useEffect(() => {
@@ -78,6 +109,10 @@ function Navbar() {
       window.location.reload();
     }, 700);
   };
+
+  useEffect(() => { 
+    setPath(location.pathname);
+  }, [location.pathname]);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -110,22 +145,18 @@ function Navbar() {
           <Link to="/" className="hover:text-orange-400">
             HOME
           </Link>
-          <Link to="/bucket" className="hover:text-orange-400">
+          <Link to="/bucket" className={`${path.includes("bucket") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
             BUCKET
           </Link>
-          <Link to="/jasper" className="hover:text-orange-400">
+          <Link to="/jasper" className={`${path.includes("jasper") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
             JASPER
           </Link>
-          <Link to="/" className="hover:text-orange-400">
+          <Link to="/announcement" className={`${path.includes("announcement") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
             ANNOUNCEMENTS
           </Link>
-          <Link to="/about" className="hover:text-orange-400">
+          <Link to="/about" className={`${path.includes("about") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
             ABOUT
-          </Link>
-          {/* <Link to="/service" className="hover:text-orange-400">
-            SERVICE
-          </Link> */}
-          {/* <Link to="/" onClick={logout} className={`${token == null ? 'hidden' : 'block'} hover:text-orange-400 border-b-2`}>LOGOUT</Link>  */}
+          </Link> 
         </div>
         <div className="flex justify-center gap-2 items-center">
           <div
@@ -152,7 +183,7 @@ function Navbar() {
               LOG IN
             </h1>
           </Link>
-          {!profile ? (
+          {!profile || profile == null ? (
             <Link to="/profile">
               <img
                 className={`${
