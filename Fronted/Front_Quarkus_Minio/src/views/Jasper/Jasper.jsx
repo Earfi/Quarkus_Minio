@@ -1,13 +1,9 @@
-import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar";
-import Sidebar from "../../components/Sidebar";
-import GetAddress from "../../components/jasper/DB/GetAddress";
-import InsertAddress from "../../components/jasper/DB/InsertAddress";
+import { Link } from "react-router-dom"; 
+import Sidebar from "../../components/Sidebar"; 
 
 function Jasper() {
     return (
-        <div className="w-full overflow-hidden mb-20"> 
-            <Navbar/>
+        <div className="w-full overflow-hidden min-h-[90vh]">  
             <div className="flex flex-row ">
                 <div className="fixed">
                     <Sidebar/>  

@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import Navbar from "../components/Navbar";
+import { useEffect, useRef, useState } from "react"; 
 import Sidebar from "../components/Sidebar";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
@@ -12,8 +11,8 @@ function Profile() {
     const [decodedToken, setDecodedToken] = useState(null);
     const [userId, setUserId] = useState("");
 
-    const [image, setImage] = useState("");
-    const [profile, setProfile] = useState("");
+    const [image, setImage] = useState(null);
+    const [profile, setProfile] = useState(null);
 
     const [info, setInfo] = useState([]);
 
@@ -170,6 +169,10 @@ function Profile() {
     const updateProfile = async (file, id) => {
         const formData = new FormData();
         formData.append("file", file);
+  
+        if (file === undefined || file === null) { 
+            return alert("choose picture to Update profile !!")
+        }  
 
         const res = await fetch(`http://localhost:8080/user/${id}/profile-image`, {
             method: "POST",
@@ -192,7 +195,7 @@ function Profile() {
                 }
             });
         } else if (res.ok) {
-            console.log("Successfull Update Profile");
+            // console.log("Successfull Update Profile");
 
             Swal.fire({
                 title: "Update Profile Successfully",
@@ -240,45 +243,51 @@ function Profile() {
     };
 
     return (
-        <div className="w-full overflow-hidden">
-            <Navbar />
-            <div className="flex flex-row bg-slate-200 min-h-[100vh]">
+        <div className="w-full overflow-hidden min-h-[90vh]"> 
+            <div className="flex flex-row bg-slate-200 min-h-[100vh]"> 
                 <div className="fixed">
                     <Sidebar />
                 </div>
                 <div className="flex flex-col w-[100%] min-h-[100vh] p-0">
-                    <div className="mx-auto flex flex-col justify-start items-center bg-white w-[100%] sm:w-[80%] lg:w-[50%] min-h-[100vh]">
-                        <h1 className="text-2xl my-5 font-medium text-center border-b-2">
-                            Profile
-                        </h1>
+                    <div className="mx-auto flex flex-col justify-start items-center bg-white w-[100%] sm:w-[80%] lg:w-[50%] min-h-[100vh] relative">
+                         
+                        <div className="bg-red-500 w-full h-48 md:h-52 absolute top-0 left-0 z-0 overflow-hidden">
+                            <img className="h-full w-full object-cover" src="../../..//Rc213V-93-44.jpg" alt="" />
+                        </div>
 
-                        <div onClick={() => handleImageClick}>
-                            {image ? (
-                                <img
-                                    className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full"
-                                    src={URL.createObjectURL(image)}
-                                    alt=""
-                                />
-                            ) : (
-                                <img
-                                    className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full"
-                                    src={profile || "../../..//profile-icon.png"}
-                                    alt=""
-                                />
-                            )}
+                        <div className="w-full flex flex-col justify-center z-40 mt-20">
+                            <div onClick={() => handleImageClick} className="w-full">
+                                {image? (
+                                    <img
+                                        className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full "
+                                        src={URL.createObjectURL(image)}
+                                        alt=""
+                                    />
+                                ) : (
+                                    <img
+                                        className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full"
+                                        src={profile || "../../..//profile-icon.png"}
+                                        alt=""
+                                    />
+                                )}
+                            </div>
+
+
+                            <div className="flex justify-center items-center"> 
                             <input
                                 type="file"
                                 ref={inputRef}
                                 onChange={handleImageChange}
-                                className="file-input file-input-bordered my-5 text-xs bg-gray-100 border "
-                            />
+                                className="file-input file-input-bordered my-5 text-xs bg-gray-100 border w-24 mx-auto"
+                                />
+                            <button
+                                onClick={() => updateProfile(image, info.id)}
+                                className="w-28 mx-auto px-2 py-2 bg-red-500 text-white font-bold text-xs rounded-xl hover:bg-red-800 cursor-pointer"
+                                >
+                                UPDATE PROFILE
+                            </button>
+                            </div>
                         </div>
-                        <button
-                            onClick={() => updateProfile(image, info.id)}
-                            className="mx-5 px-2 py-2 bg-red-500 text-white font-bold text-sm rounded-xl hover:bg-red-800 cursor-pointer"
-                        >
-                            UPDATE PROFILE
-                        </button>
 
                         <div className="px-5 sm:px-10 my-3 mx-auto gap-10 w-full flex flex-wrap mt-10">
                             <div className="flex items-center gap-1">
@@ -441,4 +450,5 @@ function Profile() {
         </div>
     );
 }
+
 export default Profile;

@@ -126,72 +126,60 @@ function ListUser() {
  
 
     return(
-        <div> 
-            <div className="w-full h-[100vh] flex min-w-[1300px] overflow-hidden bg-slate-100">
-                <div className="w-[15%] h-full shadow-2xl">
-                    <Sidebar/>
-                </div>
+        <div className="min-h-screen bg-slate-100">
+            <div className="flex">
+                <Sidebar />
+                <div className="flex-1 min-h-screen overflow-auto bg-white shadow-md rounded-md mx-4 p-4">
+                    <div className="flex justify-between items-center mb-4">
+                        <input value={searchValue} onChange={(e) => setSearchValue(e.target.value)} className="w-64 h-10 text-black rounded-md p-2 border" placeholder="Search User..." type="text" />
+                        <CreateUser />
+                    </div>
 
-                <div className="w-[85%] h-full overflow-hidden">
-                    <div className="w-[90%] h-[100vh] overflow-auto mx-auto bg-white">
-                        <div className="h-full">
-                            <div className="h-16 w-full bg-gray-900 flex justify-between items-center px-20 "> 
-                                <input value={searchValue} onChange={(e) => setSearchValue(e.target.value)}  className="w-52 h-10 text-black rounded-2xl p-2" placeholder="Search User..." type="text" />
-                                <CreateUser/>
-                            </div>
-
-                            <table class="w-[90%] mx-auto bg-white shadow-md rounded my-6">
-                                <thead>
-                                    <tr class="bg-gray-600 text-white border-2">
-                                        <th class="py-4 px-6">Username</th>
-                                        <th class="py-4 px-6">Birthday</th>
-                                        <th class="py-4 px-6">Roles</th>
-                                        <th class="py-4 px-6">Created At</th>
-                                        <th class="py-4 px-6">Updated At</th>
-                                        <th class="py-4 px-6"></th>
-                                        <th class="py-4 px-6"></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-gray-700">
-                                    {searchTerm.length > 0 ? (
-                                        <>
-                                            {searchTerm.map((u) => (
-                                                <tr key={u.id} className="bg-white text-gray-700 border-b-2 border-gray-300 text-center">
-                                                    <td className="py-4 px-6">{u.username}</td>
-                                                    <td className="py-4 px-6">{u.birthdate}</td>
-                                                    <td className="py-4 px-6">{u.roles}</td>
-                                                    <td className="py-4 px-6">{convertDate(u.created_at)}</td>
-                                                    <td className="py-4 px-6">{convertDate(u.updated_at)}</td> 
-                                                    <td ><Link to={`/dashboard/edituser/${u.id}`}><h1 className="py-1 px-2 bg-blue-500 cursor-pointer text-white font-bold hover:bg-blue-800 w-28 m-1">EDIT</h1></Link></td>
-                                                    <td ><h1 onClick={() => deleteUser(u.id)} className="py-1 px-2 bg-red-500 cursor-pointer text-white font-bold hover:bg-red-800 w-28 m-1">DELETE</h1></td>
-                                                </tr>
-                                            ))}
-                                        </>
-                                    ) : (
-                                        <tr className="bg-white text-gray-700 border-b-2 border-gray-300 text-center">
-                                            <td className="py-4 px-6" colSpan="5">No User</td>
-                                            
+                    <table className="w-full bg-white shadow-md rounded-md my-6">
+                        <thead>
+                            <tr className="bg-gray-600 text-white">
+                                <th className="py-4 px-6">Username</th>
+                                <th className="py-4 px-6">Birthday</th>
+                                <th className="py-4 px-6">Roles</th>
+                                <th className="py-4 px-6">Created At</th>
+                                <th className="py-4 px-6">Updated At</th>
+                                <th className="py-4 px-6"></th>
+                                <th className="py-4 px-6"></th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-gray-700">
+                            {searchTerm.length > 0 ? (
+                                <>
+                                    {searchTerm.map((u) => (
+                                        <tr key={u.id} className="bg-white text-gray-700 border-b-2 border-gray-300 text-center">
+                                            <td className="py-4 px-6">{u.username}</td>
+                                            <td className="py-4 px-6">{u.birthdate}</td>
+                                            <td className="py-4 px-6">{u.roles}</td>
+                                            <td className="py-4 px-6">{convertDate(u.created_at)}</td>
+                                            <td className="py-4 px-6">{convertDate(u.updated_at)}</td> 
+                                            <td><Link to={`/dashboard/edituser/${u.id}`} className="py-1 px-2 bg-blue-500 cursor-pointer text-white font-bold hover:bg-blue-800 w-28 m-1">EDIT</Link></td>
+                                            <td><button onClick={() => deleteUser(u.id)} className="py-1 px-2 bg-red-500 cursor-pointer text-white font-bold hover:bg-red-800 w-28 m-1">DELETE</button></td>
                                         </tr>
-                                    )} 
-                                </tbody>
-                            </table>  
+                                    ))}
+                                </>
+                            ) : (
+                                <tr className="bg-white text-gray-700 border-b-2 border-gray-300 text-center">
+                                    <td className="py-4 px-6" colSpan="5">No User</td>
+                                </tr>
+                            )} 
+                        </tbody>
+                    </table>  
 
-                            <div className="w-full">
-                                <div className="w-fit mx-auto"> 
-                                    <div className="join ">
-                                        <input className="join-item btn btn-square" type="radio" name="options" aria-label="1" checked />
-                                        <input className="join-item btn btn-square" type="radio" name="options" aria-label="2" />
-                                        <input className="join-item btn btn-square" type="radio" name="options" aria-label="3" />
-                                        <input className="join-item btn btn-square" type="radio" name="options" aria-label="4" />
-                                    </div>
-                                </div>
-                            </div>
-                            
+                    <div className="w-full flex justify-center mt-4">
+                        <div className="join">
+                            <input className="join-item btn btn-square" type="radio" name="options" aria-label="1" checked />
+                            <input className="join-item btn btn-square" type="radio" name="options" aria-label="2" />
+                            <input className="join-item btn btn-square" type="radio" name="options" aria-label="3" />
+                            <input className="join-item btn btn-square" type="radio" name="options" aria-label="4" />
                         </div>
                     </div>
                 </div>
-
-            </div> 
+            </div>
         </div>
     )
 }

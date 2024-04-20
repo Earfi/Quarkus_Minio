@@ -2,32 +2,26 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function Sidebar() {
-    const [name,setName] = useState(null);
+    const [name, setName] = useState(null);
 
     useEffect(() => { 
-
         setName(localStorage.getItem("username"))
-
     },[])
 
     return(
-        <div className="w-full h-full border p-5 bg-blue-950">
-                {/* <div className="w-[95%] h-[90%] border mx-auto p-2 bg-gradient-to-tl from-gray-800 to-gray-950"> */}
-                    <h1 className=" text-white p-2 w-full text-2xl">Hello {name}</h1>
-                    <hr />
-                    <div className="my-5 text-white">
-                        <h1 className="text-xl font-bold text-white">Menu</h1>
-                        <div className="flex flex-col gap-8 w-full p-5 text-xl font-mono">
-                            <Link to="/dashboard"><h1 className="hover:text-gray-500 cursor-pointer">&#9729; Home</h1></Link> 
-                            <Link to="/dashboard/user"><h1 className="hover:text-gray-500 cursor-pointer">&#9822; User</h1></Link>
-                            <h1 className="hover:text-gray-500 cursor-pointer">&#9743; Services</h1>
-                            <h1 className="hover:text-gray-500 cursor-pointer">&#10065; Bucket</h1>
-                            <h1 className="hover:text-gray-500 cursor-pointer">&#10002; Calcurator</h1>
-                            <h1 className="hover:text-gray-500 cursor-pointer">&#9881; Setting</h1>
-                        </div>
-                    </div>
-                {/* </div> */}
-                <Link to="/"><h1 className="absolute bottom-5 text-xl font-bold bg-orange-500 text-white cursor-pointer p-2 rounded-xl hover:bg-orange-400">&#10094; Go Home</h1></Link>
+        <div className="w-52 h-[100vh] bg-blue-950 text-white p-5">
+            <div className="text-2xl font-semibold mb-5">Hello, {name}</div>
+            <hr className="border-white border-opacity-50 mb-5" />
+            <div className="text-xl font-semibold mb-5">Menu</div>
+            <div className="flex flex-col gap-4">
+                <Link to="/dashboard" className="hover:text-gray-500">&#9729; Home</Link> 
+                <Link to="/dashboard/user" className="hover:text-gray-500">&#9822; User</Link>
+                <span className="hover:text-gray-500">&#9743; Services</span>
+                <span className="hover:text-gray-500">&#10065; Bucket</span>
+                <span className="hover:text-gray-500">&#10002; Calcurator</span>
+                <span className="hover:text-gray-500">&#9881; Setting</span>
+            </div>
+            <Link to="/" className="absolute bottom-5 text-xl font-bold bg-orange-500 text-white p-2 rounded-xl hover:bg-orange-400">&#10094; Go Home</Link>
         </div>
     )
 }

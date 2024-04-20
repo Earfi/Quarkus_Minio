@@ -1,10 +1,7 @@
-import './App.css'
-
-import Navbar from './components/Navbar' 
+import './App.css' 
 import Sidebar from './components/Sidebar';
 import Introduce from './components/Introduce';
 import { useEffect, useState } from 'react';
- 
 
 function App() { 
   const [showToken , setShowToken] = useState(false);
@@ -16,11 +13,12 @@ function App() {
   },[])
   
   return (
-    <div className="w-full h-full overflow-hidden bg-gradient-to-tl from-blue-800 to-red-800"> 
+    <div className="w-full max-h-screen overflow-hidden bg-gradient-to-tl from-blue-800 to-red-800"> 
         {/* <div className='z-40'>
           <Navbar/>
         </div> */}
         <div className="flex flex-row overflow-hidden z-20">
+            </div>
             <div className="fixed z-10">
                 <Sidebar/>  
             </div>
@@ -50,9 +48,6 @@ function App() {
             {/* )} */}
             
         </div>
-
-        
-    </div>
   )
 }
 

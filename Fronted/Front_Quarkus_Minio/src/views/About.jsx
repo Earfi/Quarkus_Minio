@@ -1,10 +1,8 @@
-import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 
 function About() {
     return (
-        <div className="w-full overflow-hidden mb-20"> 
-            <Navbar/>
+        <div className="w-full overflow-hidden min-h-[90vh]">  
             <div className="flex flex-row ">
                 <div className="fixed">
                     <Sidebar/>  
