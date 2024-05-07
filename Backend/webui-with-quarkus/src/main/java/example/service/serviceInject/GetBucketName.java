@@ -1,7 +1,8 @@
 package example.service.serviceInject;
 
 
-public class BucketService {
+public class GetBucketName {
+
     public String bucketName;
 
     public String getBucketName() {

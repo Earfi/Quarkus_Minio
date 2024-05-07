@@ -1,10 +1,14 @@
 package example.service.minio;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import example.dto.minio.FileInfo;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import io.minio.http.Method;
 import io.minio.messages.Item;
+import io.minio.messages.Tags;
+import io.vertx.codegen.doc.Tag;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
@@ -14,7 +18,9 @@ import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class MinioFileService{
@@ -48,35 +54,80 @@ public class MinioFileService{
         return fileReturn;  
     }
 
-    //    public List<BucketInfo> getAllBucket() {
-//        List<BucketInfo> bucketReturn = new ArrayList<>();
-//        try {
-//            List<Bucket> bucketList = minioClient.listBuckets();
-//            for (Bucket bucket : bucketList) {
-//                bucketReturn.add(new BucketInfo(bucket.name(), bucket.creationDate().toString()));
-//            }
-//        } catch (MinioException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return bucketReturn;
-//    }
-
-    public Object uploadFile(String bucketName, InputStream filStream, String fileName) throws Exception{
-        try{
+    public Object uploadFile(String bucketName, InputStream fileStream, String fileName, String tagsAsString) throws Exception{
+        try {
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
                             .object(fileName)
-                            .stream(filStream,-1,10485760)
+                            .stream(fileStream,-1,10485760)
                             .contentType(MediaType.APPLICATION_OCTET_STREAM)
                             .build()
             );
-        }catch (Exception e){
+
+            List<Map<String, String>> tags = parseTagsFromString(tagsAsString);
+
+            if (tags != null && !tags.isEmpty()) {
+                for (Map<String, String> tagMap : tags) {
+                    String tagKey = tagMap.get("key");
+                    String tagValue = tagMap.get("value");
+                    setTags(bucketName, fileName, tagKey, tagValue);
+                }
+            }
+
+            return "File uploaded successfully";
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new Exception("Failed to upload file");
         }
-        return null;
+    }
+
+    public Object uploadFile(String bucketName, String folderName, InputStream fileStream, String fileName, String tagsAsString) throws Exception {
+        try {
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(folderName + "/" + fileName)
+                            .stream(fileStream,-1,10485760)
+                            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                            .build()
+            );
+
+            List<Map<String, String>> tags = parseTagsFromString(tagsAsString);
+
+            if (tags != null && !tags.isEmpty()) {
+                for (Map<String, String> tagMap : tags) {
+                    String tagKey = tagMap.get("key");
+                    String tagValue = tagMap.get("value");
+                    setTags(bucketName, folderName + "/" + fileName, tagKey, tagValue);
+                }
+            }
+
+            return "File uploaded successfully to folder: " + folderName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Failed to upload file to folder: " + folderName);
+        }
+    }
+
+    private List<Map<String, String>> parseTagsFromString(String tagsAsString) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(tagsAsString, new TypeReference<List<Map<String, String>>>() {});
+    }
+
+    private void setTags(String bucketName, String objectName, String... tags) throws IOException, InvalidKeyException, NoSuchAlgorithmException, MinioException {
+        Map<String, String> tagMap = new HashMap<>();
+        for (int i = 0; i < tags.length; i += 2) {
+            tagMap.put(tags[i], tags[i + 1]);
+        }
+
+        minioClient.setObjectTags(
+                SetObjectTagsArgs.builder()
+                        .bucket(bucketName)
+                        .object(objectName)
+                        .tags(tagMap)
+                        .build()
+        );
     }
 
     public void deleteFile(String bucket, String fileName) throws Exception{

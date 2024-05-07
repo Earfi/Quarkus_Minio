@@ -58,7 +58,7 @@ public class ReportService{
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(pdfData);
 
                 // Upload PDF to MinIO
-                minioFileService.uploadFile(bucket, byteArrayInputStream, filename);
+//                minioFileService.uploadFile(bucket, byteArrayInputStream, filename);
 
                 return pdfData;
             } catch (JRException e) {
@@ -92,7 +92,7 @@ public class ReportService{
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(pdfData);
 
             // Upload PDF to MinIO
-            minioFileService.uploadFile(bucket, byteArrayInputStream, filename);
+//            minioFileService.uploadFile(bucket, byteArrayInputStream, filename);
 
             return pdfData;
 
@@ -130,7 +130,7 @@ public class ReportService{
 
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(pdfData);
 
-                minioFileService.uploadFile(bucket, byteArrayInputStream, filename);
+//                minioFileService.uploadFile(bucket, byteArrayInputStream, filename);
 
                 return pdfData;
 

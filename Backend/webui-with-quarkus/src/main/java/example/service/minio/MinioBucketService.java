@@ -32,24 +32,7 @@ public class MinioBucketService {
         return bucketReturn;
     }
 
-
-//    public List<BucketInfo> getAllBucket() {
-//        List<BucketInfo> bucketReturn = new ArrayList<>();
-//        try {
-//            List<Bucket> bucketList = minioClient.listBuckets();
-//            for (Bucket bucket : bucketList) {
-//                bucketReturn.add(new BucketInfo(bucket.name(), bucket.creationDate().toString()));
-//            }
-//        } catch (MinioException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return bucketReturn;
-//    }
-
     public Object uploadBucket(String bucketName){
-//        String bucketName = "test";
         try {
             MakeBucketArgs args = MakeBucketArgs.builder()
                     .bucket(bucketName)
@@ -76,18 +59,6 @@ public class MinioBucketService {
 
     public void removeBucket(String bucketName) throws Exception{
         minioClient.removeBucket(bucketName);
-//        try {
-//            minioClient.removeBucket(
-//                    RemoveBucketArgs.builder()
-//                            .bucket(bucketName)
-//                            .build()
-//            );
-//            return Response.ok("Bucket removed successfully").build();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-//                    .entity("Error removing bucket: " + e.getMessage()).build();
-//        }
     }
 
 

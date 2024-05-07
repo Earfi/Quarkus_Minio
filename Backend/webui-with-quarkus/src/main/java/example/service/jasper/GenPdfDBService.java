@@ -46,7 +46,7 @@ public class GenPdfDBService {
 
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
 
-            minioFileService.uploadFile(bucket, byteArrayInputStream, "Customer_Address.pdf");
+//            minioFileService.uploadFile(bucket, byteArrayInputStream, "Customer_Address.pdf");
 
         } catch (Exception e) {
             throw new JRException("Failed to generate PDF", e);
