@@ -14,13 +14,13 @@ function FileBucket() {
     }, []);
 
     return (
-        <div className="w-full overflow-hidden min-h-[90vh]">  
+        <div className="w-full overflow-hidden min-h-[90vh] bg-slate-100">  
             <div className="flex flex-row ">
                 <div className="fixed ">
                     <Sidebar/>  
                 </div>
-                <div className="flex flex-col w-[100%] mt-16"> 
-                    <div className="mx-auto ">
+                <div className="flex flex-col w-full mt-16 md:mt-0 "> 
+                    <div className="md:mx-auto ">
                         {/* <h1 onClick={() => navigate(-1)} className="absolute text-4xl text-white md:text-black md:-left-20 cursor-pointer hover:text-red-500 z-0">&#10094;</h1> */}
                         <div className={`${token == null ? 'hidden' : 'block'}`}>
                             <UploadFile/> 
