@@ -265,7 +265,7 @@ function Profile() {
                                     />
                                 ) : (
                                     <img
-                                        className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full"
+                                        className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full bg-white"
                                         src={profile || "../../..//profile-icon.png"}
                                         alt=""
                                     />
