@@ -19,7 +19,7 @@ function FileBucket() {
                 <div className="fixed ">
                     <Sidebar/>  
                 </div>
-                <div className="flex flex-col w-full mt-16 md:mt-0 "> 
+                <div className="flex flex-col w-full"> 
                     <div className="md:mx-auto ">
                         {/* <h1 onClick={() => navigate(-1)} className="absolute text-4xl text-white md:text-black md:-left-20 cursor-pointer hover:text-red-500 z-0">&#10094;</h1> */}
                         <div className={`${token == null ? 'hidden' : 'block'}`}>

@@ -6,6 +6,7 @@ function UploadFile() {
     const [bucket, setBucket] = useState(''); 
     const [file, setFile] = useState(null); 
     const [fileName, setFileName] = useState(null); 
+    const [folder, setFolder] = useState(null); 
     const [showUploadUI, setShowUploadUI] = useState(false);
 
     useEffect(() => { 
@@ -39,13 +40,20 @@ function UploadFile() {
             return;
         }
 
-        try {
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("fileName", fileName);
-            formData.append("bucket", bucket);
-            formData.append("folder", "Honda/CBR");
+        const formData = new FormData();
         
+        formData.append("file", file);
+        formData.append("fileName", fileName);
+        formData.append("bucket", bucket);
+
+        if(folder != null || folder != ""){
+            formData.append("folder", folder); 
+        }else{ 
+            formData.append("folder", ''); 
+        }
+
+        try {
+            
             const res = await fetch(`http://localhost:8080/minio/file/upload`, {
                 method: "POST",
                 body: formData,
@@ -83,8 +91,8 @@ function UploadFile() {
     };
 
     return (
-      <div className='bg-gradient-to-bl to-purple-800 from-red-800 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-5 py-5 border-2 shadow-xl rounded-md m-auto'>
-        <button onClick={toggleUploadUI} className="text-white bg-red-500 hover:bg-red-700 p-2 rounded-md mb-4 w-full md:w-auto">Upload File</button>
+      <div className='bg-gradient-to-bl to-purple-800 from-red-800 w-full lg:w-[650px] xl:w-[800px] px-5 py-5 border-2 shadow-xl rounded-md m-auto'>
+        <button onClick={toggleUploadUI} className="text-white text-sm bg-red-500 hover:bg-red-700 p-2 rounded-md mb-4 w-full md:w-auto">Upload File</button>
             {/* {showUploadUI && ( */}
             <div className={`sm:flex justify-center flex-wrap overflow-hidden transition-all duration-500 ${showUploadUI ? 'h-fit' : 'h-0'}`}>
                     <div className='m-2 p-4 bg-white rounded-lg shadow-md w-full '>
@@ -101,7 +109,7 @@ function UploadFile() {
                                 ))} 
                             </select>
                             <p className='text-sm font-medium text-gray-700 mb-1'>folder</p> 
-                            <input type="text"  className='text-sm font-medium text-gray-700 h-10 border border-gray-500 rounded-md mb-4 w-full p-2' placeholder="format ../../.."/>
+                            <input type="text" onChange={(e) => setFolder(e.target.value)} className='text-sm font-medium text-gray-700 h-10 border border-gray-500 rounded-md mb-4 w-full p-2' placeholder="format ../../.."/>
                         </div>
                         <div className='mb-4'>
                             <label className='text-sm font-medium text-gray-700'>Select file : </label> 

@@ -90,15 +90,18 @@ public class MinioResource {
         String bucket = file.bucket;
         String folder = file.folder;
 
+        System.out.println(folder);
         try {
             Object response;
-            if (folder == null) {
+            System.out.println(folder);
+            if (folder == null || folder.equals("") || folder.isEmpty() || folder == "" || folder.equals("null") || folder == "null") {
+                System.out.println("1");
                 response = fileService.uploadFile(bucket, fileStream, fileName, file.tagsAsString);
-                return Response.status(200).entity(response).build();
             } else {
-                response = fileService.uploadFile(bucket, folder, fileStream, fileName, file.tagsAsString);
-                return Response.status(200).entity(response).build();
+                System.out.println("2");
+                response = fileService.uploadFile(bucket, fileStream, folder + "/" + fileName, file.tagsAsString);
             }
+            return Response.status(200).entity(response).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(500).entity("Failed to upload file").build();

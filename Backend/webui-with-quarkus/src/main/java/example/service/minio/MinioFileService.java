@@ -82,33 +82,33 @@ public class MinioFileService{
         }
     }
 
-    public Object uploadFile(String bucketName, String folderName, InputStream fileStream, String fileName, String tagsAsString) throws Exception {
-        try {
-            minioClient.putObject(
-                    PutObjectArgs.builder()
-                            .bucket(bucketName)
-                            .object(folderName + "/" + fileName)
-                            .stream(fileStream,-1,10485760)
-                            .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                            .build()
-            );
-
-//            List<Map<String, String>> tags = parseTagsFromString(tagsAsString);
-
-//            if (tags != null && !tags.isEmpty()) {
-//                for (Map<String, String> tagMap : tags) {
-//                    String tagKey = tagMap.get("key");
-//                    String tagValue = tagMap.get("value");
-//                    setTags(bucketName, folderName + "/" + fileName, tagKey, tagValue);
-//                }
-//            }
-
-            return "File uploaded successfully to folder: " + folderName;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Failed to upload file to folder: " + folderName);
-        }
-    }
+//    public Object uploadFile(String bucketName, InputStream fileStream, String fileName, String tagsAsString) throws Exception {
+//        try {
+//            minioClient.putObject(
+//                    PutObjectArgs.builder()
+//                            .bucket(bucketName)
+//                            .object(fileName)
+//                            .stream(fileStream,-1,10485760)
+//                            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+//                            .build()
+//            );
+//
+////            List<Map<String, String>> tags = parseTagsFromString(tagsAsString);
+//
+////            if (tags != null && !tags.isEmpty()) {
+////                for (Map<String, String> tagMap : tags) {
+////                    String tagKey = tagMap.get("key");
+////                    String tagValue = tagMap.get("value");
+////                    setTags(bucketName, folderName + "/" + fileName, tagKey, tagValue);
+////                }
+////            }
+//
+//            return "File uploaded successfully to folder: " + folderName;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new Exception("Failed to upload file to folder: " + folderName);
+//        }
+//    }
 
     private List<Map<String, String>> parseTagsFromString(String tagsAsString) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();

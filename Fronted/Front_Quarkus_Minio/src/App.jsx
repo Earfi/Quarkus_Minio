@@ -19,7 +19,7 @@ function App() {
         </div> */}
         <div className="flex flex-row overflow-hidden z-20">
             </div>
-            <div className="fixed z-10">
+            <div className="fixed z-30">
                 <Sidebar/>  
             </div>
             <div className="flex flex-col w-[100%] z-0 h-[120vh]">
