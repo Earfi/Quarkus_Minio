@@ -1,5 +1,7 @@
 package example.controller;
 
+import example.controller.support.minio.deleteFile;
+import example.controller.support.minio.downloadFile;
 import example.dto.minio.FileInfo;
 import example.service.minio.MinioBucketService;
 import example.service.minio.MinioFileService;
@@ -50,20 +52,19 @@ public class MinioResource {
             }
         }
 
-        @GET
-        @Path("/download/file/{bucket}/{fileName}")
+        @POST
+        @Path("/download/file")
         @PermitAll
-        public Response downloadFile(@PathParam("bucket") String bucket,
-                                     @PathParam("fileName") String fileName) {
+        public Response downloadFile(@MultipartForm downloadFile file) {
             try {
                 // Check if bucket or fileName is empty
-                if (bucket == null || bucket.isEmpty() || fileName == null || fileName.isEmpty()) {
+                if (file.bucket == null || file.bucket.isEmpty() || file.fileName == null || file.fileName.isEmpty()) {
                     return Response.status(Response.Status.BAD_REQUEST)
                             .entity("Bucket or fileName is empty.")
                             .build();
                 }
 
-                InputStream stream = fileService.downloadFile(bucket, fileName);
+                InputStream stream = fileService.downloadFile(file.bucket, file.fileName);
 
                 if (stream == null) {
                     return Response.status(Response.Status.NOT_FOUND)
@@ -71,10 +72,8 @@ public class MinioResource {
                             .build();
                 }
 
-                // Return response with the file stream
                 return Response.ok(stream).build();
             } catch (Exception e) {
-                // Return server error response
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                         .entity("Error downloading file.")
                         .build();
@@ -95,10 +94,11 @@ public class MinioResource {
             Object response;
             if (folder == null) {
                 response = fileService.uploadFile(bucket, fileStream, fileName, file.tagsAsString);
+                return Response.status(200).entity(response).build();
             } else {
                 response = fileService.uploadFile(bucket, folder, fileStream, fileName, file.tagsAsString);
+                return Response.status(200).entity(response).build();
             }
-            return Response.status(200).entity(response).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(500).entity("Failed to upload file").build();
@@ -122,13 +122,12 @@ public class MinioResource {
     }
 
     @DELETE
-    @Path("/file/delete/{bucket}/{fileName}")
+    @Path("/file/delete")
     @RolesAllowed({"User","Admin"})
-    public Response deleteFile(@PathParam("bucket") String bucketName,
-                               @PathParam("fileName") String fileName) {
+    public Response deleteFile(@MultipartForm deleteFile file) {
         try {
-            fileService.deleteFile(bucketName, fileName);
-            return Response.ok().build();
+            fileService.deleteFile(file.bucket, file.fileName);
+            return Response.ok("delete file : " + file.fileName + " successfully.").build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to delete file").build();

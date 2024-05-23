@@ -65,15 +65,15 @@ public class MinioFileService{
                             .build()
             );
 
-            List<Map<String, String>> tags = parseTagsFromString(tagsAsString);
-
-            if (tags != null && !tags.isEmpty()) {
-                for (Map<String, String> tagMap : tags) {
-                    String tagKey = tagMap.get("key");
-                    String tagValue = tagMap.get("value");
-                    setTags(bucketName, fileName, tagKey, tagValue);
-                }
-            }
+//            List<Map<String, String>> tags = parseTagsFromString(tagsAsString);
+//
+//            if (tags != null && !tags.isEmpty()) {
+//                for (Map<String, String> tagMap : tags) {
+//                    String tagKey = tagMap.get("key");
+//                    String tagValue = tagMap.get("value");
+//                    setTags(bucketName, fileName, tagKey, tagValue);
+//                }
+//            }
 
             return "File uploaded successfully";
         } catch (Exception e) {
@@ -93,15 +93,15 @@ public class MinioFileService{
                             .build()
             );
 
-            List<Map<String, String>> tags = parseTagsFromString(tagsAsString);
+//            List<Map<String, String>> tags = parseTagsFromString(tagsAsString);
 
-            if (tags != null && !tags.isEmpty()) {
-                for (Map<String, String> tagMap : tags) {
-                    String tagKey = tagMap.get("key");
-                    String tagValue = tagMap.get("value");
-                    setTags(bucketName, folderName + "/" + fileName, tagKey, tagValue);
-                }
-            }
+//            if (tags != null && !tags.isEmpty()) {
+//                for (Map<String, String> tagMap : tags) {
+//                    String tagKey = tagMap.get("key");
+//                    String tagValue = tagMap.get("value");
+//                    setTags(bucketName, folderName + "/" + fileName, tagKey, tagValue);
+//                }
+//            }
 
             return "File uploaded successfully to folder: " + folderName;
         } catch (Exception e) {

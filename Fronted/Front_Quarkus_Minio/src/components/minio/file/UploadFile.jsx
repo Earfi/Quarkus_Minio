@@ -1,134 +1,124 @@
 import { useEffect, useState } from "react";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 function UploadFile() {
-    const [allBuckets,setAllBuckets] = useState([]);   
-    const [bucket,setBucket] = useState(''); 
-    const [file,setFile] = useState(null); 
-    const [fileName,setFileName] = useState(null); 
-  
+    const [allBuckets, setAllBuckets] = useState([]);   
+    const [bucket, setBucket] = useState(''); 
+    const [file, setFile] = useState(null); 
+    const [fileName, setFileName] = useState(null); 
+    const [showUploadUI, setShowUploadUI] = useState(false);
+
     useEffect(() => { 
-        const getAllBacket = async () => {
-            const res = await fetch("http://localhost:8080/minio/all/bucket")
-            const data = await res.json()
-            setAllBuckets(data)
-        }  
-        getAllBacket() 
-    },[]) 
+        const getAllBucket = async () => {
+            const res = await fetch("http://localhost:8080/minio/all/bucket");
+            const data = await res.json();
+            setAllBuckets(data);
+        };
+        getAllBucket();
+    }, []); 
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setFileName(selectedFile ? selectedFile.name : null); 
         setFile(selectedFile);
-      };
+    };
     
-      const uploadFile = async () => {
-        try {
-          if (!file) {
+    const toggleUploadUI = () => {
+        setShowUploadUI(!showUploadUI);
+    };
+
+    const uploadFile = async () => {
+        if (!file) {
             alert("No file selected");
             console.error("No file selected");
             return;
-          }
-          if (!bucket || bucket == "Please Select") {
+        }
+        if (!bucket || bucket === "Please Select") {
             alert("No bucket selected");
             console.error("No bucket selected");
             return;
-          }
-      
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("fileName", fileName);
-      
-          const res = await fetch(`http://localhost:8080/minio/file/upload/${bucket}`, {
-            method: "POST",
-            body: formData,
-            headers: { 
-                'Authorization': `Bearer ` + localStorage.getItem("token")
-            },
-          });
+        }
 
-          if (res.ok) {
-            Swal.fire({
-                title: "File uploaded successfully",
-                text: "Please Check your File!!!",
-                icon: "success",
-                showConfirmButton: false, 
-                timer: 1000
-              });
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("fileName", fileName);
+            formData.append("bucket", bucket);
+            formData.append("folder", "Honda/CBR");
+        
+            const res = await fetch(`http://localhost:8080/minio/file/upload`, {
+                method: "POST",
+                body: formData,
+                headers: { 
+                    'Authorization': `Bearer ` + localStorage.getItem("token")
+                },
+            });
 
-            // Toast();
-            
-            setTimeout(() => {
-                window.location.reload()
-            }, 1500); 
-        } else {
+            if (res.ok) {
+                Swal.fire({
+                    title: "File uploaded successfully",
+                    text: "Please Check your File!!!",
+                    icon: "success",
+                    showConfirmButton: false, 
+                    timer: 1000
+                });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500); 
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Error uploading file!!!", 
+                }); 
+            } 
+       
+        } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
                 text: "Error uploading file!!!", 
             }); 
-        } 
-       
-        } catch (error) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Error uploading file!!!", 
-        }); 
         }
-      };
-
-      // const Toast = Swal.mixin({
-      //   toast: true,
-      //   position: "bottom-end",
-      //   showConfirmButton: false,
-      //   timer: 3000,
-      //   timerProgressBar: true,
-      //   didOpen: (toast) => {
-      //     toast.onmouseenter = Swal.stopTimer;
-      //     toast.onmouseleave = Swal.resumeTimer;
-      //   }
-      // });
-      // Toast.fire({
-      //   icon: "success",
-      //   title: "Signed in successfully"
-      // });
-      
+    };
 
     return (
-        <div className='bg-gradient-to-bl to-purple-800 from-red-800 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-5 py-5  border-2 shadow-xl'>
-          <h1 className='font-bold text-xl text-white '>UploadFile</h1>
-          <div className=' sm:flex justify-center flex-row h-fit  '> 
-            <div className='m-2 w-full'>
-              <p className='text-md font-serif text-white'>Select Bucket</p> 
-              <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='select select-bordered h-10 border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white '>
-                {allBuckets.length == 0 &&
-                  (
-                    <>
-                      <option className='m-5 bg-red-500 text-white font-mono border-l-red-500 border p-2'>No Bucket !!!</option>
-                    </>
-                  )
-                }
-                <option className="bg-black text-white hover:cursor-none ">Please Select</option>
-                {allBuckets.map((post) => ( 
-                  <>
-                    <option className='m-5 text-black bg-white hover:bg-red-400 hover:text-white hover:cursor-pointer"' key={post} value={post}>{post}</option>
-                  </>
-                ))} 
-              </select>
-            </div>
-            <div className='mb-5'>
-              <label className='text-md font-serif ms-2 text-white'>Select file : </label> 
-              <input type="file" onChange={handleFileChange} className="file-input file-input-bordered w-full max-w-xs h-10" />
-            </div>
-          </div>
-          <button onClick={uploadFile} className='skeleton w-full bg-red-600 text-white p-2 cursor-pointer hover:bg-red-800'>Upload File</button>
-          <div className="flex flex-col mt-2 bg-white px-2 py-1">
-            <p><b>file select : </b>{file ? file.name : 'No file selected'}</p>  
-            <p><b>bucket select : </b>{bucket ? bucket : 'No bucket selected'}</p>
-          </div>
+      <div className='bg-gradient-to-bl to-purple-800 from-red-800 w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-5 py-5 border-2 shadow-xl rounded-md m-auto'>
+        <button onClick={toggleUploadUI} className="text-white bg-red-500 hover:bg-red-700 p-2 rounded-md mb-4 w-full md:w-auto">Upload File</button>
+            {/* {showUploadUI && ( */}
+            <div className={`sm:flex justify-center flex-wrap overflow-hidden transition-all duration-500 ${showUploadUI ? 'h-fit' : 'h-0'}`}>
+                    <div className='m-2 p-4 bg-white rounded-lg shadow-md w-full '>
+                        <h1 className='font-bold text-xl text-gray-800 mb-4'>Upload File</h1>
+                        <div className='w-full'>
+                            <p className='text-sm font-medium text-gray-700 mb-1'>Select Bucket</p> 
+                            <select onChange={(e) => setBucket(e.target.value)} content='Bucket' className='select select-bordered h-10 border border-gray-500 cursor-pointer hover:bg-gray-200 focus:outline-none rounded-md mb-4 w-full'>
+                                {allBuckets.length === 0 && (
+                                    <option className='bg-red-500 text-white font-mono p-2'>No Bucket !!!</option>
+                                )}
+                                <option className="bg-black text-white cursor-not-allowed">Please Select</option>
+                                {allBuckets.map((post, index) => ( 
+                                    <option className='text-gray-800 bg-white hover:bg-gray-200 cursor-pointer' key={index} value={post}>{post}</option>
+                                ))} 
+                            </select>
+                            <p className='text-sm font-medium text-gray-700 mb-1'>folder</p> 
+                            <input type="text"  className='text-sm font-medium text-gray-700 h-10 border border-gray-500 rounded-md mb-4 w-full p-2' placeholder="format ../../.."/>
+                        </div>
+                        <div className='mb-4'>
+                            <label className='text-sm font-medium text-gray-700'>Select file : </label> 
+                            <input type="file" onChange={handleFileChange} className="file-input file-input-bordered h-10 border border-gray-500 cursor-pointer hover:bg-gray-200 focus:outline-none rounded-md w-full" />
+                        </div>
+                        <div>
+                            <button onClick={uploadFile} className='w-full bg-red-600 text-white p-2 rounded-md cursor-pointer hover:bg-red-800'>Upload File</button>
+                        </div>
+                        <div className="flex flex-col mt-4">
+                            <p className='text-sm font-medium text-gray-700'><b>File selected : </b>{file ? file.name : 'No file selected'}</p>  
+                            <p className='text-sm font-medium text-gray-700'><b>Bucket selected : </b>{bucket ? bucket : 'No bucket selected'}</p>
+                        </div>
+                    </div>
+                </div>
+            {/* )} */}
         </div>
-    )
+    );
 }
 
 export default UploadFile;
