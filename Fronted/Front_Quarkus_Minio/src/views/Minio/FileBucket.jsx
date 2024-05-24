@@ -20,8 +20,8 @@ function FileBucket() {
                     <Sidebar/>  
                 </div>
                 <div className="flex flex-col w-full"> 
-                    <div className="md:mx-auto ">
-                        {/* <h1 onClick={() => navigate(-1)} className="absolute text-4xl text-white md:text-black md:-left-20 cursor-pointer hover:text-red-500 z-0">&#10094;</h1> */}
+                    <div className="md:mx-auto relative">
+                        <h1 onClick={() => navigate(-1)} className="absolute text-4xl text-gray-400 shadow-2xl left-2 top-2 cursor-pointer hover:text-red-500 z-30">&#10094;</h1>
                         <div className={`${token == null ? 'hidden' : 'block'}`}>
                             <UploadFile/> 
                         </div>

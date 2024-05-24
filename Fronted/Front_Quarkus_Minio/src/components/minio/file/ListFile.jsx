@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import ListFileByFolder from './ListFileByFolder';
 
 function Information({ bucket }) {
+    const [token, setToken] = useState(null);
     const [files, setFiles] = useState([]);
     const [editBtn, setEditBtn] = useState(false);
     const [filesEditName, setFilesEditName] = useState("");
     const [newName, setNewName] = useState("");
     const [link, setLink] = useState("");
-    const [token, setToken] = useState(null);
     const [folderView, setFolderView] = useState(null);
     const [showFiles, setShowFiles] = useState(true);
     const [showFolders, setShowFolders] = useState(true);
@@ -25,30 +26,52 @@ function Information({ bucket }) {
         getFileFromBucket();
     }, [bucket]);
 
-    // const groupFilesByFolder = (files) => {
-    //     return files.reduce((folders, file) => {
-    //         const filePathParts = file.fileName.split('/');
-    //         let currentFolder = folders;
-    //         for (let i = 0; i < filePathParts.length - 1; i++) {
-    //             const folderName = filePathParts[i];
-    //             if (!currentFolder[folderName]) {
-    //                 currentFolder[folderName] = {};
-    //             }
-    //             currentFolder = currentFolder[folderName];
-    //         }
-    //         const fileName = filePathParts[filePathParts.length - 1];
-    //         if (!currentFolder[fileName]) {
-    //             currentFolder[fileName] = [];
-    //         }
-    //         currentFolder[fileName].push(file);
-    //         console.log(folders);
-    //         return folders;
-    //     }, {});
-    // };
-
+    const groupFilesByFolders = (files) => {
+        return files.reduce((folders, file) => {
+            const filePathParts = file.fileName.split('/');
+            
+            let currentFolder = folders;
+    
+            for (let i = 0; i < filePathParts.length - 1; i++) {
+                const folderName = filePathParts[i];
+    
+                if (!currentFolder[folderName]) {
+                    currentFolder[folderName] = {}; // สร้างโฟลเดอร์หากยังไม่มี
+                }
+    
+                currentFolder = currentFolder[folderName];
+            }
+    
+            const fileName = filePathParts[filePathParts.length - 1]; // ได้ชื่อไฟล์
+    
+            if (!currentFolder[fileName]) {
+                currentFolder[fileName] = []; // สร้างอาเรย์ของไฟล์ในโฟลเดอร์
+            }
+    
+            currentFolder[fileName].push(file); // เพิ่มไฟล์เข้าไปในอาเรย์ของไฟล์ในโฟลเดอร์
+    
+    // console.log("-----------------------------------------");
+    // console.log("-----------------------------------------");
+    // console.log("-----------------------------------------");
     // console.log(folders);
+    // console.log("-----------------------------------------");
+    // console.log("-----------------------------------------");
+    // console.log("-----------------------------------------");
+            return folders;
+        }, {});
+    };
+    
+    
+    // console.log("-----------------------------------------");
+    // console.log("-----------------------------------------");
+    // console.log("-----------------------------------------");
+    // console.log(folders);
+    // console.log("-----------------------------------------");
+    // console.log("-----------------------------------------");
+    // console.log("-----------------------------------------");
 
     const groupFilesByFolder = (files) => {
+        // groupFilesByFolders(files)
         return files.reduce((folders, file) => {
             const indexOfSlash = file.fileName.indexOf('/');
             let folderPath;
@@ -62,7 +85,7 @@ function Information({ bucket }) {
                 folders[folderPath] = [];
             }
             folders[folderPath].push(file);
-            console.log(folders);
+            // console.log(folders);
             return folders;
         }, {});
     };
@@ -200,12 +223,44 @@ function Information({ bucket }) {
     }
 
     const renameFile = async () => {
+
+        if (newName == "" || newName == undefined || newName == null || newName == "/") {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Please Input New File Name !!!",
+                showConfirmButton: false,
+                timer: 1000
+            });
+            return
+        }
+
         const typeFile = filesEditName.slice(-3);
+  
+        let newNameValue;
 
-        let newValue = newName + "." + typeFile;
+        const lastIndex = filesEditName.lastIndexOf('/');
+        if (lastIndex !== -1) {
+            const result = filesEditName.substring(0, lastIndex);
+            newNameValue = result + "/" + newName;
+            console.log(result);
+            console.log("1");
+        } else {
+            console.log("2");
+            newNameValue = newName + "." + typeFile;
+        }
 
-        const res = await fetch(`http://localhost:8080/minio/file/edit/${bucket}/${filesEditName}/${newValue}`, {
+        console.log("oldName : " + filesEditName);
+        console.log("newName : " + newNameValue);
+
+        const formData = new FormData();
+        formData.append("bucket", bucket);
+        formData.append("oldName", filesEditName);
+        formData.append("newName", newNameValue);
+
+        const res = await fetch(`http://localhost:8080/minio/file/edit`, {
             method: "PUT",
+            body: formData,
             headers: { 
                 'Authorization': `Bearer ` + localStorage.getItem("token")
             },
@@ -242,18 +297,18 @@ function Information({ bucket }) {
         <>
             <div className=' bg-white w-full lg:w-[650px] xl:w-[800px] py-5 shadow-lg'>
                 <div className='w-full bg-white'>
-                    <h1 className='text-xl font-bold border-b-2 p-2'>Bucket: <span className='text-red-500'>{bucket}</span></h1>
+                    <h1 className='text-xl font-bold border-b-2 p-2 ml-10'>Bucket: <span className='text-red-500'>{bucket}</span></h1>
                 </div>
                 <div className="p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div className="flex gap-2">
                         <button 
                             onClick={() => setShowFiles(!showFiles)} 
-                            className={`w-full md:w-auto px-4 py-2 rounded-lg text-xs ${showFiles ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}>
+                            className={`w-fit md:w-auto px-4 py-2 rounded-lg text-xs ${showFiles ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}>
                             {showFiles ? 'Hide Files' : 'Show Files'}
                         </button>
                         <button 
                             onClick={() => setShowFolders(!showFolders)} 
-                            className={`w-full md:w-auto px-4 py-2 rounded-lg text-xs ${showFolders ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}>
+                            className={`w-fit md:w-auto px-4 py-2 rounded-lg text-xs ${showFolders ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}>
                             {showFolders ? 'Hide Folders' : 'Show Folders'}
                         </button>
                     </div>
@@ -273,12 +328,12 @@ function Information({ bucket }) {
                     .map((folder, idx) => (
                         <div key={idx}>
                             {folder === "" && showFiles && (
-                                <div>
+                                <div className='w-full'>
                                     {(groupedFiles[folder] || []).filter(file => Array.isArray(groupedFiles[folder]) && file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
                                         .map((file, idx) => (
                                             <div key={idx} className='flex flex-col items-center justify-center border p-5 w-full'>
                                             <div className='w-full flex flex-col justify-end items-start gap-5'>
-                                                <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-[240px] sm:w-full mx-auto overflow-hidden bg-white p-2 border-black border rounded-xl">
+                                                <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-full mx-auto overflow-hidden bg-white p-2 border-black border rounded-xl">
                                                     <p className='break-words text-xs'><b>Name : </b>{file.fileName}</p>
                                                     <p className='text-xs'><b>Size : </b>{convertBytes(file.fileSize)}</p>
                                                     <p className='text-xs'><b>Last Modified : </b>{convertDate(file.creationDate)}</p>
@@ -303,10 +358,10 @@ function Information({ bucket }) {
                                                     <button onClick={() => setFileEditedName(file.fileName)} className={`${token == null ? 'hidden' : 'block'} btn-sm bg-gray-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-gray-800 text-xs`}>Edit</button>
                                                     <button onClick={() => deleteFile(file.fileName)} className={`${token == null ? 'hidden' : 'block'} btn-sm bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 text-xs`}>DELETE</button>
                                                 </div>
-                                                <div className={` ${editBtn === true && filesEditName === file.fileName ? 'h-28 p-1' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl mb-2 text-xs`}>
+                                                <div className={` ${editBtn === true && filesEditName === file.fileName ? 'h-28 p-1' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-2 border-t-green-500 rounded-b-2xl mb-2 text-xs`}>
                                                     <label className="text-sm my-1"><b>Input new File Name:</b></label>
                                                     <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-1 rounded-md w-full border text-xs" />
-                                                    <button onClick={() => renameFile(file)} className="bg-red-500 w-full my-1 p-1 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700 text-xs">OK</button>
+                                                    <button onClick={() => renameFile(file)} className="bg-red-500 w-full my-1 p-1 cursor-pointer text-white font-medium hover:bg-red-800 border border-gray-700 text-xs">RENAME</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -366,6 +421,9 @@ function Information({ bucket }) {
                                             </div>
                                     ))}
                                 </div>
+                                {/* <div className={`ml-5 transition-all duration-500 ease-in-out folder-content ${folderView == folder ? 'border-none' : 'border-none'} overflow-hidden`} style={{ maxHeight: folderView === folder ? 'fit-content' : '0px' }}>
+                                    <ListFileByFolder folder={folder} files={groupedFiles[folder]} />
+                                </div> */}
                             </>
                         )}
                     </div>

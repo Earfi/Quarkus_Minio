@@ -1,11 +1,10 @@
 package example.controller;
 
-import example.controller.support.minio.deleteFile;
-import example.controller.support.minio.downloadFile;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import example.controller.support.minio.*;
 import example.dto.minio.FileInfo;
 import example.service.minio.MinioBucketService;
 import example.service.minio.MinioFileService;
-import example.service.serviceInject.FileUpload;
 import example.service.serviceInject.GetBucketName;
 import io.minio.MinioClient;
 import jakarta.annotation.security.PermitAll;
@@ -18,7 +17,9 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Path("/minio")
 @Produces(MediaType.APPLICATION_JSON)
@@ -86,20 +87,22 @@ public class MinioResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(@MultipartForm FileUpload file) throws Exception {
         InputStream fileStream = file.file;
-        String fileName = file.fileName;
-        String bucket = file.bucket;
         String folder = file.folder;
 
-        System.out.println(folder);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        List<TagDto> tagList = objectMapper.readValue(file.tagsAsString, objectMapper.getTypeFactory().constructCollectionType(List.class, TagDto.class));
+//
+//        Map<String, String> tags = new HashMap<>();
+//        for (TagDto tag : tagList) {
+//            tags.put(tag.getKey(), tag.getValue());
+//        }
+
         try {
             Object response;
-            System.out.println(folder);
             if (folder == null || folder.equals("") || folder.isEmpty() || folder == "" || folder.equals("null") || folder == "null") {
-                System.out.println("1");
-                response = fileService.uploadFile(bucket, fileStream, fileName, file.tagsAsString);
+                response = fileService.uploadFile(file.bucket, fileStream, file.fileName, file.tagsAsString);
             } else {
-                System.out.println("2");
-                response = fileService.uploadFile(bucket, fileStream, folder + "/" + fileName, file.tagsAsString);
+                response = fileService.uploadFile(file.bucket, fileStream, folder + "/" + file.fileName, file.tagsAsString);
             }
             return Response.status(200).entity(response).build();
         } catch (Exception e) {
@@ -110,14 +113,12 @@ public class MinioResource {
 
 
     @PUT
-    @Path("/file/edit/{bucket}/{oldName}/{newName}")
+    @Path("/file/edit")
     @RolesAllowed({"User","Admin"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response renameFile(@PathParam("bucket") String bucketName,
-                               @PathParam("oldName") String oldName,
-                               @PathParam("newName") String newName) throws Exception {
+    public Response renameFile(@MultipartForm renameFile file) throws Exception {
         try  {
-            return Response.status(200).entity(fileService.renameFile(bucketName, oldName, newName)).build();
+            return Response.status(200).entity(fileService.renameFile(file.bucket, file.oldName, file.newName)).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(500).entity("Failed to upload file").build();
