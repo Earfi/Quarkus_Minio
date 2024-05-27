@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AddBucket from './AddBucket';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
-function ListBuckets() {  
+function ListBuckets() {
     const [buckets, setBuckets] = useState([]);
-    const [editBtn, setEditBtn] = useState(false);
-    const [bucketEditName, setBucketEditName] = useState("");
-    const [newName, setNewName] = useState("");
-    const [token,setToken] = useState(null);
+    const [token, setToken] = useState(null);
 
-    useEffect(() => { 
-
-        setToken(localStorage.getItem("token"))
+    useEffect(() => {
+        setToken(localStorage.getItem("token"));
 
         const getBucket = async () => {
             try {
@@ -20,38 +16,32 @@ function ListBuckets() {
                     method: "GET"
                 });
                 const data = await res.json();
-                setBuckets(data); 
-                // console.log(data);
+                setBuckets(data);
             } catch (error) {
                 console.error("Error fetching buckets:", error);
             }
-        };  
+        };
         getBucket();
     }, []);
 
-    const deleteBucket = async (bucket) => { 
+    const deleteBucket = async (bucket) => {
         try {
-
-            Swal.fire({
+            const result = await Swal.fire({
                 title: "Are you sure?",
-                text: "You wan't to delete bucket!!",
+                text: "You want to delete the bucket!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, delete it!"
-              }).then(async (result) => {
-                if (result.isConfirmed) {  
-                  await deleteBucket(bucket);
-                }
-              });
-               
-            async function deleteBucket(bucket) {
+            });
+
+            if (result.isConfirmed) {
                 const res = await fetch(`http://localhost:8080/minio/${bucket}/delete`, {
-                  method: "DELETE",
-                  headers: {
-                    'X-HTTP-Method-Override': 'DELETE', 
-                    'Authorization': `Bearer ` + localStorage.getItem("token")
+                    method: "DELETE",
+                    headers: {
+                        'X-HTTP-Method-Override': 'DELETE',
+                        'Authorization': `Bearer ` + localStorage.getItem("token")
                     },
                 });
 
@@ -59,44 +49,42 @@ function ListBuckets() {
                     Swal.fire({
                         title: "Delete bucket successfully",
                         text: "Please Check your bucket!!!",
-                        icon: "success" ,
-                        showConfirmButton: false, 
+                        icon: "success",
+                        showConfirmButton: false,
                         timer: 1000
                     });
-                    
+
                     setTimeout(() => {
-                        window.location.reload()
-                    }, 1200); 
+                        window.location.reload();
+                    }, 1200);
                 } else {
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
-                        text: "Error Delete bucket!!!, Check File In Bucket!!!", 
-                    }); 
-                } 
-            } 
-
-            
+                        text: "Error Deleting the bucket, Check Files In Bucket!!!",
+                    });
+                }
+            }
         } catch (error) {
-            alert("Error Delete bucket!!!"); 
+            console.error("Error Deleting the bucket:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error Deleting the bucket, Check Files In Bucket!!!",
+            });
         }
-    };    
+    };
 
-    const setBucketEditedName = (bucket) => {
-        setBucketEditName(bucket);
-        setEditBtn(!editBtn);
-    }; 
-
-    const convertDate = (dateString) => { 
+    const convertDate = (dateString) => {
         const formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' });
         const dateObj = new Date(dateString);
         return formatter.format(dateObj);
     };
 
-    return ( 
+    return (
         <div className='mx-auto bg-white w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-1 py-5 mt-0 min-h-screen border border-black shadow-xl'>
-            <div className={`${token == null ? 'hidden' : 'block'}`}> 
-                <AddBucket/> 
+            <div className={`${token == null ? 'hidden' : 'block'}`}>
+                <AddBucket />
             </div>
             <h1 className='text-xl font-bold border-b-2 border-black pb-2 mt-3'>ALL : <span className="text-purple-600">Bucket &#9778;</span></h1>
             <div className='flex flex-col my-2 bg-white w-full '>
@@ -105,36 +93,27 @@ function ListBuckets() {
                     <h1 className="hidden lg:block w-[300px] text-sm">Creation Date</h1>
                 </div>
                 <div className="flex flex-col justify-between pb-5">
-                    {buckets.length > 0 && (
+                    {buckets.length > 0 ? (
                         <>
                             {buckets.map((bucket) => (
-                                <div className="flex flex-col"  >
-                                        <div className="border-b-4 border-gray-300 p-2">
-                                            <Link to={`/file/${bucket}`}>
-                                                <div className="flex flex-col lg:flex-row items-start lg:justify-between lg:items-center my-2 mx-10 font-mono bg-gray-100 py-2 px-5 border-b-2 cursor-pointer hover:bg-gray-200 text-md h-fit">
-                                                    {/* <p className="w-[100px] md:w-[200px]">&#9778; <b className="font-extrabold">{bucket.name}</b></p> */}
-                                                    <p className="w-[100px] md:w-[200px] text-sm">&#9778; <b className="font-extrabold">{bucket}</b></p>
-                                                    <p className="w-[300px] text-sm">{bucket.creationDate}</p>
-                                                </div>
-                                            </Link>
-                                            <div className={`flex justify-center gap-5 md:justify-end my-2 mx-10 ${token == null ? 'hidden' : 'block'}`}> 
-                                                <button onClick={() => deleteBucket(bucket)}  className="bg-red-500 w-[100px] text-white px-2 py-1 hover:bg-red-800 text-xs">Delete</button>
-                                                {/* <button onClick={() => setBucketEditedName(bucket)} className="bg-purple-500 w-[100px] text-white px-2 py-1 hover:bg-purple-800">Edit</button> */}
+                                <div key={bucket} className="flex flex-col" >
+                                    <div className="border-b-4 border-gray-300 p-2">
+                                        <Link to={`/file/${bucket}`}>
+                                            <div className="flex flex-col lg:flex-row items-start lg:justify-between lg:items-center my-2 mx-10 font-mono bg-gray-100 py-2 px-5 border-b-2 cursor-pointer hover:bg-gray-200 text-md h-fit">
+                                                <p className="w-[100px] md:w-[200px] text-sm">&#9778; <b className="font-extrabold">{bucket}</b></p>
+                                                {/* <p className="w-[300px] text-sm">{convertDate(bucket.creationDate)}</p> */}
                                             </div>
-                                            <div className={`${(token == null || token.value == undefined) ? 'hidden' : 'block'} ${editBtn === true && bucketEditName === bucket ? 'h-40 p-2' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl`}>
-                                                <label className="text-xl my-2">Input new Bucket Name!!</label>
-                                                <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-2 rounded-md w-full border" />
-                                                <button className="bg-red-500 w-full my-2 p-2 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700">OK</button>
-                                            </div>
+                                        </Link>
+                                        <div className={`flex gap-5 justify-end my-2 mx-10 ${token == null ? 'hidden' : 'block'}`}>
+                                            <button onClick={() => deleteBucket(bucket)} className="bg-red-500 w-[100px] text-white px-2 py-1 hover:bg-red-800 text-xs">Delete</button>
                                         </div>
-                                </div> 
-                            ))} 
+                                    </div>
+                                </div>
+                            ))}
                         </>
-                    )}
-                    {buckets.length === 0 && (
+                    ) : (
                         <>
                             <p className='m-5 bg-red-500 text-white font-mono border-l-red-500 border p-2'>No Buckets!!!</p>
-                            {/* <img src="https://images.unsplash.com/photo-1529933037705-0d537317ae7b?q=80&w=1930&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="img"/> */}
                         </>
                     )}
                 </div>
@@ -144,3 +123,4 @@ function ListBuckets() {
 }
 
 export default ListBuckets;
+

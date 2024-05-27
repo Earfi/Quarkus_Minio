@@ -1,12 +1,15 @@
 package example.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import example.controller.support.minio.*;
 import example.dto.minio.FileInfo;
 import example.service.minio.MinioBucketService;
 import example.service.minio.MinioFileService;
+import example.service.minio.MinioTagsService;
 import example.service.serviceInject.GetBucketName;
 import io.minio.MinioClient;
+import io.minio.errors.MinioException;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,7 +19,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +37,8 @@ public class MinioResource {
         @Inject
         MinioBucketService bucketService;
 
+        @Inject
+        MinioTagsService minioTagsService;
 
         @Inject
         private MinioClient minioClient;
@@ -86,6 +94,7 @@ public class MinioResource {
 //    @RolesAllowed({"User","Admin"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(@MultipartForm FileUpload file) throws Exception {
+//        [{"key":"shirt color","value":"blue"},{"key":"theme","value":"nature"}]
         InputStream fileStream = file.file;
         String folder = file.folder;
 
@@ -138,9 +147,42 @@ public class MinioResource {
         }
     }
 
+//--------------------------------------------------
+//--------------------------------------------------
+//---------------- tags ----------------------------
+//--------------------------------------------------
+//--------------------------------------------------
 
+    @POST
+    @Path("/tags")
+//    @RolesAllowed({"User","Admin"})
+    public Response addMoreTags(@MultipartForm tagsFile file) throws JsonProcessingException {
+//        [{"key":"shirt color","value":"blue"},{"key":"theme","value":"nature"}]
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<TagDto> tagList = objectMapper.readValue(file.getTags(), objectMapper.getTypeFactory().constructCollectionType(List.class, TagDto.class));
 
+        Map<String, String> tags = new HashMap<>();
+        for (TagDto tag : tagList) {
+            tags.put(tag.getKey(), tag.getValue());
+        }
+
+        minioTagsService.addMoreTags(file.bucket, file.fileName, tags);
+        return Response.ok().entity("Tags added successfully.").build();
+    }
+
+    @DELETE
+    @Path("/tags")
+    @RolesAllowed({"User","Admin"})
+    public Response deleteTagsByKey(@MultipartForm tagsRemoveByKeyFile file) {
+        minioTagsService.deleteTagsByKey(file.bucket, file.fileName, file.key);
+        return Response.ok().entity("Tags deleted successfully.").build();
+    }
+
+//--------------------------------------------------
+//--------------------------------------------------
 //--------------- bucket ---------------------------
+//--------------------------------------------------
+//--------------------------------------------------
 
     @GET
     @Path("/all/bucket")

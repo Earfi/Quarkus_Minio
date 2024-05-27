@@ -7,6 +7,10 @@ function Information({ bucket }) {
     const [editBtn, setEditBtn] = useState(false);
     const [filesEditName, setFilesEditName] = useState("");
     const [newName, setNewName] = useState("");
+    const [tags, setTags] = useState([{ key: "", value: "" }]);
+    const [newTag, setNewTag] = useState("");
+    const [deleteTagKey, setDeleteTagKey] = useState("");
+    const [editMode, setEditMode] = useState("");
     const [link, setLink] = useState("");
     const [folderView, setFolderView] = useState(null);
     const [showFiles, setShowFiles] = useState(true);
@@ -50,15 +54,6 @@ function Information({ bucket }) {
             return folders;
         }, {});
     };
-    
-
-    // console.log("-----------------------------------------");
-    // console.log("-----------------------------------------");
-    // console.log("-----------------------------------------");
-    // console.log(folders);
-    // console.log("-----------------------------------------");
-    // console.log("-----------------------------------------");
-    // console.log("-----------------------------------------");
 
     const groupFilesByFolder = (files) => {
         // groupFilesByFolders(files)
@@ -75,7 +70,7 @@ function Information({ bucket }) {
                 folders[folderPath] = [];
             }
             folders[folderPath].push(file);
-            console.log(folders);
+            // console.log(folders);
             return folders;
         }, {});
     };
@@ -91,6 +86,196 @@ function Information({ bucket }) {
         setFolderView(folderView === folder ? null : folder);
     };
 
+    const handleEditModeChange = (mode) => {
+        setEditMode(mode);
+    };
+
+    const setFileEditedName = (file) => {
+        setFilesEditName(file);
+        setEditBtn(!editBtn);
+    };
+
+    const handleAddTagToInput = () => {
+        if (tags.length < 10) {
+            setTags([...tags, { key: "", value: "" }]);
+        } else {
+            Swal.fire({
+                icon: "warning",
+                title: "Limit reached",
+                text: "You can add up to 10 tags only.",
+            });
+        }
+    };
+    
+    const handleDeleteTagToInput = (index) => {
+        const newTags = tags.filter((_, i) => i !== index);
+        setTags(newTags);
+    };
+
+    const handleTagValueChange = (index, key, value) => {
+        const newTags = tags.map((tag, i) => {
+            if (i === index) {
+                return { ...tag, key, value };
+            }
+            return tag;
+        });
+        setTags(newTags);
+    };
+
+    // -----------------------------------
+    // -----------------------------------
+    // ---------- Call Backend------------
+    // -----------------------------------
+    // -----------------------------------
+    
+    // Can not edit file name in folder
+    const handleRenameFile = async () => {
+        
+        if (newName == "" || newName == undefined || newName == null || newName == "/") {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Please Input New File Name !!!",
+                showConfirmButton: false,
+                timer: 1000
+            });
+            return
+        }
+
+        // const typeFile = filesEditName.slice(-3);
+        // console.log(typeFile);
+
+        const parts = filesEditName.split(".");
+        const typeFile = parts.pop();
+  
+        let newNameValue;
+
+        const lastIndex = filesEditName.lastIndexOf('/');
+        if (lastIndex !== -1) {
+            const result = filesEditName.substring(0, lastIndex);
+            newNameValue = result + "/" + newName;
+            console.log(result);
+            console.log("1");
+        } else {
+            console.log("2");
+            newNameValue = newName + "." + typeFile;
+        }
+
+        // console.log("oldName : " + filesEditName);
+        // console.log("newName : " + newNameValue);
+
+        const formData = new FormData();
+        formData.append("bucket", bucket);
+        formData.append("oldName", filesEditName);
+        formData.append("newName", newNameValue);
+
+        // console.log(newNameValue);
+
+        const res = await fetch(`http://localhost:8080/minio/file/edit`, {
+            method: "PUT",
+            body: formData,
+            headers: { 
+                'Authorization': `Bearer ` + localStorage.getItem("token")
+            },
+        }); 
+    
+        if (res.ok) {
+            Swal.fire({
+                title: "Edit File Successfully!!",
+                text: "Please Check your File!!!",
+                icon: "success",
+                showConfirmButton: false, 
+                timer: 1000
+              });
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000); 
+        } else { 
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error Edit file Name!!!",
+                showConfirmButton: false,  
+                timer: 1000
+            });
+        }
+    };
+
+    const handleAddTag = async (fileName) => {
+        const formData = new FormData();
+
+        const filteredTags = tags.filter(tag => tag.key && tag.value);
+
+        formData.append("bucket", bucket);
+        formData.append("fileName", fileName);
+        formData.append("tags", JSON.stringify(filteredTags.length > 0 ? filteredTags : []));
+
+        const res = await fetch(`http://localhost:8080/minio/tags`, {
+            method: "POST",
+            body: formData,
+            headers: { 
+                'Authorization': `Bearer ` + localStorage.getItem("token")
+            },
+        }); 
+    
+        if (res.ok) {
+            Swal.fire({
+                title: "Add Tags Successfully !!",
+                text: "Please Check your File Tags !!",
+                icon: "success",
+                showConfirmButton: false, 
+                timer: 1000
+              });
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000); 
+        } else { 
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error Add Tags !!",
+                showConfirmButton: false,  
+                timer: 1000
+            });
+        }
+    };
+
+    const handleDeleteTag = async (fileName,key) => {
+        const formData = new FormData();
+        formData.append("bucket", bucket);
+        formData.append("fileName", fileName);
+        formData.append("key", key);
+
+        const res = await fetch(`http://localhost:8080/minio/tags`, {
+            method: "DELETE",
+            body: formData,
+            headers: { 
+                'Authorization': `Bearer ` + localStorage.getItem("token")
+            },
+        }); 
+    
+        if (res.ok) {
+            Swal.fire({
+                title: "Remove Tags Successfully !!",
+                text: "Please Check your File Tags !!",
+                icon: "success",
+                showConfirmButton: false, 
+                timer: 1000
+              });
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000); 
+        } else { 
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error Remove Tags !!",
+                showConfirmButton: false,  
+                timer: 1000
+            });
+        }
+    };
+    
     const deleteFile = async (fileName) => {
         try {
             Swal.fire({
@@ -147,7 +332,6 @@ function Information({ bucket }) {
         }
     };
     
-
     const downloadFile = async (fileName) => {
         const formData = new FormData();
         formData.append("fileName", fileName);
@@ -185,11 +369,6 @@ function Information({ bucket }) {
         }
     };
 
-    const setFileEditedName = (file) => {
-        setFilesEditName(file);
-        setEditBtn(!editBtn);
-    };
-
     const convertDate = (dateString) => {
         const formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' });
         const dateObj = new Date(dateString);
@@ -206,76 +385,6 @@ function Information({ bucket }) {
             return (bytes / 1024).toFixed(2) + ' KB';
         }
     }
-
-    const renameFile = async () => {
-
-        if (newName == "" || newName == undefined || newName == null || newName == "/") {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Please Input New File Name !!!",
-                showConfirmButton: false,
-                timer: 1000
-            });
-            return
-        }
-
-        // const typeFile = filesEditName.slice(-3);
-        // console.log(typeFile);
-
-        const parts = filesEditName.split(".");
-        const typeFile = parts.pop();
-  
-        let newNameValue;
-
-        const lastIndex = filesEditName.lastIndexOf('/');
-        if (lastIndex !== -1) {
-            const result = filesEditName.substring(0, lastIndex);
-            newNameValue = result + "/" + newName;
-            console.log(result);
-            console.log("1");
-        } else {
-            console.log("2");
-            newNameValue = newName + "." + typeFile;
-        }
-
-        // console.log("oldName : " + filesEditName);
-        // console.log("newName : " + newNameValue);
-
-        const formData = new FormData();
-        formData.append("bucket", bucket);
-        formData.append("oldName", filesEditName);
-        formData.append("newName", newNameValue);
-
-        const res = await fetch(`http://localhost:8080/minio/file/edit`, {
-            method: "PUT",
-            body: formData,
-            headers: { 
-                'Authorization': `Bearer ` + localStorage.getItem("token")
-            },
-        }); 
-    
-        if (res.ok) {
-            Swal.fire({
-                title: "Edit File Successfully!!",
-                text: "Please Check your File!!!",
-                icon: "success",
-                showConfirmButton: false, 
-                timer: 1000
-              });
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000); 
-        } else { 
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Error Edit file Name!!!",
-                showConfirmButton: false,  
-                timer: 1000
-            });
-        }
-    };
 
     const previewPdf = async () => {
         window.open(link)
@@ -331,7 +440,7 @@ function Information({ bucket }) {
                                                             {(link.includes("jpg") || link.includes("png")) && (
                                                                 <img src={link} width="1000" height="600" alt="preview" />
                                                             )}
-                                                            {(link.includes("pdf")) && (
+                                                            {(link.includes("pdf") || link.includes("xlsx")) && (
                                                                 <button onClick={() => previewPdf} className='btn bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 w-full'>Open New Tab</button>
                                                             )}
                                                         </div>
@@ -341,9 +450,9 @@ function Information({ bucket }) {
                                                     </dialog>
                                                 </div>
                                                 {file.tags.length > 0 && (
-                                                    <div className="tags flex items-center gap-2">
+                                                    <div className="tags flex items-center gap-2 flex-wrap">
                                                         <strong className='text-sm'>Tags:</strong>
-                                                        <ul className="flex justify-center items-center gap-3">
+                                                        <ul className="flex justify-start items-center gap-3 flex-wrap">
                                                             {file.tags.map((tag, index) => (
                                                             <li className='bg-gray-800 px-2 py-1 rounded-md text-xs font-bold text-white' key={index}>{tag}</li>
                                                             ))}
@@ -356,10 +465,73 @@ function Information({ bucket }) {
                                                     <button onClick={() => setFileEditedName(file.fileName)} className={`${token == null ? 'hidden' : 'block'} btn-sm bg-gray-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-gray-800 text-xs`}>Edit</button>
                                                     <button onClick={() => deleteFile(file.fileName)} className={`${token == null ? 'hidden' : 'block'} btn-sm bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 text-xs`}>DELETE</button>
                                                 </div>
-                                                <div className={` ${editBtn === true && filesEditName === file.fileName ? 'h-28 p-1' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-2 border-t-green-500 rounded-b-2xl mb-2 text-xs`}>
-                                                    <label className="text-sm my-1"><b>Input new File Name:</b></label>
-                                                    <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-1 rounded-md w-full border text-xs" placeholder="input new name or folder (../../fileName)" />
-                                                    <button onClick={() => renameFile(file)} className="bg-red-500 w-full my-1 p-1 cursor-pointer text-white font-medium hover:bg-red-800 border border-gray-700 text-xs">RENAME</button>
+                                                <div className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} w-full overflow-hidden transition-all flex flex-col justify-end duration-300`}>
+                                                    <div className="relative border border-gray-300 p-4 rounded-md mb-4">
+                                                        <h3 className="mb-2">Select Options to Edit!</h3>
+                                                        <button className="mr-2 bg-pink-600 hover:bg-pink-900 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("rename")}>Rename File</button>
+                                                        <button className="mr-2 bg-purple-600 hover:bg-purple-900 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("addTag")}>Add Tag</button>
+                                                        <button className="bg-red-600 hover:bg-red-900 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("deleteTag")}>Delete Tag</button>
+                                                        <h1
+                                                            className="text-white text-right cursor-pointer absolute right-2 top-0"
+                                                            onClick={() => setFileEditedName(null)}
+                                                            >
+                                                            &#10006;
+                                                        </h1>
+                                                    </div>
+                                                    <div>
+                                                        {editMode === "rename" && (
+                                                            <div className="mb-4">
+                                                            <label className='text-sm font-medium text-gray-700'>Rename Tag</label> 
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder="New File Name"
+                                                                    value={newName}
+                                                                    onChange={(e) => setNewName(e.target.value)}
+                                                                    className="border border-gray-300 p-2 rounded-md w-full text-xs"
+                                                                />
+                                                                <button onClick={handleRenameFile} className="mt-2 bg-pink-600 hover:bg-pink-900 text-white text-xs font-bold py-1 px-2 rounded">Rename</button>
+                                                            </div>
+                                                        )}
+                                                        {editMode === "addTag" && (
+                                                            <div className="mb-4">
+                                                                <label className='text-sm font-medium text-gray-700'>Add Tag</label> 
+                                                                {tags.map((tag, index) => (
+                                                                    <div key={index} className='flex gap-2 mb-2'>
+                                                                        <input 
+                                                                            type="text" 
+                                                                            value={tag.key} 
+                                                                            onChange={(e) => handleTagValueChange(index, e.target.value, tag.value)} 
+                                                                            placeholder="Key no ( $ _ \ / < > * )" 
+                                                                            className="p-2 border rounded text-xs w-1/2" 
+                                                                        />
+                                                                        <input 
+                                                                            type="text" 
+                                                                            value={tag.value} 
+                                                                            onChange={(e) => handleTagValueChange(index, tag.key, e.target.value)} 
+                                                                            placeholder="Value no ( $ _ \ / < > * )" 
+                                                                            className="p-2 border rounded text-xs w-1/2" 
+                                                                        />
+                                                                        <button onClick={() => handleDeleteTagToInput(index)} className="text-red-500 hover:text-red-700">x</button>
+                                                                    </div>
+                                                                ))}
+                                                                <button onClick={handleAddTagToInput} className="mt-2 bg-slate-500 hover:bg-gray-300 ml-2 text-white text-xs font-bold py-1 px-2 rounded border">Add More Tags</button>
+                                                                <button onClick={() => handleAddTag(file.fileName)} className="mt-2 bg-purple-500 hover:bg-purple-700 ml-2 text-white text-xs font-bold py-1 px-2 rounded">Add Tag</button>
+                                                            </div>
+                                                        )}
+                                                        {editMode === "deleteTag" && (
+                                                            <div className="mb-4">
+                                                            <label className='text-sm font-medium text-gray-700'>Delete Tag</label> 
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder="Tag to Delete (Input Key)"
+                                                                    value={deleteTagKey}
+                                                                    onChange={(e) => setDeleteTagKey(e.target.value)}
+                                                                    className="border border-gray-300 p-2 rounded-md w-full text-xs"
+                                                                />
+                                                                <button onClick={() => handleDeleteTag(file.fileName,deleteTagKey)} className="mt-2 bg-red-500 hover:bg-red-700 text-white text-xs font-bold py-1 px-2 rounded">Delete Tag</button>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -398,7 +570,7 @@ function Information({ bucket }) {
                                                                 {(link.includes("jpg") || link.includes("png")) && (
                                                                     <img src={link} width="1000" height="600" alt="preview" />
                                                                 )}
-                                                                {(link.includes("pdf")) && (
+                                                                {(link.includes("pdf") || link.includes("xlsx")) && (
                                                                     <button onClick={() => previewPdf} className='btn bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 w-full'>Open New Tab</button>
                                                                 )}
                                                             </div>
@@ -408,9 +580,9 @@ function Information({ bucket }) {
                                                         </dialog>
                                                     </div>
                                                     {file.tags.length > 0 && (
-                                                        <div className="tags flex items-center gap-2">
+                                                        <div className="tags flex items-center gap-2 flex-wrap">
                                                             <strong className='text-sm'>Tags:</strong>
-                                                            <ul className="flex justify-center items-center gap-3">
+                                                            <ul className="flex justify-start items-center gap-3 flex-wrap">
                                                                 {file.tags.map((tag, index) => (
                                                                 <li className='bg-gray-800 px-2 py-1 rounded-md text-xs font-bold text-white' key={index}>{tag}</li>
                                                                 ))}
@@ -423,18 +595,78 @@ function Information({ bucket }) {
                                                         <button onClick={() => setFileEditedName(file.fileName)} className={`${token == null ? 'hidden' : 'block'} btn-sm bg-gray-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-gray-800 text-xs`}>Edit</button>
                                                         <button onClick={() => deleteFile(file.fileName)} className={`${token == null ? 'hidden' : 'block'} btn-sm bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 text-xs`}>DELETE</button>
                                                     </div>
-                                                    <div className={` ${editBtn === true && filesEditName === file.fileName ? 'h-28 p-1' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-8 border-t-green-500 rounded-b-2xl mb-2 text-xs`}>
-                                                        <label className="text-sm my-1"><b>Input new File Name:</b></label>
-                                                        <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-1 rounded-md w-full border text-xs" />
-                                                        <button onClick={() => renameFile(file)} className="bg-red-500 w-full my-1 p-1 cursor-pointer text-white font-medium hover:bg-red-800 border-2 border-gray-700 text-xs">OK</button>
+                                                    <div className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} w-full overflow-hidden transition-all flex flex-col justify-end duration-300`}>
+                                                        <div className="relative border border-gray-300 p-4 rounded-md mb-4">
+                                                            <h3 className="mb-2">Select Options to Edit!</h3>
+                                                            <button className="mr-2 bg-pink-600 hover:bg-pink-900 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("rename")}>Rename File</button>
+                                                            <button className="mr-2 bg-purple-600 hover:bg-purple-900 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("addTag")}>Add Tag</button>
+                                                            <button className="bg-red-600 hover:bg-red-900 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("deleteTag")}>Delete Tag</button>
+                                                            <h1
+                                                                className="text-white text-right cursor-pointer absolute right-2 top-0"
+                                                                onClick={() => setFileEditedName(null)}
+                                                                >
+                                                                &#10006;
+                                                            </h1>
+                                                        </div>
+                                                        <div>
+                                                            {editMode === "rename" && (
+                                                                <div className="mb-4">
+                                                                <label className='text-sm font-medium text-gray-700'>Rename Tag</label> 
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="New File Name"
+                                                                        value={newName}
+                                                                        onChange={(e) => setNewName(e.target.value)}
+                                                                        className="border border-gray-300 p-2 rounded-md w-full text-xs"
+                                                                    />
+                                                                    <button onClick={handleRenameFile} className="mt-2 bg-pink-600 hover:bg-pink-900 text-white text-xs font-bold py-1 px-2 rounded">Rename</button>
+                                                                </div>
+                                                            )}
+                                                            {editMode === "addTag" && (
+                                                                <div className="mb-4">
+                                                                    <label className='text-sm font-medium text-gray-700'>Add Tag</label> 
+                                                                    {tags.map((tag, index) => (
+                                                                        <div key={index} className='flex gap-2 mb-2'>
+                                                                            <input 
+                                                                                type="text" 
+                                                                                value={tag.key} 
+                                                                                onChange={(e) => handleTagValueChange(index, e.target.value, tag.value)} 
+                                                                                placeholder="Key no ( $ _ \ / < > * )" 
+                                                                                className="p-2 border rounded text-xs w-1/2" 
+                                                                            />
+                                                                            <input 
+                                                                                type="text" 
+                                                                                value={tag.value} 
+                                                                                onChange={(e) => handleTagValueChange(index, tag.key, e.target.value)} 
+                                                                                placeholder="Value no ( $ _ \ / < > * )" 
+                                                                                className="p-2 border rounded text-xs w-1/2" 
+                                                                            />
+                                                                            <button onClick={() => handleDeleteTagToInput(index)} className="text-red-500 hover:text-red-700">x</button>
+                                                                        </div>
+                                                                    ))}
+                                                                    <button onClick={handleAddTagToInput} className="mt-2 bg-slate-500 hover:bg-gray-300 ml-2 text-white text-xs font-bold py-1 px-2 rounded border">Add More Tags</button>
+                                                                    <button onClick={() => handleAddTag(file.fileName)} className="mt-2 bg-purple-500 hover:bg-purple-700 ml-2 text-white text-xs font-bold py-1 px-2 rounded">Add Tag</button>
+                                                                </div>
+                                                            )}
+                                                            {editMode === "deleteTag" && (
+                                                                <div className="mb-4">
+                                                                <label className='text-sm font-medium text-gray-700'>Delete Tag</label> 
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="Tag to Delete (Input Key)"
+                                                                        value={deleteTagKey}
+                                                                        onChange={(e) => setDeleteTagKey(e.target.value)}
+                                                                        className="border border-gray-300 p-2 rounded-md w-full text-xs"
+                                                                    />
+                                                                    <button onClick={() => handleDeleteTag(file.fileName,deleteTagKey)} className="mt-2 bg-red-500 hover:bg-red-700 text-white text-xs font-bold py-1 px-2 rounded">Delete Tag</button>
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                     ))}
                                 </div>
-                                {/* <div className={`ml-5 transition-all duration-500 ease-in-out folder-content ${folderView == folder ? 'border-none' : 'border-none'} overflow-hidden`} style={{ maxHeight: folderView === folder ? 'fit-content' : '0px' }}>
-                                    <ListFileByFolder folder={folder} files={groupedFiles[folder]} />
-                                </div> */}
                             </>
                         )}
                     </div>

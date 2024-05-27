@@ -156,14 +156,14 @@ function UploadFile() {
                                 type="text" 
                                 value={tag.key} 
                                 onChange={(e) => handleTagChange(index, e.target.value, tag.value)} 
-                                placeholder="Key" 
+                                placeholder="Key no ( $ _ \ / < > * )" 
                                 className="p-2 border rounded text-xs w-1/2" 
                             />
                             <input 
                                 type="text" 
                                 value={tag.value} 
                                 onChange={(e) => handleTagChange(index, tag.key, e.target.value)} 
-                                placeholder="Value" 
+                                placeholder="Value no ( $ _ \ / < > * )" 
                                 className="p-2 border rounded text-xs w-1/2" 
                             />
                             <button onClick={() => handleDeleteTag(index)} className="text-red-500 hover:text-red-700">x</button>
