@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class MinioFileService{
@@ -34,15 +35,30 @@ public class MinioFileService{
         try {
             for (Result<Item> file : listObj) {
                 Item item = file.get();
+
+                Tags tags = minioClient.getObjectTags(
+                        GetObjectTagsArgs.builder()
+                                .bucket(bucket)
+                                .object(item.objectName())
+                                .build()
+                );
+
+                Map<String, String> tagsMap = tags.get();
+                List<String> tagsList = new ArrayList<>();
+                if (tagsMap != null && !tagsMap.isEmpty()) {
+                    tagsMap.forEach((key, value) -> tagsList.add(key + ":" + value));
+                }
+
                 String url = minioClient.getPresignedObjectUrl(
                         GetPresignedObjectUrlArgs.builder()
                                 .method(Method.GET)
                                 .bucket(bucket)
                                 .object(item.objectName())
-                                .expiry(24 * 60 *60)
+                                .expiry(24 * 60 * 60)
                                 .build()
                 );
-                fileReturn.add(new FileInfo(item.objectName(),String.valueOf(item.size()),item.lastModified().toString() ,url));
+
+                fileReturn.add(new FileInfo(item.objectName(), String.valueOf(item.size()), item.lastModified().toString(), url, tagsList));
             }
         } catch (MinioException e) {
             e.printStackTrace();
@@ -50,11 +66,11 @@ public class MinioFileService{
             e.printStackTrace();
         }
 
-
-        return fileReturn;  
+        return fileReturn;
     }
 
-    public Object uploadFile(String bucketName, InputStream fileStream, String fileName, String tagsAsString) throws Exception{
+
+    public Object uploadFile(String bucketName, InputStream fileStream, String fileName,Map<String, String> tags) throws Exception{
         try {
             minioClient.putObject(
                     PutObjectArgs.builder()
@@ -65,15 +81,15 @@ public class MinioFileService{
                             .build()
             );
 
-//            List<Map<String, String>> tags = parseTagsFromString(tagsAsString);
-//
-//            if (tags != null && !tags.isEmpty()) {
-//                for (Map<String, String> tagMap : tags) {
-//                    String tagKey = tagMap.get("key");
-//                    String tagValue = tagMap.get("value");
-//                    setTags(bucketName, fileName, tagKey, tagValue);
-//                }
-//            }
+            if (tags != null){
+                minioClient.setObjectTags(SetObjectTagsArgs.builder()
+                        .bucket(bucketName)
+                        .object(fileName)
+                        .tags(tags)
+                        .build());
+
+            }
+
 
             return "File uploaded successfully";
         } catch (Exception e) {
@@ -82,25 +98,6 @@ public class MinioFileService{
         }
     }
 
-    private List<Map<String, String>> parseTagsFromString(String tagsAsString) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(tagsAsString, new TypeReference<List<Map<String, String>>>() {});
-    }
-
-    private void setTags(String bucketName, String objectName, String... tags) throws IOException, InvalidKeyException, NoSuchAlgorithmException, MinioException {
-        Map<String, String> tagMap = new HashMap<>();
-        for (int i = 0; i < tags.length; i += 2) {
-            tagMap.put(tags[i], tags[i + 1]);
-        }
-
-        minioClient.setObjectTags(
-                SetObjectTagsArgs.builder()
-                        .bucket(bucketName)
-                        .object(objectName)
-                        .tags(tagMap)
-                        .build()
-        );
-    }
 
     public void deleteFile(String bucket, String fileName) throws Exception{
         try {

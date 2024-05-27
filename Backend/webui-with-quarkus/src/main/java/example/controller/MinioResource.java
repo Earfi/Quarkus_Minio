@@ -83,26 +83,26 @@ public class MinioResource {
 
     @POST
     @Path("/file/upload")
-    @RolesAllowed({"User","Admin"})
+//    @RolesAllowed({"User","Admin"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(@MultipartForm FileUpload file) throws Exception {
         InputStream fileStream = file.file;
         String folder = file.folder;
 
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        List<TagDto> tagList = objectMapper.readValue(file.tagsAsString, objectMapper.getTypeFactory().constructCollectionType(List.class, TagDto.class));
-//
-//        Map<String, String> tags = new HashMap<>();
-//        for (TagDto tag : tagList) {
-//            tags.put(tag.getKey(), tag.getValue());
-//        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<TagDto> tagList = objectMapper.readValue(file.tagsAsString, objectMapper.getTypeFactory().constructCollectionType(List.class, TagDto.class));
+
+        Map<String, String> tags = new HashMap<>();
+        for (TagDto tag : tagList) {
+            tags.put(tag.getKey(), tag.getValue());
+        }
 
         try {
             Object response;
             if (folder == null || folder.equals("") || folder.isEmpty() || folder == "" || folder.equals("null") || folder == "null") {
-                response = fileService.uploadFile(file.bucket, fileStream, file.fileName, file.tagsAsString);
+                response = fileService.uploadFile(file.bucket, fileStream, file.fileName, tags);
             } else {
-                response = fileService.uploadFile(file.bucket, fileStream, folder + "/" + file.fileName, file.tagsAsString);
+                response = fileService.uploadFile(file.bucket, fileStream, folder + "/" + file.fileName, tags);
             }
             return Response.status(200).entity(response).build();
         } catch (Exception e) {

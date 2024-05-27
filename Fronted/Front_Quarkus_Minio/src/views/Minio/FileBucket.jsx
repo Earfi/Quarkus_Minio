@@ -15,9 +15,9 @@ function FileBucket() {
 
     return (
         <div className="w-full overflow-hidden min-h-[90vh] bg-slate-100">  
-            <div className="flex flex-row ">
-                <div className="fixed ">
-                    <Sidebar/>  
+            <div className="flex">
+                <div className='hidden lg:block'>
+                    <Sidebar />
                 </div>
                 <div className="flex flex-col w-full"> 
                     <div className="md:mx-auto relative">

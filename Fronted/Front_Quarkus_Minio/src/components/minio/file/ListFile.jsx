@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
-import ListFileByFolder from './ListFileByFolder';
+import Swal from 'sweetalert2'; 
 
 function Information({ bucket }) {
     const [token, setToken] = useState(null);
@@ -29,39 +28,30 @@ function Information({ bucket }) {
     const groupFilesByFolders = (files) => {
         return files.reduce((folders, file) => {
             const filePathParts = file.fileName.split('/');
-            
             let currentFolder = folders;
     
             for (let i = 0; i < filePathParts.length - 1; i++) {
                 const folderName = filePathParts[i];
     
                 if (!currentFolder[folderName]) {
-                    currentFolder[folderName] = {}; // สร้างโฟลเดอร์หากยังไม่มี
+                    currentFolder[folderName] = {};
                 }
     
                 currentFolder = currentFolder[folderName];
             }
     
-            const fileName = filePathParts[filePathParts.length - 1]; // ได้ชื่อไฟล์
+            const fileName = filePathParts[filePathParts.length - 1];
     
             if (!currentFolder[fileName]) {
-                currentFolder[fileName] = []; // สร้างอาเรย์ของไฟล์ในโฟลเดอร์
+                currentFolder[fileName] = [];
             }
     
-            currentFolder[fileName].push(file); // เพิ่มไฟล์เข้าไปในอาเรย์ของไฟล์ในโฟลเดอร์
-    
-    // console.log("-----------------------------------------");
-    // console.log("-----------------------------------------");
-    // console.log("-----------------------------------------");
-    // console.log(folders);
-    // console.log("-----------------------------------------");
-    // console.log("-----------------------------------------");
-    // console.log("-----------------------------------------");
+            currentFolder[fileName].push(file);
             return folders;
         }, {});
     };
     
-    
+
     // console.log("-----------------------------------------");
     // console.log("-----------------------------------------");
     // console.log("-----------------------------------------");
@@ -85,12 +75,11 @@ function Information({ bucket }) {
                 folders[folderPath] = [];
             }
             folders[folderPath].push(file);
-            // console.log(folders);
+            console.log(folders);
             return folders;
         }, {});
     };
     
-
     const groupedFiles = groupFilesByFolder(files);
 
     const openPreview = (url) => {
@@ -114,54 +103,50 @@ function Information({ bucket }) {
                 confirmButtonText: "Yes, delete it!"
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    await deleteFile(fileName);
+                    const formData = new FormData();
+                    formData.append("fileName", fileName);
+                    formData.append("bucket", bucket);
+    
+                    const res = await fetch(`http://localhost:8080/minio/file/delete`, {
+                        method: "DELETE",
+                        body: formData,
+                        headers: {
+                            'X-HTTP-Method-Override': 'DELETE',
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`
+                        },
+                    });
+    
+                    if (res.ok) {
+                        Swal.fire({
+                            title: "Delete File successfully",
+                            text: "Please Check your File!!!",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1000
+                        });
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1500);
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Failed to delete file!!!",
+                            timer: 1000
+                        });
+                    }
                 }
             });
-
-            const formData = new FormData();
-            formData.append("fileName", fileName);
-            formData.append("bucket", bucket);
-
-            async function deleteFile(file) {
-                const res = await fetch(`http://localhost:8080/minio/file/delete`, {
-                    method: "DELETE",
-                    body: formData,
-                    headers: {
-                        'X-HTTP-Method-Override': 'DELETE',
-                        'Authorization': `Bearer ` + localStorage.getItem("token")
-                    },
-                });
-
-                if (res.ok) {
-                    Swal.fire({
-                        title: "Delete File successfully",
-                        text: "Please Check your File!!!",
-                        icon: "success",
-                        showConfirmButton: false,
-                        timer: 1000
-                    });
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1500);
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Failed Delete file!!!",
-                        timer: 1000
-                    });
-                }
-            }
-
         } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Failed Delete file!!!",
+                text: "Failed to delete file!!!",
                 timer: 1000
             });
         }
     };
+    
 
     const downloadFile = async (fileName) => {
         const formData = new FormData();
@@ -235,7 +220,11 @@ function Information({ bucket }) {
             return
         }
 
-        const typeFile = filesEditName.slice(-3);
+        // const typeFile = filesEditName.slice(-3);
+        // console.log(typeFile);
+
+        const parts = filesEditName.split(".");
+        const typeFile = parts.pop();
   
         let newNameValue;
 
@@ -250,8 +239,8 @@ function Information({ bucket }) {
             newNameValue = newName + "." + typeFile;
         }
 
-        console.log("oldName : " + filesEditName);
-        console.log("newName : " + newNameValue);
+        // console.log("oldName : " + filesEditName);
+        // console.log("newName : " + newNameValue);
 
         const formData = new FormData();
         formData.append("bucket", bucket);
@@ -287,7 +276,6 @@ function Information({ bucket }) {
             });
         }
     };
-
 
     const previewPdf = async () => {
         window.open(link)
@@ -337,7 +325,7 @@ function Information({ bucket }) {
                                                     <p className='break-words text-xs'><b>Name : </b>{file.fileName}</p>
                                                     <p className='text-xs'><b>Size : </b>{convertBytes(file.fileSize)}</p>
                                                     <p className='text-xs'><b>Last Modified : </b>{convertDate(file.creationDate)}</p>
-    
+
                                                     <dialog id="my_modal_2" className="modal">
                                                         <div className="modal-box">
                                                             {(link.includes("jpg") || link.includes("png")) && (
@@ -352,6 +340,16 @@ function Information({ bucket }) {
                                                         </form>
                                                     </dialog>
                                                 </div>
+                                                {file.tags.length > 0 && (
+                                                    <div className="tags flex items-center gap-2">
+                                                        <strong className='text-sm'>Tags:</strong>
+                                                        <ul className="flex justify-center items-center gap-3">
+                                                            {file.tags.map((tag, index) => (
+                                                            <li className='bg-gray-800 px-2 py-1 rounded-md text-xs font-bold text-white' key={index}>{tag}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
                                                 <div className='flex flex-row flex-wrap gap-3 mt-2 md:mt-0 sm:ml-2 w-full justify-center sm:justify-end'>
                                                     <button onClick={() => openPreview(file.url)} className='btn-sm bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800 text-xs'>PREVIEW</button>
                                                     <button onClick={() => downloadFile(file.fileName)} className='btn-sm bg-blue-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-blue-800 text-xs'>Download</button>
@@ -360,7 +358,7 @@ function Information({ bucket }) {
                                                 </div>
                                                 <div className={` ${editBtn === true && filesEditName === file.fileName ? 'h-28 p-1' : 'h-0'} overflow-hidden transition-all w-full border shadow-lg bg-white flex flex-col justify-center items-center mx-auto border-t-2 border-t-green-500 rounded-b-2xl mb-2 text-xs`}>
                                                     <label className="text-sm my-1"><b>Input new File Name:</b></label>
-                                                    <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-1 rounded-md w-full border text-xs" />
+                                                    <input onChange={(e) => setNewName(e.target.value)} type="text" className="p-1 rounded-md w-full border text-xs" placeholder="input new name or folder (../../fileName)" />
                                                     <button onClick={() => renameFile(file)} className="bg-red-500 w-full my-1 p-1 cursor-pointer text-white font-medium hover:bg-red-800 border border-gray-700 text-xs">RENAME</button>
                                                 </div>
                                             </div>
@@ -372,10 +370,13 @@ function Information({ bucket }) {
                             <>
                                 <h2 
                                     onClick={() => handleFolderClick(folder)} 
-                                    className={`cursor-pointer text-black font-bold p-3 mx-5 my-1 shadow-md bg-gradient-to-r rounded-lg flex items-center transition-transform duration-200 transform text-xs ${folderView === folder ? 'from-yellow-800 to-yellow-800 border-l-4 border-yellow-700 text-white translate-x-1' : 'from-yellow-400 to-yellow-300 border-l-4 border-yellow-600'}`}
+                                    className={`cursor-pointer text-black font-bold p-3 mx-5 my-1 shadow-md bg-gradient-to-r rounded-lg flex items-center transition-transform duration-200 transform text-xs border ${folderView === folder ? 'from-yellow-800 to-yellow-800 border-l-4 border-yellow-700 text-white translate-x-1' : 'from-amber-200 to-amber-200 border-l-4 border-yellow-600'}`}
                                 >
                                     <div className='flex justify-between w-full'>
-                                        {folder}
+                                        <div className="flex gap-2">
+                                            <img src="../../public/folder-icon.png" width="20"/>
+                                            <p> {folder}</p>
+                                        </div>
                                         <span className='material-icons mr-2'>
                                             {folderView === folder ? 'open' : 'close '}
                                         </span>
@@ -391,7 +392,7 @@ function Information({ bucket }) {
                                                         <p className='break-words text-xs'><b>Name : </b>{file.fileName}</p>
                                                         <p className='text-xs'><b>Size : </b>{convertBytes(file.fileSize)}</p>
                                                         <p className='text-xs'><b>Last Modified : </b>{convertDate(file.creationDate)}</p>
-
+                                                        
                                                         <dialog id="my_modal_2" className="modal">
                                                             <div className="modal-box">
                                                                 {(link.includes("jpg") || link.includes("png")) && (
@@ -406,6 +407,16 @@ function Information({ bucket }) {
                                                             </form>
                                                         </dialog>
                                                     </div>
+                                                    {file.tags.length > 0 && (
+                                                        <div className="tags flex items-center gap-2">
+                                                            <strong className='text-sm'>Tags:</strong>
+                                                            <ul className="flex justify-center items-center gap-3">
+                                                                {file.tags.map((tag, index) => (
+                                                                <li className='bg-gray-800 px-2 py-1 rounded-md text-xs font-bold text-white' key={index}>{tag}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    )}
                                                     <div className='flex flex-row flex-wrap gap-3 mt-2 md:mt-0 sm:ml-2 w-full justify-center sm:justify-end'>
                                                         <button onClick={() => openPreview(file.url)} className='btn-sm bg-purple-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-purple-800 text-xs'>PREVIEW</button>
                                                         <button onClick={() => downloadFile(file.fileName)} className='btn-sm bg-blue-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-blue-800 text-xs'>Download</button>

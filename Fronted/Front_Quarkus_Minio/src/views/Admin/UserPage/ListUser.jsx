@@ -152,13 +152,13 @@ function ListUser() {
                                 <>
                                     {searchTerm.map((u) => (
                                         <tr key={u.id} className="bg-white text-gray-700 border-b-2 border-gray-300 text-center">
-                                            <td className="py-4 px-6">{u.username}</td>
-                                            <td className="py-4 px-6">{u.birthdate}</td>
-                                            <td className="py-4 px-6">{u.roles}</td>
-                                            <td className="py-4 px-6">{convertDate(u.created_at)}</td>
-                                            <td className="py-4 px-6">{convertDate(u.updated_at)}</td> 
-                                            <td><Link to={`/dashboard/edituser/${u.id}`} className="py-1 px-2 bg-blue-500 cursor-pointer text-white font-bold hover:bg-blue-800 w-28 m-1">EDIT</Link></td>
-                                            <td><button onClick={() => deleteUser(u.id)} className="py-1 px-2 bg-red-500 cursor-pointer text-white font-bold hover:bg-red-800 w-28 m-1">DELETE</button></td>
+                                            <td className="py-4 px-6 text-sm">{u.username}</td>
+                                            <td className="py-4 px-6 text-sm">{u.birthdate}</td>
+                                            <td className="py-4 px-6 text-sm">{u.roles}</td>
+                                            <td className="py-4 px-6 text-sm">{convertDate(u.created_at)}</td>
+                                            <td className="py-4 px-6 text-sm">{convertDate(u.updated_at)}</td> 
+                                            <td><Link to={`/dashboard/edituser/${u.id}`} className="py-1 px-2 bg-blue-500 cursor-pointer text-white font-bold hover:bg-blue-800 w-28 m-1 text-sm rounded-md">EDIT</Link></td>
+                                            <td><button onClick={() => deleteUser(u.id)} className="py-1 px-2 bg-red-500 cursor-pointer text-white font-bold hover:bg-red-800 w-28 m-1 text-sm rounded-md">DELETE</button></td>
                                         </tr>
                                     ))}
                                 </>

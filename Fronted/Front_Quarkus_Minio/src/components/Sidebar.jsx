@@ -15,7 +15,7 @@ function Sidebar() {
     return (
         <div className="z-40 shadow-2xl relative"> 
             <p onClick={() => setFullWidth((prev) => !prev)}  className="absolute left-0 text-3xl cursor-pointer hover:text-red-500 bg-white p-2">&#10132;</p>
-            <div className={` lg:flex flex-col items-center h-[120vh] overflow-y-auto bg-black text-black overflow-hidden transition-all relative ${fullWidth ? 'w-[250px]' : 'w-[0]'}`}> 
+            <div className={` lg:flex flex-col items-center h-[120vh] overflow-y-auto bg-white text-black overflow-hidden transition-all relative ${fullWidth ? 'w-[250px]' : 'w-[0]'}`}> 
                 <div className={`w-full p-4 sm:p-5 mt-10 bg-gradient-to-bl ${path.includes("products")? 'from-orange-800' : 'from-white'} ${path.includes("products")? 'from-orange-700' : 'to-white'}`}>
                     <p onClick={() => setFullWidth((prev) => !prev)} 
                         className={`absolute text-gray-500 cursor-pointer hover:text-orange-500  ${fullWidth ? 'rotate-180 right-2 top-1 text-3xl ' : 'right-7 top-1 text-2xl'}`} >&#10132;</p>
