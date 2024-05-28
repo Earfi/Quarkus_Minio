@@ -155,7 +155,7 @@ public class MinioResource {
 
     @POST
     @Path("/tags")
-//    @RolesAllowed({"User","Admin"})
+    @RolesAllowed({"User","Admin"})
     public Response addMoreTags(@MultipartForm tagsFile file) throws JsonProcessingException {
 //        [{"key":"shirt color","value":"blue"},{"key":"theme","value":"nature"}]
         ObjectMapper objectMapper = new ObjectMapper();

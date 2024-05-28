@@ -23,15 +23,6 @@ public class MinioTagsService {
     @Inject
     MinioClient minioClient;
 
-//    public void addMoreTags(String bucketName, String objectName, Map<String, String> tags) throws MinioException, IOException, NoSuchAlgorithmException, InvalidKeyException {
-//        Tags objectTags = Tags.newObjectTags(tags);
-//        minioClient.setObjectTags(
-//                SetObjectTagsArgs.builder()
-//                        .bucket(bucketName)
-//                        .object(objectName)
-//                        .tags(objectTags)
-//                        .build());
-//    }
     public void addMoreTags(String bucketName, String objectName, Map<String, String> newTags) {
 //        [{"key":"shirt color","value":"blue"},{"key":"theme","value":"nature"}]
         try {

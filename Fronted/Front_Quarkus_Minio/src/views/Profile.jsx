@@ -278,7 +278,7 @@ function Profile() {
                                 type="file"
                                 ref={inputRef}
                                 onChange={handleImageChange}
-                                className="file-input file-input-bordered my-5 text-xs bg-gray-100 border w-24 mx-auto"
+                                className="file-input file-input-bordered file-input-xs bg-gray-100 border mx-auto"
                                 />
                             <button
                                 onClick={() => updateProfile(image, info.id)}
@@ -386,7 +386,7 @@ function Profile() {
                                 </label>
                                 <input
                                     type="text"
-                                    className="text-md px-2 border rounded-md max-w-28"
+                                    className="text-md px-2 border rounded-md"
                                     value={formattedUserInfo.phoneNumber}
                                 />
                             </div>
@@ -396,7 +396,7 @@ function Profile() {
                                 </label>
                                 <input
                                     type="text"
-                                    className="text-md px-2 border rounded-md max-w-96"
+                                    className="text-md px-2 border rounded-md min-w-fit"
                                     value={formattedUserInfo.email}
                                 />
                             </div>

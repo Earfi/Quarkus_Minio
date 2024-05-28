@@ -31,18 +31,16 @@ function Dashboard() {
 
   return (
     <div> 
-      <div className="w-full h-[100vh] flex min-w-[1300px] bg-slate-100">
-        {loading ? (
-          <div className="flex justify-center items-center h-full w-full">
+      <div className="w-full h-screen min-w-[1300px] bg-slate-100">
+        {/* {loading ? (
+          <div className="h-full w-full">
             <span className="loading loading-bars loading-lg"></span>
           </div>
-        ) : (
+        ) : ( */}
           <>
-            <div className="w-[15%] h-full shadow-2xl">
-              <Sidebar />
-            </div>
+            <Sidebar />
 
-            <div className="w-[85%] h-[100vh] overflow-auto">
+            <div className="h-[100vh] overflow-auto w-screen">
               <div className="w-full h-full">
                 <div className="w-full shadow-xl h-44 flex justify-center items-center gap-5">
                   <div className="relative w-[20%] h-[80%] bg-gradient-to-r from-blue-500 to-blue-800 rounded-2xl p-2 text-white flex flex-col justify-center">
@@ -137,7 +135,7 @@ function Dashboard() {
               </div>
             </div>
           </>
-        )}
+        {/* )} */}
       </div> 
     </div>
   );
