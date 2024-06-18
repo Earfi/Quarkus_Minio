@@ -134,13 +134,19 @@ function InsertCompany() {
                 <h1 className="text-3xl font-bold text-red-700 text-center">Company</h1>
                 <div className="my-2">
                     <h1><b>Select Bucket to Collect Files!!</b></h1>
-                    <select onChange={(e) => setBucket(e.target.value)} className='border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white my-2' required>
+                    <select
+                        onChange={(e) => setBucket(e.target.value)}
+                        className="border border-gray-500 cursor-pointer hover:bg-gray-500 hover:text-white p-2 rounded-lg w-full text-xs"
+                        required
+                    >
                         {allBuckets.length === 0 && (
-                            <option className='m-5 bg-red-500 text-white font-mono border-l-red-500 border p-2'>No Bucket !!!</option>
+                            <option className="bg-red-500 text-white font-mono p-2">No Bucket !!!</option>
                         )}
-                        <option className="bg-black text-white hover:cursor-none">Please Select</option>
+                        <option className="bg-black text-white text-xs">Please Select</option>
                         {allBuckets.map((post) => (
-                            <option className='m-5 text-black bg-white hover:bg-red-400 hover:text-white hover:cursor-pointer' key={post} value={post}>{post}</option>
+                            <option key={post} value={post} className="text-black text-xs bg-white hover:bg-red-400 hover:text-white">
+                                {post}
+                            </option>
                         ))}
                     </select>
                 </div>

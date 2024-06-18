@@ -175,10 +175,7 @@ function Profile() {
         }  
 
         const res = await fetch(`http://localhost:8080/user/${id}/profile-image`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ` + localStorage.getItem("token"),
-            },
+            method: "POST", 
             body: formData,
         });
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AddBucket from './AddBucket';
 import Swal from 'sweetalert2';
+import Footer from '../../Footer';
 
 function ListBuckets() {
     const [buckets, setBuckets] = useState([]);
@@ -82,45 +83,57 @@ function ListBuckets() {
     };
 
     return (
-        <div className='mx-auto bg-white w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-1 py-5 mt-0 min-h-screen border border-black shadow-xl'>
-            <div className={`${token == null ? 'hidden' : 'block'}`}>
-                <AddBucket />
-            </div>
-            <h1 className='text-xl font-bold border-b-2 border-black pb-2 mt-3'>ALL : <span className="text-purple-600">Bucket &#9778;</span></h1>
-            <div className='flex flex-col my-2 bg-white w-full '>
-                <div className="flex justify-between my-5 mx-10 font-bold text-lg bg-black text-white py-2 px-5">
+        <div className='container mx-auto bg-white w-full sm:w-[450px] md:w-[550px] lg:w-[650px] xl:w-[800px] px-4 py-5 mt-10 min-h-screen border border-gray-300 shadow-lg rounded-lg'>
+            {token && (
+                <div className='mb-4'>
+                    <AddBucket />
+                </div>
+            )}
+            <h1 className='text-2xl font-bold border-b-2 border-gray-300 pb-3 mb-5 text-center'>
+                ALL <span className="text-purple-600">Bucket &#9778;</span>
+            </h1>
+            <div className='flex flex-col bg-white w-full'>
+                <div className="flex justify-between my-5 mx-4 font-semibold text-lg bg-gray-800 text-white py-3 px-5 rounded">
                     <h1 className="w-[200px] text-sm">Bucket Name</h1>
-                    <h1 className="hidden lg:block w-[300px] text-sm">Creation Date</h1>
+                    {/* <h1 className="hidden lg:block w-[300px] text-sm">Creation Date</h1> */}
                 </div>
                 <div className="flex flex-col justify-between pb-5">
                     {buckets.length > 0 ? (
-                        <>
-                            {buckets.map((bucket) => (
-                                <div key={bucket} className="flex flex-col" >
-                                    <div className="border-gray-300 p-2">
-                                        <Link to={`/file/${bucket}`}>
-                                            <div className="flex flex-col lg:flex-row items-start lg:justify-between lg:items-center my-2 mx-10 font-mono bg-gray-100 py-2 px-5 border-b-2 cursor-pointer hover:bg-gray-200 text-md h-fit">
-                                                <p className="w-[100px] md:w-[200px] text-sm">&#9778; <b className="font-extrabold">{bucket}</b></p>
-                                                {/* <p className="w-[300px] text-sm">{convertDate(bucket.creationDate)}</p> */}
-                                            </div>
-                                        </Link>
-                                        <div className={`flex gap-5 justify-end my-2 mx-10 ${token == null ? 'hidden' : 'block'}`}>
-                                            <button onClick={() => deleteBucket(bucket)} className="bg-red-500 w-[100px] text-white px-2 py-1 hover:bg-red-800 text-xs">Delete</button>
+                        buckets.map((bucket, index) => (
+                            <div key={index} className="flex flex-col mb-4">
+                                <div className="border-b border-gray-200 p-2">
+                                    <Link to={`/file/${bucket}`}>
+                                        <div className="flex flex-col lg:flex-row items-start lg:justify-between lg:items-center my-2 mx-4 font-mono bg-gray-100 py-3 px-5 rounded-lg hover:bg-gray-200">
+                                            <p className="w-full lg:w-[200px] text-sm">
+                                                &#9778; <span className="font-bold">{bucket}</span>
+                                            </p>
+                                            {/* <p className="hidden lg:block w-[300px] text-sm">{convertDate(bucket.creationDate)}</p> */}
                                         </div>
-                                    </div>
+                                    </Link>
+                                    {token && (
+                                        <div className="flex gap-3 justify-end my-2 mx-4">
+                                            <button 
+                                                onClick={() => deleteBucket(bucket)} 
+                                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 text-xs"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
-                            ))}
-                        </>
+                            </div>
+                        ))
                     ) : (
-                        <>
-                            <p className='m-5 bg-red-500 text-white font-mono border-l-red-500 border p-2'>No Buckets!!!</p>
-                        </>
+                        <p className='m-5 bg-red-500 text-white font-mono border-l-4 border-red-700 p-3 rounded'>
+                            No Buckets!!!
+                        </p>
                     )}
                 </div>
             </div>
+            <Footer/>
         </div>
     );
-}
+};
 
 export default ListBuckets;
 

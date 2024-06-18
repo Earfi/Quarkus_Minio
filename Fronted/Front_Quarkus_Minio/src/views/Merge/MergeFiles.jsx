@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import * as pdfjs from 'pdfjs-dist';
+import Footer from '../../components/Footer';
 
 const ITEM_TYPE = 'FILE';
 
@@ -295,7 +296,9 @@ const MergeFiles = () => {
             </div>
           </div>
         )}
+
       </div>
+      <Footer/>
     </DndProvider>
   );
 };

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; 
+import Footer from '../../Footer';
 
 function Information({ bucket }) {
     const [token, setToken] = useState(null);
@@ -23,7 +24,7 @@ function Information({ bucket }) {
         const getFileFromBucket = async () => {
             const res = await fetch(`http://localhost:8080/minio/file/all/${bucket}`);
             const data = await res.json();
-            setFiles(data);
+            setFiles(data); 
         };
 
         getFileFromBucket();
@@ -79,8 +80,7 @@ function Information({ bucket }) {
             if (!folders[folderPath]) {
                 folders[folderPath] = [];
             }
-            folders[folderPath].push(file);
-            // console.log(folders);
+            folders[folderPath].push(file); 
             return folders;
         }, {});
     };
@@ -817,6 +817,7 @@ function Information({ bucket }) {
                     </div>
                 ))}
             </div>
+            <Footer/>
         </>
     );
 }

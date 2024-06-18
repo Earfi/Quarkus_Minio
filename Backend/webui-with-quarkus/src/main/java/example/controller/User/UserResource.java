@@ -138,7 +138,7 @@ public class UserResource {
 
     @GET
     @Path("/{userId}/profile-image")
-    @RolesAllowed({"Admin","User"})
+    @PermitAll
     @Produces("image/jpeg")
     public Response getProfileImage(@PathParam("userId") Long userId) {
         UserDto user = service.getUserById(userId);

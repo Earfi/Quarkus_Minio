@@ -50,7 +50,7 @@ function InsertLetter() {
   }, []);
 
   const handleGeneratePdf = async () => {
-    try { 
+    // try { 
       if (bucket == "" || bucket == "Please Selete") {
         Swal.fire({
             title: "Please Selete Bucket!!",
@@ -61,43 +61,45 @@ function InsertLetter() {
       // }else if(senderAddress.length == 0 || date.length == 0 || recipientName.length == 0 || recipientAddress.length == 0 || salutation.length == 0 || content1.length == 0 || content2.length == 0 || content3.length == 0 || closing.length == 0 || signature.length == 0){
         // alert("senderAddress")
       
-      }else{
-        const dataToSend = {
-          senderAddress: senderAddress,
-          date: date,
-          recipientName: recipientName,
-          recipientAddress: recipientAddress,
-          salutation: salutation,
-          content1: content1,
-          content2: content2,
-          content3: content3,
-          closing: closing,
-          signature: signature,
-        };
-
-        const response = await fetch(
-          `http://localhost:8080/api/v1/report/generate/${fileName}/${bucket}/3`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dataToSend),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to generate PDF");
-        }
-
-        const responseData = await response.blob();
-        saveAs(responseData, `${fileName}` + ".pdf");
       }
+      
+    const dataToSend = {
+        senderAddress: senderAddress,
+        date: date,
+        recipientName: recipientName,
+        recipientAddress: recipientAddress,
+        salutation: salutation,
+        content1: content1,
+        content2: content2,
+        content3: content3,
+        closing: closing,
+        signature: signature,
+    };
+
+    const response = await fetch(
+        `http://localhost:8080/api/v1/report/generate/${fileName}/${bucket}/3`,
+        {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
+        }
+    );
+
+    console.log(response);
+
+    // if (!response.ok) {
+    //   throw new Error("Failed to generate PDF");
+    // }
+
+    const responseData = await response.blob();
+    saveAs(responseData, `${fileName}` + ".pdf");
 
       
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    }
+    // } catch (error) {
+    //   console.error("Error generating PDF:", error);
+    // }
   };
   
   return (

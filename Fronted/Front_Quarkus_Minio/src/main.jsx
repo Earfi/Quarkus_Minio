@@ -109,7 +109,7 @@ const router = createBrowserRouter([
     ( 
       <>
         <Navbar/>
-        <Jasper />
+        <JasperJSON />
       </>
     ),  
   },

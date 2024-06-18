@@ -33,10 +33,7 @@ function Navbar() {
         const res = await fetch(
           `http://localhost:8080/user/${id}/profile-image`,
           {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ` + localStorage.getItem("token"),
-            },
+            method: "GET", 
           }
         ); 
         if (res.ok) {
@@ -154,8 +151,8 @@ function Navbar() {
           <Link to="/mergefiles" className={`${path.includes("mergefiles") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
             PDF
           </Link>
-          <Link to="/about" className={`${path.includes("about") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
-            ABOUT
+          <Link to="/announcement" className={`${path.includes("announcement") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
+            ANNOUNCEMENTS
           </Link> 
         </div>
         <div className="flex justify-center gap-2 items-center">
@@ -167,7 +164,7 @@ function Navbar() {
             <input
               onClick={() => setSearch(true)}
               type="text"
-              className="hidden sm:block p-1 rounded-md text-black mx-5 w-36 sm:w-fit  text-sm"
+              className="hidden sm:block p-1 rounded-md text-black mx-5 w-36 sm:w-fit text-xs md:text-xl  "
               name="search"
               placeholder="Search Bucket"
               value={searchValue}
@@ -178,7 +175,7 @@ function Navbar() {
             <h1
               className={`${
                 token == null ? "block" : "hidden"
-              } hover:text-orange-400 text-xs mx-5`}
+              } hover:text-orange-400 text-xs md:text-xl mx-5`}
             >
               LOG IN
             </h1>
@@ -238,8 +235,8 @@ function Navbar() {
             <Link to="/jasper" className="hover:text-orange-400 border-b-2">
               JASPER &#8464;
             </Link>
-            <Link to="/about" className="hover:text-orange-400 border-b-2">
-              ABOUT &#8471;
+            <Link to="/announcement" className="hover:text-orange-400 border-b-2">
+              ANNOUNCEMENTS
             </Link>
             <Link to="/service" className="hover:text-orange-400 border-b-2">
               SERVICE &#9743;
