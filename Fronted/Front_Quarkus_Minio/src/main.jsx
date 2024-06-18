@@ -18,7 +18,8 @@ import JasperJSON from './views/Jasper/JasperJSON.jsx';
 import Login from './views/Login.jsx';
 import Products from './views/Product/Products.jsx';
 import ProductCart from './views/Product/ProductCart.jsx';
-import { useNavigate } from 'react-router-dom';
+
+import Mergefiles from './views/Merge/MergeFiles.jsx';
 
 import Bucket from './views/Minio/Bucket.jsx';
 import FileBucket from './views/Minio/FileBucket.jsx';
@@ -28,6 +29,7 @@ import Dashboard from './views/Admin/Dashboard.jsx';
 import ListUser from './views/Admin/UserPage/ListUser.jsx';
 import EditUser from './views/Admin/UserPage/EditUser.jsx';
 import SignUp from './views/SignUp.jsx';
+
 import Navbar from './components/Navbar.jsx';
 import Announcement from './views/Announcement.jsx';
 import ProductCatagory from './views/Product/ProductCatagory.jsx';
@@ -140,6 +142,16 @@ const router = createBrowserRouter([
         <FilePage />
       </>
     ),  
+  },
+  {
+    path: "/mergefiles",
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <Mergefiles/>
+      </>
+    ), 
   },
   {
     path: "/about",

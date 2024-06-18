@@ -1,0 +1,60 @@
+{
+    "Lat-Phrao": [
+        {
+            "fileName": "Lat-Phrao/bat_sup.jpg",
+            "fileSize": "1842308",
+            "creationDate": "2024-04-30T04:11:55.904Z",
+            "url": "http://minio-dev:9000/document/Lat-Phrao/bat_sup.j…3a61b455491b87af438d17e6d15238bf9d5a54b1f5b8ab726"
+        },
+        {
+            "fileName": "Lat-Phrao/egg.jpg",
+            "fileSize": "2549360",
+            "creationDate": "2024-04-30T04:03:32.353Z",
+            "url": "http://minio-dev:9000/document/Lat-Phrao/egg.jpg?X…67ad5f5d499b6b00389d253853d07c63f13f238ab9f285d71"
+        },
+        {
+            "fileName": "Lat-Phrao/sky.jpg",
+            "fileSize": "4683746",
+            "creationDate": "2024-04-30T04:10:59.222Z",
+            "url": "http://minio-dev:9000/document/Lat-Phrao/sky.jpg?X…d3e6b29958f78aceeb7fa4cbee1660a76994a79c5a2e92794"
+        }
+    ],
+    "soi-137": [
+        {
+            "fileName": "Lat-Phrao/soi-137/650R15S1000.jpg",
+            "fileSize": "455999",
+            "creationDate": "2024-05-21T08:09:19.376Z",
+            "url": "http://minio-dev:9000/document/Lat-Phrao/soi-137/6…244f90512b78ce9d745e4a97fe67ecbe8f7d56524eec94710"
+        },
+        {
+            "fileName": "Lat-Phrao/soi-137/bat_sup.jpg",
+            "fileSize": "1842308",
+            "creationDate": "2024-04-30T04:46:33.450Z",
+            "url": "http://minio-dev:9000/document/Lat-Phrao/soi-137/b…5937d231b8c5d1353b7b3000278c163f337f0a6fd95b06364"
+        },
+        {"soi-138": [
+            {
+                "fileName": "Lat-Phrao/soi-138/bat_sup.jpg",
+                "fileSize": "1842308",
+                "creationDate": "2024-04-30T04:25:14.503Z",
+                "url": "http://minio-dev:9000/document/Lat-Phrao/soi-138/b…82876f17178112214f83ef44832fe4cacafefb5357511a1e3"
+            }
+        ]},
+        {"soi-139": [
+            {
+                "fileName": "Lat-Phrao/soi-139/bat_sup.jpg",
+                "fileSize": "1842308",
+                "creationDate": "2024-04-30T05:20:24.978Z",
+                "url": "http://minio-dev:9000/document/Lat-Phrao/soi-139/b…939d75cee6aba6996aca92a4f9da4b9b7e302dd6da8d4ff90"
+            }
+        ]},
+        {"soi-140": [
+            {
+                "fileName": "Lat-Phrao/soi-140/eiei.jpg",
+                "fileSize": "4244775",
+                "creationDate": "2024-04-30T06:16:58.072Z",
+                "url": "http://minio-dev:9000/document/Lat-Phrao/soi-140/e…72e1d303f4ec3e37464ede99d2d9b0a9c07c7fb811b58259a"
+            }
+        ]}
+    ]
+}

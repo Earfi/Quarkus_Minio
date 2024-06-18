@@ -82,12 +82,12 @@ function Login() {
             <div className="md:bg-gray-500 mt-[-80px] w-[90%] h-[80%] grid justify-center items-center rounded-3xl">
                 <div className="bg-white w-[100%] h-fit flex justify-center items-center rounded-2xl overflow-hidden border border-black shadow-2xl">
                     <div className="relative h-full hidden lg:block overflow-hidden">
-                        <div className="h-[500px] w-[500px] bg-[url('../../login//crash.jpg')] bg-cover brightness-75  "> 
+                        <div className="h-[500px] w-[500px] bg-[url('../../login//bg.jpg')] bg-cover brightness-75  "> 
                             <div className="w-full"></div>
                         </div>
                         <div className="absolute top-[20%] h-full w-full text-white text-2xl font-medium text-center shadow-xl">
-                        <p>Welcome To My first Project</p>
-                        <p>Try Login</p>
+                        {/* <p>Welcome To Quarkus Minio Jasper React Project</p> */}
+                        {/* <p>Try Login</p> */}
                         </div>
                     </div>
                 

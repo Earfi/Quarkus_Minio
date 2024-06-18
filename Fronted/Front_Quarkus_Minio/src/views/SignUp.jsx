@@ -139,10 +139,10 @@ const SignUp = () => {
                     <Link to="/login" className='text-red cursor-pointer bg-fuchsia-500 rounded-md font-medium text-white hover:bg-fuchsia-400 hover:text-red-800 border p-2'>Sign In</Link>
                     <h2 className="text-xl font-bold my-4">Registration Form</h2>
                     <form onSubmit={handleSubmit} className='mt-5'>
-                        <div onClick={() => handleImageClick} className='w-full flex flex-col justify-center'> 
+                        {/* <div onClick={() => handleImageClick} className='w-full flex flex-col justify-center'> 
                             {profile ? <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={URL.createObjectURL(profile)} alt="" />  : <img className="w-[200px] h-[200px] object-cover mx-auto border-4 border-black rounded-full" src={profile|| "../../..//profile-icon.png"} alt="" /> }
                             <input type="file" ref={inputRef} onChange={handleImageChange} className="w-60 mx-auto file-input file-input-bordered my-5 text-xs bg-gray-100 border "/>
-                        </div>
+                        </div> */}
 
                         {/* ------------------------------------------------- */}
                         {/* ------------------------------------------------- */}

@@ -141,18 +141,18 @@ function Navbar() {
         >
           Minio With Quarkus
         </Link>
-        <div className="hidden xl:flex p-5 text-xs sm:text-sm md:text-xl gap-7 cursor-pointer items-center">
+        <div className="hidden lg:flex p-5 text-xs md:text-xl gap-7 cursor-pointer items-center">
           <Link to="/" className="hover:text-orange-400">
             HOME
           </Link>
           <Link to="/bucket" className={`${path.includes("bucket") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
-            BUCKET
+            MINIO
           </Link>
           <Link to="/jasper" className={`${path.includes("jasper") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
             JASPER
           </Link>
-          <Link to="/announcement" className={`${path.includes("announcement") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
-            ANNOUNCEMENTS
+          <Link to="/mergefiles" className={`${path.includes("mergefiles") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
+            PDF
           </Link>
           <Link to="/about" className={`${path.includes("about") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
             ABOUT
@@ -167,7 +167,7 @@ function Navbar() {
             <input
               onClick={() => setSearch(true)}
               type="text"
-              className="hidden sm:block p-1 rounded-md text-black mx-5 w-36 sm:w-fit"
+              className="hidden sm:block p-1 rounded-md text-black mx-5 w-36 sm:w-fit  text-sm"
               name="search"
               placeholder="Search Bucket"
               value={searchValue}
@@ -178,7 +178,7 @@ function Navbar() {
             <h1
               className={`${
                 token == null ? "block" : "hidden"
-              } hover:text-orange-400 text-xl sm:text-sm mx-5`}
+              } hover:text-orange-400 text-xs mx-5`}
             >
               LOG IN
             </h1>
@@ -188,7 +188,7 @@ function Navbar() {
               <img
                 className={`${
                   token == null ? "hidden" : "block"
-                } hover:text-orange-400 text-xs sm:text-sm mr-10 h-12 w-12 object-cover bg-white rounded-full`}
+                } hover:text-orange-400 text-xs mr-10 h-12 w-12 object-cover bg-white rounded-full`}
                 src="../../..//profile-icon.png"
                 alt=""
               />
@@ -198,7 +198,7 @@ function Navbar() {
               <img
                 className={`${
                   token == null ? "hidden" : "block"
-                } hover:text-orange-400 text-xs sm:text-sm mr-10 h-12 w-12 object-cover bg-white rounded-full`}
+                } hover:text-orange-400 text-xs mr-10 h-12 w-12 object-cover bg-white rounded-full`}
                 src={profile}
                 alt=""
               />
@@ -206,7 +206,7 @@ function Navbar() {
           )}
           <h1
             onClick={() => setOpenBar(!openBar)}
-            className="block xl:hidden text-4xl cursor-pointer hover:text-red-500 mr-5"
+            className="block lg:hidden text-4xl cursor-pointer hover:text-red-500 mr-5"
           >
             &#9776;
           </h1>
@@ -233,7 +233,7 @@ function Navbar() {
               HOME
             </Link>
             <Link to="/bucket" className="hover:text-orange-400 border-b-2">
-              BUCKET &#9778;
+              MINIO &#9778;
             </Link>
             <Link to="/jasper" className="hover:text-orange-400 border-b-2">
               JASPER &#8464;
@@ -244,6 +244,9 @@ function Navbar() {
             <Link to="/service" className="hover:text-orange-400 border-b-2">
               SERVICE &#9743;
             </Link>
+            <Link to="/mergefiles" className="hover:text-orange-400 border-b-2">
+              PDF
+            </Link>
             <Link to="/products" className="hover:text-orange-400 border-b-2">
               PRODUCTS
             </Link>
@@ -252,7 +255,7 @@ function Navbar() {
               onClick={logout}
               className={`${
                 token == null ? "hidden" : "block"
-              } absolute bottom-10 hover:text-orange-400 border-b-2`}
+              } absolute text-xs bottom-10 hover:text-orange-400 border-b-2`}
             >
               LOGOUT
             </Link>

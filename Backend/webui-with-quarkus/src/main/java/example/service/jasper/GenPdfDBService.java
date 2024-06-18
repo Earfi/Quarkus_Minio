@@ -3,6 +3,7 @@ package example.service.jasper;
 import example.model.Address;
 import example.repository.AddressRepository;
 import example.service.minio.MinioFileService;
+import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Swal from 'sweetalert2'
 
 function InsertAddress() { 
     const [firstName,setFirstName] = useState(null);
@@ -28,8 +29,16 @@ function InsertAddress() {
         console.log(res); 
      
         if (res.ok) {
-            alert("Data added successfully!");
-            window.location.reload();
+            Swal.fire({
+                title: "Data added successfully",
+                text: "Please Check your Data!!!",
+                icon: "success",
+                showConfirmButton: false, 
+                timer: 1000
+              }); 
+              setTimeout(() => {
+                window.location.reload()
+            }, 1000);
         } else {
             alert("Failed to add data!");
             console.error("Failed to add data");

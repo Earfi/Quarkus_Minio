@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import jakarta.ws.rs.Path;
 
 @Path("/jasper")
 public class GenPdfDBResource {

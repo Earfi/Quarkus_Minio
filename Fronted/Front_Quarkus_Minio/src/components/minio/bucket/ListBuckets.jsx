@@ -97,7 +97,7 @@ function ListBuckets() {
                         <>
                             {buckets.map((bucket) => (
                                 <div key={bucket} className="flex flex-col" >
-                                    <div className="border-b-4 border-gray-300 p-2">
+                                    <div className="border-gray-300 p-2">
                                         <Link to={`/file/${bucket}`}>
                                             <div className="flex flex-col lg:flex-row items-start lg:justify-between lg:items-center my-2 mx-10 font-mono bg-gray-100 py-2 px-5 border-b-2 cursor-pointer hover:bg-gray-200 text-md h-fit">
                                                 <p className="w-[100px] md:w-[200px] text-sm">&#9778; <b className="font-extrabold">{bucket}</b></p>

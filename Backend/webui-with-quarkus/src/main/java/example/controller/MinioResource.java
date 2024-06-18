@@ -18,11 +18,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+import jakarta.ws.rs.Path;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +89,7 @@ public class MinioResource {
 
     @POST
     @Path("/file/upload")
-//    @RolesAllowed({"User","Admin"})
+    @RolesAllowed({"User","Admin"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(@MultipartForm FileUpload file) throws Exception {
 //        [{"key":"shirt color","value":"blue"},{"key":"theme","value":"nature"}]

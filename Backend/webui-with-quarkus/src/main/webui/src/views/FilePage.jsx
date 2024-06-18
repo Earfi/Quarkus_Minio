@@ -1,22 +1,28 @@
-import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar"; 
-import UploadFile from "../components/file/UploadFile";
-import ListFile from "../components/file/ListFile";
+import UploadFile from "../components/minio/file/UploadFile";
+import ListFile from "../components/minio/file/ListFile";
+import { useEffect, useState } from "react";
 
 function FilePage() { 
+    const [token,setToken] = useState(null);
+
+    useEffect(() => { 
+        setToken(localStorage.getItem("token"))
+    }, []);
  
     return (
-        <div className="w-full overflow-hidden mb-20"> 
-            <Navbar/>
-            <div className="flex flex-row pt-20">
+        <div className="w-full overflow-hidden min-h-[90vh]">  
+            <div className="flex flex-row ">
                 <div className="fixed">
                     <Sidebar/>  
                 </div>
-                <div className="ml-[80px] flex flex-col w-[100%]"> 
+                <div className="flex flex-col w-[100%] mt-16"> 
                     <div className="mx-auto">
-                        <UploadFile/> 
-                        <ListFile bucket={"1testbacket"} />
-                        <ListFile bucket={"2testbucket"} />
+                        <div className={`${token == null ? 'hidden' : 'block'}`}>
+                            <UploadFile/>  
+                        </div>
+                        <ListFile bucket={"pichaya"} />
+                        <ListFile bucket={"student"} />
                     </div>
                 </div>
             </div>

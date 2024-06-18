@@ -4,9 +4,11 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  theme: {
-    extend: {},
+  extend: {
+    backgroundImage: {
+      'login': "url('./public/login//crash.jpg')", 
+    }
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }
 

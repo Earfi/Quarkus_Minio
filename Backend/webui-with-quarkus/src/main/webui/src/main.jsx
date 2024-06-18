@@ -7,61 +7,285 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import Bucket from './views/Bucket.jsx';
 import ObjectBrowse from './views/ObjectBrowse.jsx';
-import FileBucket from './views/FileBucket.jsx';
 import FilePage from './views/FilePage.jsx';
 import About from './views/About.jsx';
 import Service from './views/Service.jsx';
 import Profile from './views/Profile.jsx';
-import Jasper from './views/Jasper.jsx';
+import Jasper from './views/Jasper/Jasper.jsx';
 import JasperDB from './views/Jasper/JasperDB.jsx';
 import JasperJSON from './views/Jasper/JasperJSON.jsx';
+import Login from './views/Login.jsx';
+import Products from './views/Product/Products.jsx';
+import ProductCart from './views/Product/ProductCart.jsx';
+import { useNavigate } from 'react-router-dom';
+
+import Bucket from './views/Minio/Bucket.jsx';
+import FileBucket from './views/Minio/FileBucket.jsx';
+
+import Mode from './views/Admin/Mode.jsx';
+import Dashboard from './views/Admin/Dashboard.jsx';
+import ListUser from './views/Admin/UserPage/ListUser.jsx';
+import EditUser from './views/Admin/UserPage/EditUser.jsx';
+import SignUp from './views/SignUp.jsx';
+import Navbar from './components/Navbar.jsx';
+import Announcement from './views/Announcement.jsx';
+import ProductCatagory from './views/Product/ProductCatagory.jsx';
+import ProductByCatagory from './views/Product/ProductByCatagory.jsx';
+import ProductDetail from './views/Product/ProductDetail.jsx';
+import ProductService from './views/Product/ProductService.jsx';
+import NavbarP from './components/product/Navbar.jsx';
+
+import ProductProfile from './views/Product/Profile/ProductProfile.jsx';
+import ProductProfileCategory from './views/Product/Profile/Page/Category.jsx';
+// const navigate = useNavigate();
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: 
+      ( 
+        <>
+          <Navbar/>
+          <App />
+        </>
+      ),
+  },
+  {
+    path: "/login",
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <Login />
+      </>
+    ),
+  },
+  {
+    path: "/signUp",
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <SignUp />
+      </>
+    ), 
   },
   {
     path: "/bucket",
-    element: <Bucket/>,
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <Bucket />
+      </>
+    ), 
   },
   {
     path: "/file/:bucket",
-    element: <FileBucket/>,
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <FileBucket />
+      </>
+    ),  
+  },
+  {
+    path: "/announcement",
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <Announcement />
+      </>
+    ),  
   },
   {
     path: "/jasper",
-    element: <Jasper/>,
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <Jasper />
+      </>
+    ),  
   },
   {
     path: "/jasper/db",
-    element: <JasperDB/>,
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <JasperDB />
+      </>
+    ),  
   },
   {
     path: "/jasper/json",
-    element: <JasperJSON/>,
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <JasperJSON />
+      </>
+    ), 
   },
   {
     path: "/file",
-    element: <FilePage/>,
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <FilePage />
+      </>
+    ),  
   },
   {
     path: "/about",
-    element: <About/>,
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <About />
+      </>
+    ), 
   },
   {
     path: "/service",
-    element: <Service/>,
+    element:  
+    ( 
+      <>
+        <Navbar/>
+        <Service />
+      </>
+    ), 
   },
   {
     path: "/profile",
-    element: <Profile/>,
+    element: 
+    ( 
+      <>
+        <Navbar/>
+        <Profile />
+      </>
+    ), 
   },
   {
     path: "/obj-browse",
-    element: <ObjectBrowse/>,
+    element:
+    ( 
+      <>
+        <Navbar/>
+        <ObjectBrowse />
+      </>
+    ), 
+  },
+
+
+  // 
+  // PRODUCT 
+  // 
+
+  {
+    path: "/products",
+    element: 
+    ( 
+      <>
+        <NavbarP/>
+        <Products />
+      </>
+    ), 
+  },
+  {
+    path: "/products/profile",
+    element: 
+    ( 
+      <>
+        <NavbarP/>
+        <ProductProfile />
+      </>
+    ), 
+  },
+  {
+    path: "/products/profile/category",
+    element: 
+    ( 
+      <>
+        <NavbarP/>
+        <ProductProfileCategory />
+      </>
+    ), 
+  },
+  {
+    path: "/products/detail",
+    element: 
+    ( 
+      <>
+        <NavbarP/>
+        <ProductDetail />
+      </>
+    ), 
+  },
+  {
+    path: "/products/catagoryPage",
+    element: 
+    ( 
+      <>
+        <NavbarP/>
+        <ProductCatagory />
+      </>
+    ), 
+  },
+  {
+    path: "/products/byCatagory",
+    element: 
+    ( 
+      <>
+        <NavbarP/>
+        <ProductByCatagory />
+      </>
+    ), 
+  },
+  {
+    path: "/products/cart",
+    element: 
+    ( 
+      <>
+        <NavbarP/>
+        <ProductCart />
+      </>
+    ), 
+  },
+  {
+    path: "/products/service",
+    element: 
+    ( 
+      <>
+        <NavbarP/>
+        <ProductService />
+      </>
+    ), 
+  },
+
+  // Admin
+
+  
+  {
+    path: "/mode",
+    element: <Mode/>, 
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard/>,
+  },
+  {
+    path: "/dashboard/user",
+    element: <ListUser/>,
+  },
+  {
+    path: "/dashboard/edituser/:id",
+    element: <EditUser/>,
   },
 ]);
 

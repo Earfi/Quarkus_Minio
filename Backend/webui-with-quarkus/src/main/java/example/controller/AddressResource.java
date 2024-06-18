@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
-
+import jakarta.ws.rs.Path;
 
 @Path("/address")
 @Produces(MediaType.APPLICATION_JSON)

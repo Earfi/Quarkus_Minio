@@ -29,6 +29,16 @@ function Information({ bucket }) {
         getFileFromBucket();
     }, [bucket]);
 
+    function fetchFile() {
+        const getFileFromBucket = async () => {
+            const res = await fetch(`http://localhost:8080/minio/file/all/${bucket}`);
+            const data = await res.json();
+            setFiles(data);
+        };
+
+        getFileFromBucket();
+    }
+
     const groupFilesByFolders = (files) => {
         return files.reduce((folders, file) => {
             const filePathParts = file.fileName.split('/');
@@ -147,7 +157,6 @@ function Information({ bucket }) {
     // -----------------------------------
     // -----------------------------------
     
-    // Can not edit file name in folder
     const handleRenameFile = async () => {
         
         if (newName == "" || newName == undefined || newName == null || newName == "/") {
@@ -162,23 +171,25 @@ function Information({ bucket }) {
         }
 
         // const typeFile = filesEditName.slice(-3);
-        // console.log(typeFile);
 
         const parts = filesEditName.split(".");
         const typeFile = parts.pop();
+        // console.log(parts);
+        // console.log(typeFile);
   
         let newNameValue;
 
         const lastIndex = filesEditName.lastIndexOf('/');
         if (lastIndex !== -1) {
             const result = filesEditName.substring(0, lastIndex);
-            newNameValue = result + "/" + newName;
-            console.log(result);
-            console.log("1");
+            newNameValue = result + "/" + newName + "." + typeFile;
+            // console.log(result);
+            // console.log("1");
         } else {
-            console.log("2");
+            // console.log("2");
             newNameValue = newName + "." + typeFile;
         }
+        // console.log(newNameValue);
 
         // console.log("oldName : " + filesEditName);
         // console.log("newName : " + newNameValue);
@@ -206,9 +217,10 @@ function Information({ bucket }) {
                 showConfirmButton: false, 
                 timer: 1000
               });
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000); 
+              fetchFile();
+            // setTimeout(() => {
+            //     window.location.reload()
+            // }, 1000); 
         } else { 
             Swal.fire({
                 icon: "error",
@@ -255,9 +267,10 @@ function Information({ bucket }) {
                 showConfirmButton: false, 
                 timer: 1000
               });
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000); 
+              fetchFile();
+            // setTimeout(() => {
+            //     window.location.reload()
+            // }, 1000); 
         } else { 
             Swal.fire({
                 icon: "error",
@@ -304,9 +317,10 @@ function Information({ bucket }) {
                             showConfirmButton: false, 
                             timer: 1000
                         });
-                        setTimeout(() => {
-                            window.location.reload()
-                        }, 1000); 
+                        fetchFile();
+                        // setTimeout(() => {
+                        //     window.location.reload()
+                        // }, 1000); 
                     } else { 
                         Swal.fire({
                             icon: "error",
@@ -354,9 +368,10 @@ function Information({ bucket }) {
                             showConfirmButton: false,
                             timer: 1000
                         });
-                        setTimeout(() => {
-                            window.location.reload()
-                        }, 1500);
+                        fetchFile();
+                        // setTimeout(() => {
+                        //     window.location.reload()
+                        // }, 1500);
                     } else {
                         Swal.fire({
                             icon: "error",
@@ -557,10 +572,10 @@ function Information({ bucket }) {
                     .map((folder, idx) => (
                         <div key={idx}>
                             {folder === "" && showFiles && (
-                                <div className='w-full'>
+                                <div className={`w-full`}>
                                     {(groupedFiles[folder] || []).filter(file => Array.isArray(groupedFiles[folder]) && file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
                                         .map((file, idx) => (
-                                            <div key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'}`}>
+                                        <div key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
                                             <div className='w-full flex flex-col justify-end items-start gap-5'>
                                                 <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-full mx-auto overflow-hidden bg-white p-2 border-black border rounded-xl">
                                                     <p className='break-words text-xs'><b>Name : </b>{file.fileName}</p>
@@ -575,7 +590,7 @@ function Information({ bucket }) {
                                                             {file.tags.map((tag, index) => (
                                                             <div key={index} className='relative'>
                                                                 <li className='bg-gray-800 px-2 py-1 rounded-md text-xs font-bold text-white' key={index}>{tag}</li>
-                                                                <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} animate-ping absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
+                                                                <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
                                                             </div>
                                                             ))}
                                                         </ul>
@@ -689,7 +704,7 @@ function Information({ bucket }) {
                                     {(groupedFiles[folder] || [])
                                         .filter(file => file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
                                         .map((file, idx) => (
-                                            <div key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'}`}>
+                                            <div key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
                                                 <div className='w-full flex flex-col justify-end items-start gap-5'>
                                                     <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-[240px] sm:w-full mx-auto overflow-hidden bg-white p-2 border-black border rounded-xl">
                                                         <p className='break-words text-xs'><b>Name : </b>{file.fileName}</p>
@@ -704,7 +719,7 @@ function Information({ bucket }) {
                                                                 {file.tags.map((tag, index) => (
                                                                 <div key={index} className='relative'>
                                                                     <li className='bg-gray-800 px-2 py-1 rounded-md text-xs font-bold text-white' key={index}>{tag}</li>
-                                                                    <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} animate-ping absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
+                                                                    <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
                                                                 </div>
                                                                 ))}
                                                             </ul>
