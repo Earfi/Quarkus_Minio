@@ -1,4 +1,4 @@
-package example.kafka.Method2;
+package example.kafka;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.smallrye.reactive.messaging.kafka.Record;
@@ -20,17 +20,19 @@ public class Producer {
 
     public void sendToKafka(JsonNode jsonObjectNode) {
         try {
-            JsonNode keyNode = jsonObjectNode.get("key");
-            JsonNode valueNode = jsonObjectNode.get("value");
+            JsonNode recipientNameNode = jsonObjectNode.get("tags");
 
-            if (keyNode == null || valueNode == null) {
-                throw new IllegalArgumentException("JSON must contain 'key' and 'value' fields");
+            if (recipientNameNode == null) {
+                String errorMessage = String.format("Invalid JSON: recipientName is null, jsonObjectNode: %s",
+                        jsonObjectNode.toString());
+                throw new RuntimeException(errorMessage);
             }
 
-            Integer key = keyNode.asInt();
-            String value = valueNode.asText();
+            int key = recipientNameNode.asText().hashCode();
+            String value = jsonObjectNode.toString();
 
             Record<Integer, String> record = Record.of(key, value);
+            LOGGER.info("Sending record to Kafka - Key: " + key + ", Value: " + value);
             emitter.send(record);
         } catch (Exception e) {
             LOGGER.severe("Failed to send message to Kafka: " + e.getMessage());

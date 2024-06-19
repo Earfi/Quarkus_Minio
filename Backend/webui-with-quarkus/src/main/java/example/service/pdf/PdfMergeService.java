@@ -1,4 +1,4 @@
-package example.service;
+package example.service.pdf;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;

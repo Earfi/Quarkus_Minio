@@ -188,7 +188,7 @@ const Announcement = () => {
                                             <div className='sm:flex justify-between items-start mb-4'>
                                                 <div>
                                                     <h2 className="text-xl font-semibold mb-2">{announcement.title}</h2>
-                                                    <p className="text-sm text-gray-500 mb-1">Posted by: {announcement.user.username}, {formatDate(announcement.postDate)}</p>
+                                                    <p className="text-sm text-gray-500 mb-1">Posted by : {announcement.user.username}, {formatDate(announcement.postDate)}</p>
                                                     {/* {announcement.user.username} */}
                                                 </div>
                                                 <div>

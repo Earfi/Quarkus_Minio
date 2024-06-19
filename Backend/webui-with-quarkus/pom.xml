@@ -169,6 +169,11 @@
       <artifactId>camel-quarkus-kafka</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-mailer</artifactId>
+    </dependency>
+
 
   </dependencies>
   <build>

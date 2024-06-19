@@ -123,11 +123,11 @@ function UploadFile() {
     };
 
     return (
-        <div className='bg-gradient-to-bl to-purple-800 from-red-800 w-full lg:w-[650px] xl:w-[800px] px-5 py-5 border-2 shadow-xl rounded-md m-auto'>
-            <div className="w-full flex justify-end">
-                <button onClick={toggleUploadUI} className="text-white text-sm bg-red-500 hover:bg-red-700 p-2 rounded-md mb-4 w-fit md:w-auto">Upload File</button>
+        <div className='bg-gradient-to-bl to-purple-800 from-red-800 w-full px-5 py-5 border-2 shadow-xl rounded-md m-auto'>
+            <div className="w-full flex justify-end pr-56">
+                <button onClick={toggleUploadUI} className="text-black font-medium text-sm bg-white hover:bg-gray-200 p-2 rounded-md mb-4 w-fit md:w-auto">Upload File</button>
             </div>
-            <div className={`sm:flex justify-center flex-wrap overflow-hidden transition-all duration-500 ${showUploadUI ? 'h-fit' : 'h-0'}`}>
+            <div className={` lg:w-[650px] xl:w-[800px] mx-auto sm:flex justify-center flex-wrap overflow-hidden transition-all duration-500 ${showUploadUI ? 'h-fit' : 'h-0'}`}>
                 <div className='m-2 p-4 bg-white rounded-lg shadow-md w-full '>
                 <h1 className='font-bold text-xl text-gray-800 mb-4'>Upload File</h1>
                 <div className='w-full'>

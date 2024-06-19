@@ -30,16 +30,16 @@ public class AnnouncementResource {
     }
 
     @POST
-    @PermitAll
-    public Response addUser(AnnouncementAddDto dto, @MultipartForm ProfileImageUploadForm form){
+    @RolesAllowed({"Admin"})
+    public Response addAnnouncement(AnnouncementAddDto dto, @MultipartForm ProfileImageUploadForm form){
         AnnouncementAddDto announcement = service.createAnnouncement(dto);
         return Response.ok(announcement).status(201).build();
     }
 
     @DELETE
-//    @RolesAllowed({"Admin"})
+    @RolesAllowed({"Admin"})
     @Path("/{id}")
-    public Response deleteUser(@PathParam("id") Long id){
+    public Response deleteAnnouncement(@PathParam("id") Long id){
         service.removeAnnouncement(id);
         return Response.status(204).build();
     }

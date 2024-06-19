@@ -1,7 +1,7 @@
 package example.controller;
 
-import example.service.PdfMergeService;
-import example.service.PdfSplitService;
+import example.service.pdf.PdfMergeService;
+import example.service.pdf.PdfSplitService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;

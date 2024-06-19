@@ -24,6 +24,7 @@ public class AnnouncementService {
     @Inject
     EntityManager entityManager;
 
+
     public List<Announcement> listAllAnnouncement() {
         List<Announcement> announcements = Announcement.listAll();
         Collections.reverse(announcements);
@@ -42,6 +43,8 @@ public class AnnouncementService {
         entityManager.persist(announcement);
 
         dto.setAnnouncement_id(announcement.getAnnouncement_id());
+
+
 
         return dto;
     }

@@ -3,6 +3,7 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import * as pdfjs from 'pdfjs-dist';
 import Footer from '../../components/Footer';
+import Sidebar from '../../components/Sidebar';
 
 const ITEM_TYPE = 'FILE';
 
@@ -191,6 +192,9 @@ const MergeFiles = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
+      <div className="fixed z-50">
+          <Sidebar/>  
+      </div>
       <div className='min-h-screen bg-gray-100 flex flex-col md:flex-row'>
         <div className={`w-full bg-white ${selectedFiles.length > 0 ? 'md:w-[70%]' : 'w-full'}`}>
           <div className='p-8'>
