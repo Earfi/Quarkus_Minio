@@ -86,24 +86,14 @@ function InsertLetter() {
         body: JSON.stringify(dataToSend),
         }
     );
-
-    console.log(response);
-
-    // if (!response.ok) {
-    //   throw new Error("Failed to generate PDF");
-    // }
-
+ 
     const responseData = await response.blob();
     saveAs(responseData, `${fileName}` + ".pdf");
-
-      
-    // } catch (error) {
-    //   console.error("Error generating PDF:", error);
-    // }
+ 
   };
   
   return (
-    <form className="my-5 px-5 w-full">
+    <div className="my-5 px-5 w-full">
         <div className="w-full bg-white h-fit p-6 py-8 mx-auto border-black border-2 rounded-lg">
             <h1 className="text-3xl font-bold text-red-700 text-center">Letter</h1>
             <div className="my-4">
@@ -253,7 +243,7 @@ function InsertLetter() {
             <hr className="my-2"/>
             <div className="flex gap-2">
                 <p onClick={() => setOpenJson(!openJson)} className="mt-2 bg-red-500 text-xs text-white p-2 rounded hover:bg-red-900 font-bold cursor-pointer">Json</p>
-                <button type="submit" onClick={handleGeneratePdf} className="mt-2 bg-green-500 text-xs text-white p-2 rounded hover:bg-green-900 font-bold">Generate PDF</button>
+                <button onClick={handleGeneratePdf} className="mt-2 bg-green-500 text-xs text-white p-2 rounded hover:bg-green-900 font-bold">Generate PDF</button>
             </div>
             <div className="w-full overflow-hidden rounded-2xl transition-all">
                 <div className={`overflow-hidden transition-all ${openJson ? "max-h-96" : "max-h-0"}`}>
@@ -276,7 +266,7 @@ function InsertLetter() {
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 );
 
 }

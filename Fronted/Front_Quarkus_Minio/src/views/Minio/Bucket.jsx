@@ -5,8 +5,8 @@ function Bucket() {
     return (
         <div className="w-full overflow-hidden min-h-[90vh] bg-slate-100">  
             <div className="flex flex-row ">
-                <div className="fixed z-50">
-                    <Sidebar/>  
+                <div>
+                    <Sidebar />  
                 </div>
                 <div className="flex flex-col w-full z-0">
                     <ListBuckets/>

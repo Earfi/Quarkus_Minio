@@ -23,21 +23,23 @@ function Sidebar() {
                     <ul className={`my-2 font-semibold ${role === "Admin" ? 'block' : 'hidden'}`}>
                         <Link to="/dashboard"><li className="p-2 cursor-pointer hover:bg-gray-300 my-2"><span className={`${fullWidth ? '' : 'hidden'}`}>DASHBOARD</span></li></Link>
                     </ul> 
-    
-                    <Link to="/"><li className={`p-2 cursor-pointer ${fullWidth ? '' : 'hidden'}`}><span>HOME</span></li></Link>
+     
                     {/* <hr className="h-1 bg-red-500 my-5"/> */}
     
+                    <h1 className={`text-xl font-bold border-b-2 border-gray-600 ${fullWidth ? '' : 'hidden'}`}>Mode</h1> 
                     <ul className="my-2 font-semibold">
-                        <Link to="/bucket"><li className={`p-2 cursor-pointer ${fullWidth ? '' : 'hidden'}`}><span className="rounded-full -ml-2 p-2">&#9778;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>Buckets</span></li></Link>
-                        <Link to="/jasper"><li className={`p-2 cursor-pointer ${fullWidth ? '' : 'hidden'}`}><span className="rounded-full -ml-2 p-2">&#8464;</span> <span className={`${fullWidth ? '' : 'hidden'}`}>Jasper</span></li></Link>  
+                        <Link to="/"><li className={`p-2 cursor-pointer hover:text-gray-500 ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>&#9751; HOME</span></li></Link>
+                        <Link to="/bucket"><li className={`p-2 cursor-pointer hover:text-gray-500 ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>&#9778; MINIO</span></li></Link>
+                        <Link to="/jasper"><li className={`p-2 cursor-pointer hover:text-gray-500 ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>&#8464; JASPER</span></li></Link>  
                     </ul> 
     
                     <h1 className={`text-xl font-bold border-b-2 border-gray-600 ${fullWidth ? '' : 'hidden'}`}>Others</h1> 
                     <ul className="my-2 font-semibold"> 
-                        <Link to="/mergefiles"><li className={`p-2 cursor-pointer ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>PDF</span></li></Link>
-                        <Link to="/products"><li className={`p-2 cursor-pointer ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>PRODUCT</span></li></Link>
-                        <Link to="/about"><li className={`p-2 cursor-pointer ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>ABOUT</span></li></Link>
-                        <Link to="/service"><li className={`p-2 cursor-pointer ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>SERVICE</span></li></Link>
+                        <Link to="/announcement"><li className={`p-2 cursor-pointer hover:text-gray-500 ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>ANNOUNCEMENT</span></li></Link>
+                        <Link to="/mergefiles"><li className={`p-2 cursor-pointer hover:text-gray-500 ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>PDF</span></li></Link>
+                        <Link to="/products"><li className={`p-2 cursor-pointer hover:text-gray-500 ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>PRODUCT</span></li></Link>
+                        <Link to="/about"><li className={`p-2 cursor-pointer hover:text-gray-500 ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>ABOUT</span></li></Link>
+                        <Link to="/service"><li className={`p-2 cursor-pointer hover:text-gray-500 ${fullWidth ? '' : 'hidden'}`}><span className={`${fullWidth ? '' : 'hidden'}`}>SERVICE</span></li></Link>
                     </ul> 
     
                     <hr className="h-1 bg-red-500 my-5"/>

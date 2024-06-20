@@ -483,11 +483,11 @@ function Information({ bucket }) {
                                     <div className={`w-full`}>
                                         {(groupedFiles[folder] || []).filter(file => Array.isArray(groupedFiles[folder]) && file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
                                             .map((file, idx) => (
-                                            <div onClick={() => {
-                                                showOptionsMode(file)  
-                                                setFileEditedName("")
-                                            }} key={idx} className={`cursor-pointer flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions.fileName == file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
-                                                <div className='w-full flex flex-col justify-end items-start gap-5'>
+                                            <div key={idx} className={`cursor-pointer flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions.fileName == file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
+                                                <div onClick={() => {
+                                                    showOptionsMode(file)  
+                                                    setFileEditedName("")
+                                                }}  className='w-full flex flex-col justify-end items-start gap-5 mb-5'>
                                                     <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-full mx-auto overflow-hidden bg-white p-2 rounded-xl border border-gray-300">
                                                         <p className='break-words text-xs'><b>Name : </b>{file.fileName}</p>
                                                         <p className='text-xs'><b>Size : </b>{convertBytes(file.fileSize)}</p>
@@ -507,6 +507,118 @@ function Information({ bucket }) {
                                                             </ul>
                                                         </div>
                                                     )}
+                                                </div>
+                                                {/* show options */}
+                                                <>  
+                                                    <div className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} w-full overflow-hidden transition-all flex flex-col justify-end duration-300 bg-white border-2 p-5 text-white`}>
+                                                        <div className="relative border border-gray-300 p-4 rounded-md mb-4">
+                                                            <h3 className="mb-2 text-black">Select Options to Edit!</h3>
+                                                            <button className="mr-2 bg-pink-500 hover:bg-pink-700 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("rename",0)}>Rename File</button>
+                                                            
+                                                            {file.tags.length < 10 && (
+                                                                <> 
+                                                                    <button className="mr-2 bg-purple-500 hover:bg-purple-700 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("addTag",file.tags)}>Add Tag</button>
+                                                                </>
+                                                            )}
+                                                            <h1
+                                                                className="text-white hover:text-gray-100 text-right cursor-pointer absolute right-2 top-0"
+                                                                onClick={() => setFileEditedName(null)}
+                                                                >
+                                                                &#10008;
+                                                            </h1>
+                                                        </div>
+                                                        <div>
+                                                            {editMode === "rename" && (
+                                                                <div className="mb-4">
+                                                                <label className='text-sm font-medium text-black'>Rename File</label> 
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="New File Name"
+                                                                        value={newName}
+                                                                        onChange={(e) => setNewName(e.target.value)}
+                                                                        className="border text-black border-gray-300 p-2 rounded-md w-full text-xs"
+                                                                        />
+                                                                    <button onClick={handleRenameFile} className="mt-2 bg-pink-500 hover:bg-pink-700 text-white text-xs font-bold py-1 px-2 rounded">Rename</button>
+                                                                </div>
+                                                            )}
+                                                            {editMode === "addTag" && (
+                                                                <div className="mb-4">
+                                                                    <label className='text-sm font-medium text-black'>Add Tag</label> 
+                                                                    {tags.map((tag, index) => (
+                                                                        <div key={index} className='flex gap-2 mb-2'>
+                                                                            <>
+                                                                                <input 
+                                                                                    type="text" 
+                                                                                    value={tag.key} 
+                                                                                    onChange={(e) => handleTagValueChange(index, e.target.value, tag.value)} 
+                                                                                    placeholder="Key no ( $ _ \ / < > * )" 
+                                                                                    className="p-2 border rounded text-xs w-1/2 text-black"/>
+                                                                                <input 
+                                                                                    type="text" 
+                                                                                    value={tag.value} 
+                                                                                    onChange={(e) => handleTagValueChange(index, tag.key, e.target.value)} 
+                                                                                    placeholder="Value no ( $ _ \ / < > * )" 
+                                                                                    className="p-2 border rounded text-xs w-1/2 text-black"/>
+                                                                            </>
+                                                                            <button onClick={() => handleDeleteTagToInput(index)} className="bg-white py-0 px-2 font-bold rounded-full text-red-500 hover:text-red-700">x</button>
+                                                                        </div>
+                                                                    ))}
+                                                                    <button onClick={handleAddTagToInput} className="mt-2 bg-slate-500 hover:bg-gray-300 ml-2 text-white text-xs font-bold py-1 px-2 rounded border">Add More Tags</button>
+                                                                    <button onClick={() => handleAddTag(file.fileName)} className="mt-2 bg-purple-500 hover:bg-purple-700 ml-2 text-white text-xs font-bold py-1 px-2 rounded">Add Tag</button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            </div>
+                                        ))}
+                                </div>
+                            )}
+                            {folder !== "" && folder != null && showFolders && (
+                                <>
+                                    <h2 
+                                        onClick={() => handleFolderClick(folder)} 
+                                        className={`cursor-pointer text-black font-bold p-3 mx-5 my-1 shadow-md bg-gradient-to-r rounded-lg flex items-center transition-transform duration-200 transform text-xs border ${folderView === folder ? 'from-yellow-800 to-yellow-800 border-l-4 border-yellow-700 text-white translate-x-1' : 'from-amber-200 to-amber-200 border-l-4 border-yellow-600'}`}
+                                    >
+                                        <div className='flex justify-between w-full'>
+                                            <div className="flex gap-2">
+                                                <img src="../../public/folder-icon.png" width="20"/>
+                                                <p> {folder}</p>
+                                            </div>
+                                            <span className='material-icons mr-2'>
+                                                {folderView === folder ? 'open' : 'close '}
+                                            </span>
+                                        </div>
+                                    </h2>
+                                    <div className={`ml-5 transition-all duration-500 ease-in-out folder-content ${folderView == folder ? 'border-none' : 'border-none'} overflow-hidden`} style={{ maxHeight: folderView === folder ? 'fit-content' : '0px' }}>
+                                        {(groupedFiles[folder] || [])
+                                            .filter(file => file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
+                                            .map((file, idx) => (
+                                                <div key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions.fileName == file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
+                                                    <div  onClick={() => {
+                                                        showOptionsMode(file)  
+                                                        setFileEditedName("")
+                                                    }}  className='w-full flex flex-col justify-end items-start gap-5 mb-5'>
+                                                        <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-[240px] sm:w-full mx-auto overflow-hidden bg-white p-2 rounded-xl border border-gray-300">
+                                                            <p className='break-words text-xs'><b>Name : </b>{file.fileName}</p>
+                                                            <p className='text-xs'><b>Size : </b>{convertBytes(file.fileSize)}</p>
+                                                            <p className='text-xs'><b>Last Modified : </b>{convertDate(file.creationDate)}</p>
+                                                            
+                                                        </div>
+                                                        {file.tags.length > 0 && (
+                                                            <div className="tags flex items-center gap-2 flex-wrap">
+                                                                <strong className='text-sm'>Tags:</strong>
+                                                                <ul className="flex justify-start items-center gap-5 flex-wrap">
+                                                                    {file.tags.map((tag, index) => (
+                                                                    <div key={index} className='relative'>
+                                                                        <li className='bg-gray-200 px-2 py-1 rounded-md text-xs font-bold text-gray-700' key={index}>{tag}</li>
+                                                                        <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
+                                                                    </div>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                     {/* show options */}
                                                     <>  
                                                         <div className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} w-full overflow-hidden transition-all flex flex-col justify-end duration-300 bg-white border-2 p-5 text-white`}>
@@ -568,119 +680,7 @@ function Information({ bucket }) {
                                                                 )}
                                                             </div>
                                                         </div>
-                                                    </>
-                                                </div>
-                                            </div>
-                                        ))}
-                                </div>
-                            )}
-                            {folder !== "" && folder != null && showFolders && (
-                                <>
-                                    <h2 
-                                        onClick={() => handleFolderClick(folder)} 
-                                        className={`cursor-pointer text-black font-bold p-3 mx-5 my-1 shadow-md bg-gradient-to-r rounded-lg flex items-center transition-transform duration-200 transform text-xs border ${folderView === folder ? 'from-yellow-800 to-yellow-800 border-l-4 border-yellow-700 text-white translate-x-1' : 'from-amber-200 to-amber-200 border-l-4 border-yellow-600'}`}
-                                    >
-                                        <div className='flex justify-between w-full'>
-                                            <div className="flex gap-2">
-                                                <img src="../../public/folder-icon.png" width="20"/>
-                                                <p> {folder}</p>
-                                            </div>
-                                            <span className='material-icons mr-2'>
-                                                {folderView === folder ? 'open' : 'close '}
-                                            </span>
-                                        </div>
-                                    </h2>
-                                    <div className={`ml-5 transition-all duration-500 ease-in-out folder-content ${folderView == folder ? 'border-none' : 'border-none'} overflow-hidden`} style={{ maxHeight: folderView === folder ? 'fit-content' : '0px' }}>
-                                        {(groupedFiles[folder] || [])
-                                            .filter(file => file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
-                                            .map((file, idx) => (
-                                                <div onClick={() => {
-                                                    showOptionsMode(file)  
-                                                    setFileEditedName("")
-                                                }} key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions.fileName == file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
-                                                    <div className='w-full flex flex-col justify-end items-start gap-5'>
-                                                        <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-[240px] sm:w-full mx-auto overflow-hidden bg-white p-2 rounded-xl border border-gray-300">
-                                                            <p className='break-words text-xs'><b>Name : </b>{file.fileName}</p>
-                                                            <p className='text-xs'><b>Size : </b>{convertBytes(file.fileSize)}</p>
-                                                            <p className='text-xs'><b>Last Modified : </b>{convertDate(file.creationDate)}</p>
-                                                            
-                                                        </div>
-                                                        {file.tags.length > 0 && (
-                                                            <div className="tags flex items-center gap-2 flex-wrap">
-                                                                <strong className='text-sm'>Tags:</strong>
-                                                                <ul className="flex justify-start items-center gap-5 flex-wrap">
-                                                                    {file.tags.map((tag, index) => (
-                                                                    <div key={index} className='relative'>
-                                                                        <li className='bg-gray-200 px-2 py-1 rounded-md text-xs font-bold text-gray-700' key={index}>{tag}</li>
-                                                                        <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
-                                                                    </div>
-                                                                    ))}
-                                                                </ul>
-                                                            </div>
-                                                        )}
-                                                        {/* show options */}
-                                                        <>  
-                                                            <div className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} w-full overflow-hidden transition-all flex flex-col justify-end duration-300 bg-white border-2 p-5 text-white`}>
-                                                                <div className="relative border border-gray-300 p-4 rounded-md mb-4">
-                                                                    <h3 className="mb-2 text-black">Select Options to Edit!</h3>
-                                                                    <button className="mr-2 bg-pink-500 hover:bg-pink-700 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("rename",0)}>Rename File</button>
-                                                                    
-                                                                    {file.tags.length < 10 && (
-                                                                        <> 
-                                                                            <button className="mr-2 bg-purple-500 hover:bg-purple-700 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("addTag",file.tags)}>Add Tag</button>
-                                                                        </>
-                                                                    )}
-                                                                    <h1
-                                                                        className="text-white hover:text-gray-100 text-right cursor-pointer absolute right-2 top-0"
-                                                                        onClick={() => setFileEditedName(null)}
-                                                                        >
-                                                                        &#10008;
-                                                                    </h1>
-                                                                </div>
-                                                                <div>
-                                                                    {editMode === "rename" && (
-                                                                        <div className="mb-4">
-                                                                        <label className='text-sm font-medium text-black'>Rename File</label> 
-                                                                            <input
-                                                                                type="text"
-                                                                                placeholder="New File Name"
-                                                                                value={newName}
-                                                                                onChange={(e) => setNewName(e.target.value)}
-                                                                                className="border text-black border-gray-300 p-2 rounded-md w-full text-xs"
-                                                                                />
-                                                                            <button onClick={handleRenameFile} className="mt-2 bg-pink-500 hover:bg-pink-700 text-white text-xs font-bold py-1 px-2 rounded">Rename</button>
-                                                                        </div>
-                                                                    )}
-                                                                    {editMode === "addTag" && (
-                                                                        <div className="mb-4">
-                                                                            <label className='text-sm font-medium text-black'>Add Tag</label> 
-                                                                            {tags.map((tag, index) => (
-                                                                                <div key={index} className='flex gap-2 mb-2'>
-                                                                                    <>
-                                                                                        <input 
-                                                                                            type="text" 
-                                                                                            value={tag.key} 
-                                                                                            onChange={(e) => handleTagValueChange(index, e.target.value, tag.value)} 
-                                                                                            placeholder="Key no ( $ _ \ / < > * )" 
-                                                                                            className="p-2 border rounded text-xs w-1/2 text-black"/>
-                                                                                        <input 
-                                                                                            type="text" 
-                                                                                            value={tag.value} 
-                                                                                            onChange={(e) => handleTagValueChange(index, tag.key, e.target.value)} 
-                                                                                            placeholder="Value no ( $ _ \ / < > * )" 
-                                                                                            className="p-2 border rounded text-xs w-1/2 text-black"/>
-                                                                                    </>
-                                                                                    <button onClick={() => handleDeleteTagToInput(index)} className="bg-white py-0 px-2 font-bold rounded-full text-red-500 hover:text-red-700">x</button>
-                                                                                </div>
-                                                                            ))}
-                                                                            <button onClick={handleAddTagToInput} className="mt-2 bg-slate-500 hover:bg-gray-300 ml-2 text-white text-xs font-bold py-1 px-2 rounded border">Add More Tags</button>
-                                                                            <button onClick={() => handleAddTag(file.fileName)} className="mt-2 bg-purple-500 hover:bg-purple-700 ml-2 text-white text-xs font-bold py-1 px-2 rounded">Add Tag</button>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </> 
-                                                    </div>
+                                                    </> 
                                                 </div>
                                         ))}
                                     </div>

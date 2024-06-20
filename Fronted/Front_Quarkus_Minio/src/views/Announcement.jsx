@@ -131,7 +131,7 @@ const Announcement = () => {
     return (
         <div className="w-full overflow-hidden min-h-screen bg-gray-100 ">  
             <div className="flex flex-row h-full">
-                <div className="">
+                <div>
                     <Sidebar />  
                 </div>
                 <div className="flex flex-col w-full h-full"> 

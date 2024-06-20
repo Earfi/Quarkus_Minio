@@ -130,52 +130,30 @@ function Navbar() {
   };
 
   return (
-    <div className="z-50 relative h-20">
-      <div className="w-full h-20 bg-gradient-to-l from-blue-600 to-blue-950 text-xl font-medium text-white flex justify-between sm:justify-around items-center fixed ">
+    <div className="z-50 relative h-32 flex flex-col">
+      <div className="w-full flex justify-around items-center h-12 bg-white fixed">
         <Link
           to="/"
-          className="block ml-10 text-xs md:ml-30 border py-2 px-2 rounded-full"
+          className="block ml-10 text-xs md:ml-30 border py-2 px-2 w-36 text-center rounded-full"
         >
           Minio With Quarkus
         </Link>
-        <div className="hidden lg:flex p-5 text-xs md:text-xl gap-7 cursor-pointer items-center">
-          <Link to="/" className="hover:text-orange-400">
-            HOME
-          </Link>
-          <Link to="/bucket" className={`${path.includes("bucket") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
-            MINIO
-          </Link>
-          <Link to="/jasper" className={`${path.includes("jasper") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
-            JASPER
-          </Link>
-          <Link to="/mergefiles" className={`${path.includes("mergefiles") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
-            PDF
-          </Link>
-          <Link to="/announcement" className={`${path.includes("announcement") ? 'border-b-2' : 'border-none'} hover:text-orange-400`}>
-            ANNOUNCEMENTS
-          </Link> 
-        </div>
-        <div className="flex justify-center gap-2 items-center">
-          <div
-            className={` ${
-              path.includes("products") ? "hidden" : "block"
-            } flex flex-row relative overflow-hidden`}
-          >
-            <input
-              onClick={() => setSearch(true)}
-              type="text"
-              className="hidden sm:block p-1 rounded-md text-black mx-5 w-36 sm:w-fit text-xs md:text-xl  "
-              name="search"
-              placeholder="Search Bucket"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-          </div>
+
+        <div className="flex items-center">
+          <input
+            onClick={() => setSearch(true)}
+            type="text"
+            className="hidden sm:block p-1 rounded-md text-black mx-5 w-36 sm:w-fit text-xs md:text-xl border"
+            name="search"
+            placeholder="Search Bucket"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
           <Link to="/login">
             <h1
               className={`${
                 token == null ? "block" : "hidden"
-              } hover:text-orange-400 text-xs md:text-xl mx-5`}
+              } hover:text-orange-400 text-sm mx-5`}
             >
               LOG IN
             </h1>
@@ -185,9 +163,9 @@ function Navbar() {
               <img
                 className={`${
                   token == null ? "hidden" : "block"
-                } hover:text-orange-400 text-xs mr-10 h-12 w-12 object-cover bg-white rounded-full`}
+                } hover:text-orange-400 text-xs mr-10 h-10 w-10 object-cover bg-white rounded-full`}
                 src="../../..//profile-icon.png"
-                alt=""
+                alt="Profile"
               />
             </Link>
           ) : (
@@ -195,74 +173,41 @@ function Navbar() {
               <img
                 className={`${
                   token == null ? "hidden" : "block"
-                } hover:text-orange-400 text-xs mr-10 h-12 w-12 object-cover bg-white rounded-full`}
+                } hover:text-orange-400 text-xs mr-10 h-10 w-10 object-cover bg-white rounded-full`}
                 src={profile}
-                alt=""
+                alt="Profile"
               />
             </Link>
           )}
-          <h1
-            onClick={() => setOpenBar(!openBar)}
-            className="block lg:hidden text-4xl cursor-pointer hover:text-red-500 mr-5"
-          >
-            &#9776;
-          </h1>
         </div>
-
-        <div
-          className={`block xl:hidden absolute ${
-            openBar ? "right-0" : "right-[-100%]"
-          } w-[250px] bg-gray-800 h-[90vh] top-20 py-5 transition-all border-4 border-black`}
-        >
-          <div className="flex flex-col justify-center items-center gap-6">
-            <input
-              onClick={() => setSearch(true)}
-              type="text"
-              className={`${
-                path.includes("products") ? "hidden" : "block"
-              } p-1 rounded-md text-black mx-8 w-52`}
-              name="search"
-              placeholder="Search Bucket"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            <Link to="/" className="hover:text-orange-400 border-b-2">
-              HOME
-            </Link>
-            <Link to="/bucket" className="hover:text-orange-400 border-b-2">
-              MINIO &#9778;
-            </Link>
-            <Link to="/jasper" className="hover:text-orange-400 border-b-2">
-              JASPER &#8464;
-            </Link>
-            <Link to="/announcement" className="hover:text-orange-400 border-b-2">
-              ANNOUNCEMENTS
-            </Link>
-            <Link to="/service" className="hover:text-orange-400 border-b-2">
-              SERVICE &#9743;
-            </Link>
-            <Link to="/mergefiles" className="hover:text-orange-400 border-b-2">
-              PDF
-            </Link>
-            <Link to="/products" className="hover:text-orange-400 border-b-2">
-              PRODUCTS
-            </Link>
-            <Link
-              to="/"
-              onClick={logout}
-              className={`${
-                token == null ? "hidden" : "block"
-              } absolute text-xs bottom-10 hover:text-orange-400 border-b-2`}
-            >
-              LOGOUT
-            </Link>
-          </div>
+      </div>
+      <div className="w-full h-20 mt-12 bg-gradient-to-l from-blue-600 to-blue-950 text-xl font-medium text-white flex justify-between sm:justify-around items-center fixed">
+        <div className="flex flex-wrap p-5 text-xs md:text-sm gap-7 items-center">
+          <Link to="/" className="hover:text-orange-400 cursor-pointer">
+            HOME
+          </Link>
+          <Link to="/bucket" className={`${path.includes("bucket") ? 'border-b-2' : 'border-none'} hover:text-orange-400 cursor-pointer`}>
+            MINIO
+          </Link>
+          <Link to="/jasper" className={`${path.includes("jasper") ? 'border-b-2' : 'border-none'} hover:text-orange-400 cursor-pointer`}>
+            JASPER
+          </Link>
+          <Link to="/mergefiles" className={`${path.includes("mergefiles") ? 'border-b-2' : 'border-none'} hover:text-orange-400 cursor-pointer`}>
+            PDF
+          </Link>
+          <Link to="/announcement" className={`${path.includes("announcement") ? 'border-b-2' : 'border-none'} hover:text-orange-400 cursor-pointer`}>
+            ANNOUNCEMENTS
+          </Link>
+          <Link to="/service" className={`${path.includes("service") ? 'border-b-2' : 'border-none'} hover:text-orange-400 cursor-pointer`}>
+            SERVICE
+          </Link>
+          <Link to="/about" className={`${path.includes("about") ? 'border-b-2' : 'border-none'} hover:text-orange-400 cursor-pointer`}>
+            ABOUT
+          </Link>
         </div>
       </div>
       <div
-        className={`fixed top-20 ${
-          search ? "h-full" : "h-0"
-        } w-full bg-blue-200  transition-all duration-500 overflow-hidden z-50 flex justify-center `}
+        className={`fixed top-32 ${search ? "h-full" : "h-0"} w-full bg-blue-200 transition-all duration-500 overflow-hidden z-50 flex justify-center`}
       >
         <div className="max-w-screen-lg w-full p-4 backdrop-blur-xl">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 relative">

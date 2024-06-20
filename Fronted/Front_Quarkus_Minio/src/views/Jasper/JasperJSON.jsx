@@ -10,8 +10,8 @@ function JasperJSON() {
     return (
         <div className="w-full overflow-hidden min-h-screen h-full">  
             <div className="flex flex-row ">
-                <div className="fixed">
-                    <Sidebar/>  
+                <div>
+                    <Sidebar />  
                 </div>
                 <div className="flex flex-col w-full bg-gray-100"> 
                     <div className="bg-white w-full xl:w-[70%] md:mx-auto"> 
