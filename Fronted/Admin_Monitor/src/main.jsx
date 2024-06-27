@@ -5,6 +5,8 @@ import './index.css'
 import {
   createBrowserRouter,
   RouterProvider,
+  Route,
+  useNavigate
 } from "react-router-dom";
 
 import Navbar from './components/Navbar.jsx';
@@ -14,65 +16,72 @@ import User from './views/User.jsx';
 import Announcement from './views/Announcement.jsx';
 import FeedbackComplaints from './views/FeedbackComplaints.jsx';
 
+const isAuthenticated = () => { 
+  const token = localStorage.getItem('token');
+  return token !== null;
+};
+
+const ProtectedRoute = ({ children }) => {
+  const navigate = useNavigate();
+  
+  React.useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate("/");
+    }
+  }, [navigate]);
+  
+  return isAuthenticated() ? children : null;
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: 
-      ( 
-        <>
-          <App />
-        </>
-      ),
+    element: <App />,
   },
   {
     path: "/home",
-    element: 
-      ( 
-        <>
-          <Navbar/>
-          <Home />
-        </>
-      ),
+    element: (
+      <ProtectedRoute>
+        <Navbar />
+        <Home />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/user",
-    element: 
-      ( 
-        <>
-          <Navbar/>
-          <User />
-        </>
-      ),
+    element: (
+      <ProtectedRoute>
+        <Navbar />
+        <User />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/announcement",
-    element: 
-      ( 
-        <>
-          <Navbar/>
-          <Announcement />
-        </>
-      ),
+    element: (
+      <ProtectedRoute>
+        <Navbar />
+        <Announcement />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/complaints",
-    element: 
-      ( 
-        <>
-          <Navbar/>
-          <FeedbackComplaints />
-        </>
-      ),
+    element: (
+      <ProtectedRoute>
+        <Navbar />
+        <FeedbackComplaints />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/profile",
-    element: 
-      ( 
-        <>
-          <Navbar/>
-          <Profile />
-        </>
-      ),
+    element: (
+      <ProtectedRoute>
+        <Navbar />
+        <Profile />
+      </ProtectedRoute>
+    ),
   }
 ]);
 
