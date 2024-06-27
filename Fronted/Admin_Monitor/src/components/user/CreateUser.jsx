@@ -71,7 +71,7 @@ function CreateUser() {
     };
 
     return(
-        <div>
+        <div className="z-50">
             <button onClick={() => setCreate(!create)} className="border rounded-xl p-2 bg-red-500 text-white font-bold cursor-pointer">Create User</button>
             {/* {create == true && ( */}
                 <div className="overflow-hidden">

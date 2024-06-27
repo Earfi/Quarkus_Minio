@@ -242,7 +242,7 @@ function Profile() {
     return (
         <div className="w-full overflow-hidden min-h-screen">
             <div className="flex flex-row bg-slate-200"> 
-                <div className="fixed">
+                <div>
                     <Sidebar />
                 </div>
                 <div className="flex flex-col w-[100%] p-0">

@@ -25,6 +25,16 @@ function ListBuckets() {
         getBucket();
     }, []);
 
+    function fetchFile() {
+        const getFileFromBucket = async () => {
+            const res = await fetch(`http://localhost:8080/minio/all/bucket`);
+            const data = await res.json();
+            setBuckets(data);
+        };
+
+        getFileFromBucket();
+    }
+
     const deleteBucket = async (bucket) => {
         try {
             const result = await Swal.fire({
@@ -55,9 +65,7 @@ function ListBuckets() {
                         timer: 1000
                     });
 
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1200);
+                    fetchFile();
                 } else {
                     Swal.fire({
                         icon: "error",
@@ -90,7 +98,7 @@ function ListBuckets() {
                 </div>
             )}
             <h1 className='text-2xl font-bold border-b-2 border-gray-300 pb-3 mb-5 text-center'>
-                ALL <span className="text-purple-600">Bucket &#9778;</span>
+                ALL <span className="text-purple-600">Bucket ({buckets.length})</span>
             </h1>
             <div className='flex flex-col bg-white w-full'>
                 <div className="flex justify-between my-5 mx-4 font-semibold text-lg bg-gray-800 text-white py-3 px-5 rounded">

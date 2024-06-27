@@ -11,8 +11,7 @@ import ObjectBrowse from './views/ObjectBrowse.jsx';
 import FilePage from './views/FilePage.jsx';
 import About from './views/About.jsx';
 import Service from './views/Service.jsx';
-import Profile from './views/Profile.jsx';
-import Jasper from './views/Jasper/Jasper.jsx';
+import Profile from './views/Profile.jsx'; 
 import JasperDB from './views/Jasper/JasperDB.jsx';
 import JasperJSON from './views/Jasper/JasperJSON.jsx';
 import Login from './views/Login.jsx';
@@ -23,11 +22,7 @@ import Mergefiles from './views/Merge/MergeFiles.jsx';
 
 import Bucket from './views/Minio/Bucket.jsx';
 import FileBucket from './views/Minio/FileBucket.jsx';
-
-import Mode from './views/Admin/Mode.jsx';
-import Dashboard from './views/Admin/Dashboard.jsx';
-import ListUser from './views/Admin/UserPage/ListUser.jsx';
-import EditUser from './views/Admin/UserPage/EditUser.jsx';
+ 
 import SignUp from './views/SignUp.jsx';
 
 import Navbar from './components/Navbar.jsx';
@@ -280,25 +275,6 @@ const router = createBrowserRouter([
     ), 
   },
 
-  // Admin
-
-  
-  {
-    path: "/mode",
-    element: <Mode/>, 
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard/>,
-  },
-  {
-    path: "/dashboard/user",
-    element: <ListUser/>,
-  },
-  {
-    path: "/dashboard/edituser/:id",
-    element: <EditUser/>,
-  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

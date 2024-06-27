@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; 
-import Footer from '../../Footer';
 
 function Information({ bucket }) {
     const [token, setToken] = useState(null);
@@ -25,6 +24,9 @@ function Information({ bucket }) {
     const [showFolders, setShowFolders] = useState(true);
     const [searchInput, setSearchInput] = useState("");
 
+    const [showOptions,setShowOptions] = useState(false);
+    const [fileOptions,setFileOptions] = useState([]);
+
     useEffect(() => {
         setToken(localStorage.getItem("token"));
 
@@ -35,6 +37,8 @@ function Information({ bucket }) {
         };
 
         getFileFromBucket();
+        setShowOptions(false)
+        setFileOptions([])
     }, [bucket]);
 
     function fetchFile() {
@@ -445,20 +449,17 @@ function Information({ bucket }) {
         window.open(link)
     } 
 
-    const [showOptions,setShowOptions] = useState(false);
-    const [fileOptions,setFileOptions] = useState([]);
-
     const showOptionsMode = async (file) => { 
         setShowOptions(true)
         setFileOptions(file)
     }
 
     return (
-        <div className='w-screen'> 
-            <div className='w-full flex'>
-                <div className={`bg-white py-5 shadow-lg sm:w-[50%] sm:mx-auto ${showOptions == true ? ' ' : ' '}`}>
+        <div className='w-full min-h-0'> 
+            <div className='w-full flex overflow-hidden'>
+                <div className={`bg-white py-5 shadow-lg w-full ${showOptions == true ? ' ' : ' '}`}>
                     <div className='w-full bg-white'>
-                        <h1 className='text-xl font-bold border-b-2 p-2 ml-10'>Bucket: <span className='text-red-500'>{bucket} ({files.length})</span></h1>
+                        <h1 className='text-xl font-bold border-b-2 p-2 ml-10'>Files ({files.length}) : <span className='text-red-500'>{bucket}</span></h1>
                     </div>
                     <div className="p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div className="flex gap-2">
@@ -701,7 +702,7 @@ function Information({ bucket }) {
                     ))}
                 </div>
                 
-                <div className={`bg-white border-4 border-black h-screen relative pt-10 transition-all ease-in-out ${showOptions ? 'w-[50%] sm:w-[30%]' : 'w-0'}`}>
+                <div className={`bg-white h-screen relative pt-10 transition-all ease-in-out ${showOptions ? 'w-[50%] sm:w-[30%] border-4 border-black' : 'w-0'}`}>
                     <h1
                         className="text-white text-right cursor-pointer absolute left-2 top-2"
                         onClick={() => {
@@ -785,8 +786,6 @@ function Information({ bucket }) {
 
 
             </div>
-
-            <Footer/>
         </div>
     );
 }

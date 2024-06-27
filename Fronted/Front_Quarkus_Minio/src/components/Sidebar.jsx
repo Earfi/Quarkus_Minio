@@ -18,11 +18,6 @@ function Sidebar() {
             <div className={`lg:flex flex-col items-center h-[120vh] overflow-y-auto bg-gray-700 text-white overflow-hidden transition-all relative ${fullWidth ? 'w-[250px]' : 'w-[0]'}`}> 
                 <div className={`w-full p-4 sm:p-5 mt-10 bg-gray-700 to-purple-800 from-red-800 text-white`}>
                     <p onClick={() => setFullWidth(prev => !prev)} className={`absolute text-gray-500 cursor-pointer hover:text-orange-500 ${fullWidth ? 'rotate-180 right-2 top-1 text-3xl' : 'right-7 top-1 text-2xl'}`}>&#10132;</p>
-    
-                    <h1 className={`text-xl font-bold border-b-2 border-gray-600 ${fullWidth && role === "Admin" ? 'block' : 'hidden'}`}>Administrator</h1>
-                    <ul className={`my-2 font-semibold ${role === "Admin" ? 'block' : 'hidden'}`}>
-                        <Link to="/dashboard"><li className="p-2 cursor-pointer hover:bg-gray-300 my-2"><span className={`${fullWidth ? '' : 'hidden'}`}>DASHBOARD</span></li></Link>
-                    </ul> 
      
                     {/* <hr className="h-1 bg-red-500 my-5"/> */}
     

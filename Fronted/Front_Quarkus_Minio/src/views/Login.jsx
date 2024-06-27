@@ -20,59 +20,52 @@ function Login() {
         }
     }
 
-  const login = async () => {
-    const formData = JSON.stringify({
-        username: username,
-        password: password
-    });
-      
-    const res = await fetch(`http://localhost:8080/auth/login`, {
-        method: "POST",
-        body: formData,
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
- 
-
-    if (res.ok) {
-        const data = await res.json();
-        const token = data.token.string; 
-
-        const decodedToken = jwtDecode(token); 
-
-        localStorage.setItem('token', token);
-        localStorage.setItem('username', decodedToken.upn);
-        localStorage.setItem('role', decodedToken.groups); 
-
-        Swal.fire({
-            title: "Login successfully",
-            text: "Hello Please Check your File!!!",
-            icon: "success",
-            showConfirmButton: false, 
-            timer: 1000
+    const login = async () => {
+        const formData = JSON.stringify({
+            username: username,
+            password: password
         });
- 
-        if(decodedToken.groups === "User"){
+        
+        const res = await fetch(`http://localhost:8080/auth/login`, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    
+
+        if (res.ok) {
+            const data = await res.json();
+            const token = data.token.string; 
+
+            const decodedToken = jwtDecode(token); 
+
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', decodedToken.upn);
+            localStorage.setItem('role', decodedToken.groups); 
+
+            Swal.fire({
+                title: "Login successfully",
+                text: "Hello Please Check your File!!!",
+                icon: "success",
+                showConfirmButton: false, 
+                timer: 1000
+            });
+    
             setTimeout(() => {
                 navigate('/');
                 window.location.reload()
             }, 1500); 
-        }else if(decodedToken.groups === "Admin"){
-            setTimeout(() => {
-                navigate('/mode');
-                window.location.reload()
-            }, 1500); 
-        }
 
-    } else {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Error Login !!!", 
-        }); 
-    } 
-};
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error Login !!!", 
+            }); 
+        } 
+    };
 
 
 

@@ -133,9 +133,9 @@ const SignUp = () => {
     }
 
     return (
-        <div> 
+        <div className='w-full sm:w-[80%] mx-auto bg-red-500'> 
             <div className="w-full bg-gray-100 min-h-[100vh] flex justify-center">
-                <div className="w-full max-w-xl mx-auto p-6 bg-white rounded-md shadow-md">
+                <div className="w-full p-6 bg-white rounded-md shadow-md">
                     <Link to="/login" className='text-red cursor-pointer bg-fuchsia-500 rounded-md font-medium text-white hover:bg-fuchsia-400 hover:text-red-800 border p-2'>Sign In</Link>
                     <h2 className="text-xl font-bold my-4">Registration Form</h2>
                     <form onSubmit={handleSubmit} className='mt-5'>
@@ -166,7 +166,7 @@ const SignUp = () => {
                         </div>
                         <h1 className='w-full text-md font-bold text-red-500'>**</h1>
                         <hr/>
-                        <div className="grid grid-cols-2 gap-4 mt-5">
+                        <div className="grid grid-cols-3 gap-4 mt-5">
                             <div>
                                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name <span className='text-red-500 font-bold'>*</span></label>
                                 <input type="text" placeholder='firstName' name="firstName" id="firstName" className="border h-10 mt-1 p-2 block w-full border-gray-300 rounded-md" onChange={handleChange} required/>

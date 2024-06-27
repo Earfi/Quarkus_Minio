@@ -1,0 +1,11 @@
+CREATE TABLE announcement (
+    announcement_id INT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    content TEXT,
+    post_date DATE,
+    user_id INT,
+    announcement_type VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+ALTER TABLE announcement MODIFY COLUMN announcement_id BIGINT NOT NULL AUTO_INCREMENT;

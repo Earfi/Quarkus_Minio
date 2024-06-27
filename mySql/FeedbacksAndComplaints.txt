@@ -1,0 +1,9 @@
+CREATE TABLE FeedbacksAndComplaints (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(30) NOT NULL,
+    message VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+select * from FeedbacksAndComplaints;

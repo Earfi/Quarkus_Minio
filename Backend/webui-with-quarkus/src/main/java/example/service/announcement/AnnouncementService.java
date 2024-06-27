@@ -1,7 +1,6 @@
 package example.service.announcement;
 
 import example.dto.announcement.AnnouncementAddDto;
-import example.model.User;
 import example.model.announcement.Announcement;
 import example.model.announcement.AnnouncementAdd;
 import example.repository.AnnouncementRepository;

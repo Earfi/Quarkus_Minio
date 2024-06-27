@@ -48,7 +48,7 @@ public class UserResource {
 
     @GET
     @RolesAllowed({"Admin"})
-    public Response listAll(){
+    public Response listAllUser(){
         List<User> list = service.listAllUser();
         return Response.ok(list).build();
     }
