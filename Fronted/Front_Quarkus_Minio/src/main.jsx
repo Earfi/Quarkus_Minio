@@ -74,19 +74,9 @@ const router = createBrowserRouter([
     ( 
       <>
         <Navbar/>
-        <Bucket />
-      </>
-    ), 
-  },
-  {
-    path: "/file/:bucket",
-    element: 
-    ( 
-      <>
-        <Navbar/>
         <FileBucket />
       </>
-    ),  
+    ), 
   },
   {
     path: "/announcement",

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import Sidebar from '../components/Sidebar';
 import ListFile from '../components/minio/file/ListFile';
+import UploadFile from '../components/minio/file/UploadFile';
 import AddBucket from '../components/minio/bucket/AddBucket';
 
 const Home = () => {
@@ -152,6 +153,7 @@ const Home = () => {
 
                 {/* all file */}
                 <div className='container mx-auto mt-5 p-5 bg-white w-full overflow-hidden'>
+                    <UploadFile/>
                     <ListFile bucket={selectedBucket} />
                 </div>
             </div>

@@ -463,9 +463,9 @@ function Information({ bucket }) {
     }
 
     return (
-        <div className='w-screen'> 
+        <div className='w-full'> 
             <div className='w-full flex'>
-                <div className={`bg-white py-5 shadow-lg sm:w-[50%] sm:mx-auto ${showOptions == true ? ' ' : ' '}`}>
+                <div className={`bg-white py-5 shadow-lg w-full  ${showOptions == true ? ' ' : ' '}`}>
                     <div className='w-full bg-white'>
                         <h1 className='text-xl font-bold border-b-2 p-2 ml-10'>Bucket: <span className='text-red-500'>{bucket} ({files.length})</span></h1>
                     </div>
@@ -710,7 +710,7 @@ function Information({ bucket }) {
                     ))}
                 </div>
                 
-                <div className={`bg-white border-4 border-black h-screen relative pt-10 transition-all ease-in-out ${showOptions ? 'w-[50%] sm:w-[30%]' : 'w-0'}`}>
+                <div className={`bg-white border-4 border-black h-screen relative pt-10 transition-all ease-in-out ${showOptions ? 'w-[50%] sm:w-[30%]' : 'w-[0] right-[-100%]'}`}>
                     <h1
                         className="text-white text-right cursor-pointer absolute left-2 top-2"
                         onClick={() => {
