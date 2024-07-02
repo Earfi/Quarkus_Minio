@@ -19,8 +19,7 @@ import Products from './views/Product/Products.jsx';
 import ProductCart from './views/Product/ProductCart.jsx';
 
 import Mergefiles from './views/Merge/MergeFiles.jsx';
-
-import Bucket from './views/Minio/Bucket.jsx';
+ 
 import FileBucket from './views/Minio/FileBucket.jsx';
  
 import SignUp from './views/SignUp.jsx';

@@ -49,7 +49,7 @@ const Announcement = () => {
     };
 
     return (
-        <div className="w-full overflow-hidden min-h-screen bg-gray-100 ">  
+        <div className="w-full overflow-hidden min-h-screen bg-white ">  
             <div className="flex flex-row h-full">
                 <div>
                     <Sidebar />  
@@ -61,7 +61,7 @@ const Announcement = () => {
                                 <h1 className='text-center font-bold text-4xl text-gray-800 mb-8'>Announcements ({announce.length})</h1>
                                 <div className="">
                                     {announce.map(announcement => (
-                                        <div key={announcement.announcement_id} className="bg-white p-6 rounded-lg shadow-md mb-4">
+                                        <div key={announcement.announcement_id} className="bg-white p-6 rounded-lg shadow-md mb-4 border-2 border-black">
                                             <div className='sm:flex justify-between items-start mb-4'>
                                                 <div>
                                                     <h2 className="text-xl font-semibold mb-2">{announcement.title}</h2>

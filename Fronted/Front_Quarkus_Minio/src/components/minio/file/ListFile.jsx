@@ -25,6 +25,9 @@ function Information({ bucket }) {
     const [showFolders, setShowFolders] = useState(true);
     const [searchInput, setSearchInput] = useState("");
 
+    const [showOptions,setShowOptions] = useState(false);
+    const [fileOptions,setFileOptions] = useState([]);
+
     useEffect(() => {
         setToken(localStorage.getItem("token"));
 
@@ -32,6 +35,10 @@ function Information({ bucket }) {
             const res = await fetch(`http://localhost:8080/minio/file/all/${bucket}`);
             const data = await res.json();
             setFiles(data); 
+            setShowOptions("")
+            setFileOptions([])
+            setEditMode("")
+            setFileEditedName("")
         };
 
         getFileFromBucket();
@@ -454,16 +461,13 @@ function Information({ bucket }) {
         window.open(link)
     } 
 
-    const [showOptions,setShowOptions] = useState(false);
-    const [fileOptions,setFileOptions] = useState([]);
-
     const showOptionsMode = async (file) => { 
         setShowOptions(true)
         setFileOptions(file)
     }
 
     return (
-        <div className='w-full'> 
+        <div className='w-full border-2'> 
             <div className='w-full flex'>
                 <div className={`bg-white py-5 shadow-lg w-full  ${showOptions == true ? ' ' : ' '}`}>
                     <div className='w-full bg-white'>
@@ -501,9 +505,8 @@ function Information({ bucket }) {
                                     <div className={`w-full`}>
                                         {(groupedFiles[folder] || []).filter(file => Array.isArray(groupedFiles[folder]) && file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
                                             .map((file, idx) => (
-                                            <div key={idx} className={`cursor-pointer flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions?.fileName == file?.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
+                                            <div onClick={() => {showOptionsMode(file);}} key={idx} className={`cursor-pointer flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions?.fileName == file?.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
                                                 <div onClick={() => {
-                                                    showOptionsMode(file);
                                                     setFileEditedName(file.fileName);
                                                     setModeFile("");
                                                 }}  className='w-full flex flex-col justify-end items-start gap-5 mb-5'>
@@ -613,9 +616,8 @@ function Information({ bucket }) {
                                         {(groupedFiles[folder] || [])
                                             .filter(file => file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
                                             .map((file, idx) => (
-                                                <div key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions?.fileName == file?.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
-                                                    <div  onClick={() => {
-                                                        showOptionsMode(file); 
+                                                <div onClick={() => {showOptionsMode(file);}} key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions?.fileName == file?.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
+                                                    <div onClick={() => {
                                                         setFileEditedName(file.fileName);
                                                         setModeFile("");
                                                     }}  className='w-full flex flex-col justify-end items-start gap-5 mb-5'>
@@ -786,7 +788,7 @@ function Information({ bucket }) {
                             )}
                         </div>
                         <form method="dialog" className="modal-backdrop">
-                            <button className="btn" onClick={() => setModeFile("")}>close</button>
+                            <button className="btn bg-red-500 text-white font-bold text-xl" onClick={() => setModeFile("")}>close</button>
                         </form>
                     </dialog>
                 </div>

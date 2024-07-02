@@ -34,11 +34,13 @@ function Information({ bucket }) {
             const res = await fetch(`http://localhost:8080/minio/file/all/${bucket}`);
             const data = await res.json();
             setFiles(data); 
+            setShowOptions("")
+            setFileOptions([])
+            setEditMode("")
+            setFileEditedName("")
         };
 
         getFileFromBucket();
-        setShowOptions(false)
-        setFileOptions([])
     }, [bucket]);
 
     function fetchFile() {
@@ -109,21 +111,20 @@ function Information({ bucket }) {
     };
 
     // open edit mode
-    const setFileEditedName = (file, mode) => { 
-    
-        if (mode === "edit") {
-            return;
+    const setFileEditedName = (file,mode) => {
+        if (mode == "edit") {
+            setEditBtn(!editBtn);
+            setModeFile("edit");
+        }else{
+            setEditBtn(false);
+            setModeFile("");
         }
-     
-        setModeFile("edit");
         setFilesEditName(file);
-        setEditBtn(!editBtn);
+        setModeFile(mode) 
         setEditMode("rename");
         setNumTag(0);
         setTags([{ key: "", value: "" }]);
-         
     };
-    
 
     // Select mode Rename File or Add Tag
     const handleEditModeChange = (mode,num_tags) => { 
@@ -223,6 +224,7 @@ function Information({ bucket }) {
                 showConfirmButton: false, 
                 timer: 1000
               });
+              setShowOptions("")
               fetchFile();
             // setTimeout(() => {
             //     window.location.reload()
@@ -341,7 +343,8 @@ function Information({ bucket }) {
         }
     };
     
-    const deleteFile = async (fileName) => { 
+    const deleteFile = async (file) => {
+        showOptionsMode(file)
         try {
             Swal.fire({
                 title: "Are you sure?",
@@ -354,7 +357,7 @@ function Information({ bucket }) {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const formData = new FormData();
-                    formData.append("fileName", fileName);
+                    formData.append("fileName", file.fileName);
                     formData.append("bucket", bucket);
     
                     const res = await fetch(`http://localhost:8080/minio/file/delete`, {
@@ -375,6 +378,7 @@ function Information({ bucket }) {
                             timer: 1000
                         });
                         fetchFile();
+                        setFileOptions("");
                         // setTimeout(() => {
                         //     window.location.reload()
                         // }, 1500);
@@ -462,11 +466,11 @@ function Information({ bucket }) {
     }
 
     return (
-        <div className='w-full min-h-0'> 
-            <div className='w-full flex overflow-hidden'>
-                <div className={`bg-white py-5 shadow-lg w-full ${showOptions == true ? ' ' : ' '}`}>
+        <div className='w-full border-2'> 
+            <div className='w-full flex'>
+                <div className={`bg-white py-5 shadow-lg w-full  ${showOptions == true ? ' ' : ' '}`}>
                     <div className='w-full bg-white'>
-                        <h1 className='text-xl font-bold border-b-2 p-2 ml-10'>Files ({files.length}) : <span className='text-red-500'>{bucket}</span></h1>
+                        <h1 className='text-xl font-bold border-b-2 p-2 ml-10'>Bucket: <span className='text-red-500'>{bucket} ({files.length})</span></h1>
                     </div>
                     <div className="p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div className="flex gap-2">
@@ -500,14 +504,9 @@ function Information({ bucket }) {
                                     <div className={`w-full`}>
                                         {(groupedFiles[folder] || []).filter(file => Array.isArray(groupedFiles[folder]) && file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
                                             .map((file, idx) => (
-                                            <div key={idx} className={`cursor-pointer flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions.fileName == file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
+                                            <div onClick={() => {showOptionsMode(file);}} key={idx} className={`cursor-pointer flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions?.fileName == file?.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
                                                 <div onClick={() => {
-                                                    showOptionsMode(file); 
-                                                    if (modeFile == "edit") {
-                                                        setFileEditedName(file,"edit"); 
-                                                    }else{
-                                                        setFileEditedName(file,""); 
-                                                    } 
+                                                    setFileEditedName(file.fileName);
                                                     setModeFile("");
                                                 }}  className='w-full flex flex-col justify-end items-start gap-5 mb-5'>
                                                     <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-full mx-auto overflow-hidden bg-white p-2 rounded-xl border border-gray-300">
@@ -516,19 +515,6 @@ function Information({ bucket }) {
                                                         <p className='text-xs'><b>Last Modified : </b>{convertDate(file.creationDate)}</p>
 
                                                     </div>
-                                                    {file.tags.length > 0 && (
-                                                        <div className="tags flex items-center gap-2 flex-wrap">
-                                                            <strong className='text-sm'>Tags:</strong>
-                                                            <ul className="flex justify-start items-center gap-5 flex-wrap">
-                                                                {file.tags.map((tag, index) => (
-                                                                <div key={index} className='relative'>
-                                                                    <li className='bg-gray-200 px-2 py-1 rounded-md text-xs font-bold text-gray-700' key={index}>{tag}</li>
-                                                                    <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
-                                                                </div>
-                                                                ))}
-                                                            </ul>
-                                                        </div>
-                                                    )}
                                                 </div>
                                                 {/* show options */}
                                                 <>  
@@ -539,7 +525,7 @@ function Information({ bucket }) {
                                                             
                                                             {file.tags.length < 10 && (
                                                                 <> 
-                                                                    <button className="mr-2 bg-purple-500 hover:bg-purple-700 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("addTag",file.tags)}>Add Tag</button>
+                                                                    <button className="mr-2 bg-purple-500 hover:bg-purple-700 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("addTag",file.tags)}>Tags</button>
                                                                 </>
                                                             )}
                                                             <h1
@@ -564,8 +550,21 @@ function Information({ bucket }) {
                                                                 </div>
                                                             )}
                                                             {editMode === "addTag" && (
-                                                                <div className="mb-4">
-                                                                    <label className='text-sm font-medium text-black'>Add Tag</label> 
+                                                                <div className="mb-4 flex flex-col">
+                                                                    {file.tags.length > 0 && (
+                                                                        <div className="tags flex items-center gap-2 flex-wrap">
+                                                                            <strong className='text-sm text-black'>Tags:</strong>
+                                                                            <ul className="flex justify-start items-center gap-5 flex-wrap">
+                                                                                {file.tags.map((tag, index) => (
+                                                                                <div key={index} className='relative'>
+                                                                                    <li className='bg-gray-200 px-2 py-1 rounded-md text-xs font-bold text-gray-700' key={index}>{tag}</li>
+                                                                                    <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
+                                                                                </div>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
+                                                                    )}
+                                                                    <label className='text-sm font-medium text-black mt-5'>Add Tag</label> 
                                                                     {tags.map((tag, index) => (
                                                                         <div key={index} className='flex gap-2 mb-2'>
                                                                             <>
@@ -616,14 +615,9 @@ function Information({ bucket }) {
                                         {(groupedFiles[folder] || [])
                                             .filter(file => file.fileName.toLowerCase().includes(searchInput.toLowerCase()))
                                             .map((file, idx) => (
-                                                <div key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions.fileName == file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
-                                                    <div  onClick={() => {
-                                                        showOptionsMode(file); 
-                                                        if (modeFile == "edit") {
-                                                            setFileEditedName(file,"edit"); 
-                                                        }else{
-                                                            setFileEditedName(file,""); 
-                                                        } 
+                                                <div onClick={() => {showOptionsMode(file);}} key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions?.fileName == file?.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
+                                                    <div onClick={() => {
+                                                        setFileEditedName(file.fileName);
                                                         setModeFile("");
                                                     }}  className='w-full flex flex-col justify-end items-start gap-5 mb-5'>
                                                         <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-[240px] sm:w-full mx-auto overflow-hidden bg-white p-2 rounded-xl border border-gray-300">
@@ -632,19 +626,6 @@ function Information({ bucket }) {
                                                             <p className='text-xs'><b>Last Modified : </b>{convertDate(file.creationDate)}</p>
                                                             
                                                         </div>
-                                                        {file.tags.length > 0 && (
-                                                            <div className="tags flex items-center gap-2 flex-wrap">
-                                                                <strong className='text-sm'>Tags:</strong>
-                                                                <ul className="flex justify-start items-center gap-5 flex-wrap">
-                                                                    {file.tags.map((tag, index) => (
-                                                                    <div key={index} className='relative'>
-                                                                        <li className='bg-gray-200 px-2 py-1 rounded-md text-xs font-bold text-gray-700' key={index}>{tag}</li>
-                                                                        <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
-                                                                    </div>
-                                                                    ))}
-                                                                </ul>
-                                                            </div>
-                                                        )}
                                                     </div>
                                                     {/* show options */}
                                                     <>  
@@ -655,7 +636,7 @@ function Information({ bucket }) {
                                                                 
                                                                 {file.tags.length < 10 && (
                                                                     <> 
-                                                                        <button className="mr-2 bg-purple-500 hover:bg-purple-700 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("addTag",file.tags)}>Add Tag</button>
+                                                                        <button className="mr-2 bg-purple-500 hover:bg-purple-700 text-white text-xs font-bold py-1 px-2 rounded" onClick={() => handleEditModeChange("addTag",file.tags)}>Tags</button>
                                                                     </>
                                                                 )}
                                                                 <h1
@@ -680,8 +661,21 @@ function Information({ bucket }) {
                                                                     </div>
                                                                 )}
                                                                 {editMode === "addTag" && (
-                                                                    <div className="mb-4">
-                                                                        <label className='text-sm font-medium text-black'>Add Tag</label> 
+                                                                    <div className="mb-4 flex flex-col">
+                                                                        {file.tags.length > 0 && (
+                                                                            <div className="tags flex items-center gap-2 flex-wrap">
+                                                                                <strong className='text-sm text-black'>Tags:</strong>
+                                                                                <ul className="flex justify-start items-center gap-5 flex-wrap">
+                                                                                    {file.tags.map((tag, index) => (
+                                                                                    <div key={index} className='relative'>
+                                                                                        <li className='bg-gray-200 px-2 py-1 rounded-md text-xs font-bold text-gray-700' key={index}>{tag}</li>
+                                                                                        <p onClick={() => handleDeleteTag(file.fileName,tag)} className={`${editBtn && filesEditName === file.fileName ? 'block' : 'hidden'} absolute top-[-10px] right-[-10px] text-[8px] border-white bg-red-500 text-white font-bold rounded-full px-2 py-1 hover:bg-red-600 cursor-pointer`}>&#10005;</p>
+                                                                                    </div>
+                                                                                    ))}
+                                                                                </ul>
+                                                                            </div>
+                                                                        )}
+                                                                        <label className='text-sm font-medium text-black mt-5'>Add Tag</label> 
                                                                         {tags.map((tag, index) => (
                                                                             <div key={index} className='flex gap-2 mb-2'>
                                                                                 <>
@@ -717,7 +711,7 @@ function Information({ bucket }) {
                     ))}
                 </div>
                 
-                <div className={`bg-white h-screen relative pt-10 transition-all ease-in-out ${showOptions ? 'w-[50%] sm:w-[30%] border-4 border-black' : 'w-0'}`}>
+                <div className={`bg-white border-4 border-black h-screen relative pt-10 transition-all ease-in-out ${showOptions ? 'w-[50%] sm:w-[30%]' : 'w-[0] right-[-100%]'}`}>
                     <h1
                         className="text-white text-right cursor-pointer absolute left-2 top-2"
                         onClick={() => {
@@ -734,16 +728,16 @@ function Information({ bucket }) {
                     <div className='p-4 flex flex-col gap-4'>
 
                         <div className='flex flex-col gap-2'>
-                            <h1 className='text-sm font-sans'><span className='font-bold'>File:</span> {fileOptions.fileName}</h1>
-                            <h1 className='text-sm font-sans'><span className='font-bold'>Size:</span> {convertBytes(fileOptions.fileSize)}</h1>
-                            <h1 className='text-sm font-sans'><span className='font-bold'>Last Modified:</span> {fileOptions.creationDate}</h1>  
+                            <h1 className='text-sm font-sans'><span className='font-bold'>File:</span> {fileOptions?.fileName}</h1>
+                            <h1 className='text-sm font-sans'><span className='font-bold'>Size:</span> {convertBytes(fileOptions?.fileSize)}</h1>
+                            <h1 className='text-sm font-sans'><span className='font-bold'>Last Modified:</span> {fileOptions?.creationDate}</h1>  
                         </div>
 
-                        {fileOptions.tags && fileOptions.tags.length > 0 && (
+                        {fileOptions?.tags && fileOptions?.tags.length > 0 && (
                             <div className="tags flex flex-wrap items-center gap-2">
                                 <span className='font-bold'>Tags:</span>
                                 <div className="flex flex-wrap items-center gap-2">
-                                    {fileOptions.tags.map((tag, index) => (
+                                    {fileOptions?.tags.map((tag, index) => (
                                         <div key={index} className='relative'>
                                             <span className='bg-gray-200 px-2 py-1 rounded-md text-xs font-bold text-black'>{tag}</span>
                                         </div>
@@ -754,25 +748,25 @@ function Information({ bucket }) {
 
                         <div className='flex flex-col gap-2 border-2 bg-gray-100'>
                             <button 
-                                onClick={() => downloadFile(fileOptions.fileName)} 
+                                onClick={() => downloadFile(fileOptions?.fileName)} 
                                 className='text-black font-bold text-sm p-2 hover:bg-gray-200 cursor-pointer'>
                                 DOWNLOAD
                             </button>
                             <hr />
                             <button 
-                                onClick={() => openPreview(fileOptions.url)} 
+                                onClick={() => openPreview(fileOptions?.url)} 
                                 className={`text-black font-bold text-sm p-2 hover:bg-gray-200 cursor-pointer ${modeFile == "preview" ? 'bg-white' : 'bg-none'}`}>
                                 PREVIEW
                             </button>
                             <hr />
                             <button 
-                                onClick={() => setFileEditedName(fileOptions.fileName)} 
+                                onClick={() => setFileEditedName(fileOptions?.fileName,"edit")} 
                                 className={`text-black font-bold text-sm p-2 hover:bg-gray-200 cursor-pointer ${modeFile == "edit" ? 'bg-white' : 'bg-none'} ${token ? 'block' : 'hidden'}`}>
                                 EDIT
                             </button>
                             <hr />
                             <button 
-                                onClick={() => deleteFile(fileOptions.fileName)} 
+                                onClick={() => deleteFile(fileOptions)} 
                                 className={`text-black font-bold text-sm p-2 hover:bg-gray-200 cursor-pointer ${token ? 'block' : 'hidden'}`}>
                                 DELETE
                             </button>
@@ -783,24 +777,24 @@ function Information({ bucket }) {
 
                     <dialog id="my_modal_2" className="modal">
                         <div className="modal-box">
-                            {fileOptions.tags && (fileOptions.url.includes("jpg") || fileOptions.url.includes("png")) && (
-                                <img src={fileOptions.url} width="1000" height="600" alt="preview" />
+                            {fileOptions?.tags && (fileOptions?.url.includes("jpg") || fileOptions?.url.includes("png")) && (
+                                <img src={fileOptions?.url} width="1000" height="600" alt="preview" />
                             )}
-                            {fileOptions.tags && (fileOptions.url.includes("pdf") || fileOptions.url.includes("xlsx")) && (
-                                <button onClick={() => window.open(fileOptions.url, '_blank')} className='btn bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 w-full mt-4'>
+                            {fileOptions?.tags && (fileOptions?.url.includes("pdf") || fileOptions?.url.includes("xlsx")) && (
+                                <button onClick={() => window.open(fileOptions?.url, '_blank')} className='btn bg-red-500 text-white px-2 py-1 font-mono rounded-lg hover:bg-red-800 w-full mt-4'>
                                     Open New Tab
                                 </button>
                             )}
                         </div>
                         <form method="dialog" className="modal-backdrop">
-                            <button className="btn" onClick={() => setModeFile("")}>close</button>
+                            <button className="btn bg-red-500 text-white font-bold text-xl" onClick={() => setModeFile("")}>close</button>
                         </form>
                     </dialog>
                 </div>
 
 
 
-            </div>
+            </div> 
         </div>
     );
 }
