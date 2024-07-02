@@ -109,14 +109,21 @@ function Information({ bucket }) {
     };
 
     // open edit mode
-    const setFileEditedName = (file) => {
+    const setFileEditedName = (file, mode) => { 
+    
+        if (mode === "edit") {
+            return;
+        }
+     
         setModeFile("edit");
         setFilesEditName(file);
         setEditBtn(!editBtn);
         setEditMode("rename");
         setNumTag(0);
         setTags([{ key: "", value: "" }]);
+         
     };
+    
 
     // Select mode Rename File or Add Tag
     const handleEditModeChange = (mode,num_tags) => { 
@@ -495,8 +502,12 @@ function Information({ bucket }) {
                                             .map((file, idx) => (
                                             <div key={idx} className={`cursor-pointer flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions.fileName == file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
                                                 <div onClick={() => {
-                                                    showOptionsMode(file);
-                                                    setFileEditedName("");
+                                                    showOptionsMode(file); 
+                                                    if (modeFile == "edit") {
+                                                        setFileEditedName(file,"edit"); 
+                                                    }else{
+                                                        setFileEditedName(file,""); 
+                                                    } 
                                                     setModeFile("");
                                                 }}  className='w-full flex flex-col justify-end items-start gap-5 mb-5'>
                                                     <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-full mx-auto overflow-hidden bg-white p-2 rounded-xl border border-gray-300">
@@ -608,7 +619,11 @@ function Information({ bucket }) {
                                                 <div key={idx} className={`flex flex-col items-center justify-center border p-5 w-full ${idx % 2 !== 0 ? 'bg-white' : 'bg-slate-100'} ${editBtn && filesEditName === file.fileName || fileOptions.fileName == file.fileName ? 'border-4 border-red-500' : 'border-none'}`}>
                                                     <div  onClick={() => {
                                                         showOptionsMode(file); 
-                                                        setFileEditedName("");
+                                                        if (modeFile == "edit") {
+                                                            setFileEditedName(file,"edit"); 
+                                                        }else{
+                                                            setFileEditedName(file,""); 
+                                                        } 
                                                         setModeFile("");
                                                     }}  className='w-full flex flex-col justify-end items-start gap-5 mb-5'>
                                                         <div className="flex flex-col sm:flex-row sm:justify-between transition-all duration-200 w-[240px] sm:w-full mx-auto overflow-hidden bg-white p-2 rounded-xl border border-gray-300">

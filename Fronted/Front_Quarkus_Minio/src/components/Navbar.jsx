@@ -163,7 +163,7 @@ function Navbar() {
               <img
                 className={`${
                   token == null ? "hidden" : "block"
-                } hover:text-orange-400 text-xs mr-10 h-10 w-10 object-cover bg-white rounded-full`}
+                } hover:text-orange-400 text-xs mr-10 h-10 w-10 object-cover bg-white rounded-full border border-black`}
                 src="../../..//profile-icon.png"
                 alt="Profile"
               />
@@ -173,7 +173,7 @@ function Navbar() {
               <img
                 className={`${
                   token == null ? "hidden" : "block"
-                } hover:text-orange-400 text-xs mr-10 h-10 w-10 object-cover bg-white rounded-full`}
+                } hover:text-orange-400 text-xs mr-10 h-10 w-10 object-cover bg-white rounded-full border border-black`}
                 src={profile}
                 alt="Profile"
               />
